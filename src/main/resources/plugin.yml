@@ -1,10 +1,10 @@
-name: KillCounter
+name: SkillsMC
 version: ${project.version}
 main: ragnaorok.Main.Main
 api-version: 1.16
 authors: [ Ragnaorok ]
 description: 1.16.5 Spigot Plugin
 commands:
-  flame:
-    description: create a flame!
+  skill:
+    description: select a skill!
     usage: /<command>
