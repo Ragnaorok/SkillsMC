@@ -67,7 +67,7 @@ public class MobListener implements Listener {
                     }
                     player.spawnParticle(Particle.SOUL, particleLoc, 10);
                     player.spawnParticle(Particle.SOUL, particleLoc, 10);
-                    CurrencyManager.addCurrencyToPlayer(player, +1);
+                    CurrencyManager.addCurrencyToPlayer(player, 1);
                     player.sendMessage(ChatColor.GREEN + " +1 soul");
                 }
                 if (type == EntityType.ZOMBIE || type == EntityType.ZOMBIE_HORSE || type == EntityType.ZOMBIE_VILLAGER
@@ -109,7 +109,7 @@ public class MobListener implements Listener {
                             mloc.subtract(x, y, z);
                         }
                     }
-                    CurrencyManager.addCurrencyToPlayer(player, +3);
+                    CurrencyManager.addCurrencyToPlayer(player, 3);
                 }
                 if (CurrencyManager.getPlayerCurrency(player) >= 100) { //Skill:Blood_Lust
                     if (player.getHealth() < 20) {
