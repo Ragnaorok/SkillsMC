@@ -1,4 +1,4 @@
-package ragnaorok.Main;
+package ragnaorok.Main.listeners;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 
-public class DoubleJump implements Listener {
+public class DoubleJumpListener implements Listener {
 
     private void groundUpdate(Player player) {
         Location loc = player.getPlayer().getLocation();
