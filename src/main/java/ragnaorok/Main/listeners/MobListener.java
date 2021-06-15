@@ -97,6 +97,20 @@ public class MobListener implements Listener {
                     CurrencyManager.addCurrencyToPlayer(player, +1);
                     player.sendMessage(ChatColor.GREEN + " +1 soul");
                 }
+                if (type == EntityType.GHAST){
+                    for (double t = 0; t <= Math.PI; t += Math.PI / 10) { //Sphere
+                        double radius = Math.sin(t);
+                        double y = Math.cos(t);
+                        for (double i = 0; i < Math.PI * 2; i += Math.PI / 10) {
+                            double x = Math.cos(i) * radius;
+                            double z = Math.sin(i) * radius;
+                            mloc.add(x, y, z);
+                            player.spawnParticle(Particle.SOUL, particleLoc, 1);
+                            mloc.subtract(x, y, z);
+                        }
+                    }
+                    CurrencyManager.addCurrencyToPlayer(player, +3);
+                }
                 if (CurrencyManager.getPlayerCurrency(player) >= 100) { //Skill:Blood_Lust
                     if (player.getHealth() < 20) {
                         player.setHealth(player.getHealth() + 1);
