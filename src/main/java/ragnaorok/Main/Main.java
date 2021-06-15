@@ -21,7 +21,7 @@ public final class Main extends JavaPlugin {
             e.printStackTrace();
         }
         try {
-            BountyManager.loadCurrencyFile();
+            BountyManager.loadBountyFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
