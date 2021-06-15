@@ -1,66 +1,62 @@
 package ragnaorok.Main.managers;
 
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import ragnaorok.Main.Main;
+import ragnaorok.Main.Currency;
 import java.io.*;
-import java.nio.file.FileSystemNotFoundException;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class CurrencyManager {
-    public static HashMap<UUID, Integer> souls = new HashMap<UUID, Integer>();
-    public Main plugin;
+    public static final HashMap<UUID, Integer> souls = new HashMap<UUID, Integer>();
 
-    public CurrencyManager(Main Plugin) {
-        this.plugin = plugin;
-    }
-
-    public void saveCurrencyFile() throws FileSystemNotFoundException, IOException {
-        for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-            File file = new File("CurrencyData/currency.dat");
-
-            ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
-
-            UUID uuid = player.getUniqueId();
-
-            if (souls.get(player.getUniqueId().toString()) != null) {
-                souls.put(uuid, souls.get(uuid));
-            }
-            try {
-                output.writeObject(souls);
-                output.flush();
-                output.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public static void saveCurrencyFile() throws Exception {
+        File file = new File("currency.dat");
+        boolean successful = true;
+        if (!file.exists()) {
+            successful = file.createNewFile();
         }
+
+        if (!successful)
+            return;
+
+        ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+
+        try {
+            output.writeObject(Currency.SOULS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            output.close();
+        }
+
     }
     @SuppressWarnings("unchecked")
-    public void loadCurrencyFile() throws Exception {
+    public static void loadCurrencyFile() throws Exception {
 
-        File file = new File("CurrencyData/currency.dat");
+        File file = new File("currency.dat");
+        boolean successful = true;
 
-        if (file != null) {
+        if (!file.exists()) {
+            successful = file.createNewFile();
+        }
 
-            ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+        if (!successful)
+            return;
+
+        ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+        try {
             Object readObject = input.readObject();
+            System.out.println(readObject.toString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
             input.close();
-
-            if (!(readObject instanceof HashMap)) {
-                throw new IOException("Data is not a hashmap");
-            }
-            souls = (HashMap<UUID, Integer>) readObject;
-            for (UUID key : souls.keySet()) {
-                souls.put(key, souls.get(key));
-                System.out.println(readObject);
-            }
         }
     }
 
-    public void addCurrencyToPlayer(OfflinePlayer player, int amount) {
+    public static void addCurrencyToPlayer(OfflinePlayer player, int amount) {
         if (souls.get(player.getUniqueId()) != null) {
             souls.put(player.getUniqueId(), souls.get(player.getUniqueId()) + amount);
         } else {
@@ -68,7 +64,7 @@ public class CurrencyManager {
         }
     }
 
-    public void removePlayerCurrency(OfflinePlayer player, int amount) {
+    public static void removePlayerCurrency(OfflinePlayer player, int amount) {
         if (souls.get(player.getUniqueId()) != null) {
             souls.put(player.getUniqueId(), souls.get(player.getUniqueId()) - amount);
         } else {
@@ -76,11 +72,11 @@ public class CurrencyManager {
         }
     }
 
-    public void setPlayerCurrency(OfflinePlayer player, int amount) {
+    public static void setPlayerCurrency(OfflinePlayer player, int amount) {
         souls.put(player.getUniqueId(), amount);
     }
 
-    public int getPlayerCurrency(OfflinePlayer player) {
+    public static int getPlayerCurrency(OfflinePlayer player) {
         if (souls.get(player.getUniqueId()) != null) {
             return souls.get(player.getUniqueId());
         }else{

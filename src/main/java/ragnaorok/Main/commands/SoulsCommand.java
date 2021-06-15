@@ -36,17 +36,16 @@ public class SoulsCommand implements CommandExecutor {
                 @SuppressWarnings("deprecation")
                 OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
                 int amount = Integer.parseInt(args[2]);
-                CurrencyManager manager = new CurrencyManager(plugin);
                 if (args[0].equalsIgnoreCase("add")) {
                     if (player != null) {
-                        manager.addCurrencyToPlayer(player, amount);
-                        sender.sendMessage("You have successfully added " + args[2] + player.getName());
+                        CurrencyManager.addCurrencyToPlayer(player, amount);
+                        sender.sendMessage("You have successfully added " + args[2] + " souls to "+ player.getName());
                     } else {
                         sender.sendMessage("could not be found");
                     }
                 } else if (args[0].equalsIgnoreCase("set")) {
                     if (player != null) {
-                        manager.setPlayerCurrency(player, amount);
+                        CurrencyManager.setPlayerCurrency(player, amount);
                         sender.sendMessage("you have successfully set the player " + player.getName());
                     } else {
                         sender.sendMessage("player could not be found");
@@ -56,12 +55,11 @@ public class SoulsCommand implements CommandExecutor {
         } else {
             sender.sendMessage("no permission");
         }if (args.length == 2) {
-            CurrencyManager manager = new CurrencyManager(plugin);
             @SuppressWarnings("deprecation")
             OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
             if (player != null || player.hasPlayedBefore()) {
                 if (args[0].equalsIgnoreCase("get")) {
-                    sender.sendMessage(player.getName() + " currently has " + manager.getPlayerCurrency(player) + " souls");
+                    sender.sendMessage(player.getName() + " currently has " + CurrencyManager.getPlayerCurrency(player) + " souls");
                     return true;
                 } else {
                     sender.sendMessage(player.getName() + "<amount>");

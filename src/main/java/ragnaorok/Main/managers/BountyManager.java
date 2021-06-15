@@ -13,13 +13,8 @@ import java.util.zip.GZIPOutputStream;
 
 public class BountyManager {
     public static HashMap<UUID, Integer> bounty = new HashMap<UUID, Integer>();
-    public Main plugin;
 
-    public BountyManager(Main Plugin) {
-        this.plugin = plugin;
-    }
-
-    public void saveBountyFile() throws FileSystemNotFoundException, IOException {
+    public static void saveBountyFile() throws FileSystemNotFoundException, IOException {
         for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
             File file = new File("BountyManager/bounty.dat");
 
@@ -40,27 +35,30 @@ public class BountyManager {
         }
     }
     @SuppressWarnings("unchecked")
-    public void loadCurrencyFile() throws FileSystemNotFoundException, IOException, ClassNotFoundException {
+    public static void loadCurrencyFile() throws Exception {
 
-        File file = new File("BountyData/bounty.dat");
+        File file = new File("currency.dat");
+        boolean successful = true;
 
-        if (file != null) {
+        if (!file.exists()) {
+            successful = file.createNewFile();
+        }
 
-            ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+        if (!successful)
+            return;
+
+        ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+        try {
             Object readObject = input.readObject();
+            System.out.println(readObject.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             input.close();
-
-            if (!(readObject instanceof HashMap)) {
-                throw new IOException("Data is not a hashmap");
-            }
-            bounty = (HashMap<UUID, Integer>) readObject;
-            for (UUID key : bounty.keySet()) {
-                bounty.put(key, bounty.get(key));
-            }
         }
     }
 
-    public void addBountyToPlayer(OfflinePlayer player, int amount) {
+    public static void addBountyToPlayer(OfflinePlayer player, int amount) {
         if (bounty.get(player.getUniqueId()) != null) {
             bounty.put(player.getUniqueId(), bounty.get(player.getUniqueId()) + amount);
         } else {
@@ -68,7 +66,7 @@ public class BountyManager {
         }
     }
 
-    public void removePlayerBounty(OfflinePlayer player, int amount) {
+    public static void removePlayerBounty(OfflinePlayer player, int amount) {
         if (bounty.get(player.getUniqueId()) != null) {
             bounty.put(player.getUniqueId(), bounty.get(player.getUniqueId()) - amount);
         } else {
@@ -76,12 +74,12 @@ public class BountyManager {
         }
     }
 
-    public void setPlayerBounty(OfflinePlayer player, int amount) {
+    public static void setPlayerBounty(OfflinePlayer player, int amount) {
 
         bounty.put(player.getUniqueId(), amount);
     }
 
-    public int getPlayerBounty(OfflinePlayer player) {
+    public static int getPlayerBounty(OfflinePlayer player) {
         if (bounty.get(player.getUniqueId()) != null) {
             return bounty.get(player.getUniqueId());
         }else{

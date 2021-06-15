@@ -17,16 +17,14 @@ public class BountyListener implements Listener {
         if (event.getEntity() instanceof Player) {
             Player victim = event.getEntity();
             if (victim.getKiller() instanceof Player) {
-                BountyManager bmanager = new BountyManager(plugin);
-                CurrencyManager smanager = new CurrencyManager(plugin);
                 Player killer = victim.getKiller();
-                if (bmanager.getPlayerBounty(victim) == 0) {
-                    bmanager.addBountyToPlayer(killer, +1);
+                if (BountyManager.getPlayerBounty(victim) == 0) {
+                    BountyManager.addBountyToPlayer(killer, +1);
                     Bukkit.broadcastMessage(killer.getName() + "'s bounty has increased");
-                } else if (bmanager.getPlayerBounty(victim) > 0) {
-                    smanager.removePlayerCurrency(victim, bmanager.getPlayerBounty(victim));
-                    smanager.addCurrencyToPlayer(killer, bmanager.getPlayerBounty(victim));
-                    bmanager.setPlayerBounty(victim, 0);
+                } else if (BountyManager.getPlayerBounty(victim) > 0) {
+                    CurrencyManager.removePlayerCurrency(victim, BountyManager.getPlayerBounty(victim));
+                    CurrencyManager.addCurrencyToPlayer(killer, BountyManager.getPlayerBounty(victim));
+                    BountyManager.setPlayerBounty(victim, 0);
                     Bukkit.broadcastMessage(killer.getName() + " has killed " + victim.getName() + " and obtained their bounty");
                 }
             }
