@@ -2,17 +2,14 @@ package ragnaorok.Main.managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import ragnaorok.Main.Main;
-
+import ragnaorok.Main.Currency;
 import java.io.*;
 import java.nio.file.FileSystemNotFoundException;
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class BountyManager {
-    public static HashMap<UUID, Integer> bounty = new HashMap<UUID, Integer>();
 
     public static void saveBountyFile() throws FileSystemNotFoundException, IOException {
         for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
@@ -22,11 +19,11 @@ public class BountyManager {
 
             UUID uuid = player.getUniqueId();
 
-            if (bounty.get(player.getUniqueId().toString()) != null) {
-                bounty.put(uuid, bounty.get(uuid));
+            if (Currency.BOUNTIES.get(player.getUniqueId().toString()) != null) {
+                Currency.BOUNTIES.put(uuid, Currency.BOUNTIES.get(uuid));
             }
             try {
-                output.writeObject(bounty);
+                output.writeObject(Currency.BOUNTIES);
                 output.flush();
                 output.close();
             } catch (IOException e) {
@@ -34,10 +31,11 @@ public class BountyManager {
             }
         }
     }
-    @SuppressWarnings("unchecked")
-    public static void loadCurrencyFile() throws Exception {
 
-        File file = new File("currency.dat");
+    @SuppressWarnings("unchecked")
+    public static void loadBountyFile() throws Exception {
+
+        File file = new File("bounty.dat");
         boolean successful = true;
 
         if (!file.exists()) {
@@ -59,30 +57,30 @@ public class BountyManager {
     }
 
     public static void addBountyToPlayer(OfflinePlayer player, int amount) {
-        if (bounty.get(player.getUniqueId()) != null) {
-            bounty.put(player.getUniqueId(), bounty.get(player.getUniqueId()) + amount);
+        if (Currency.BOUNTIES.get(player.getUniqueId()) != null) {
+            Currency.BOUNTIES.put(player.getUniqueId(), Currency.BOUNTIES.get(player.getUniqueId()) + amount);
         } else {
-            bounty.put(player.getUniqueId(), amount);
+            Currency.BOUNTIES.put(player.getUniqueId(), amount);
         }
     }
 
     public static void removePlayerBounty(OfflinePlayer player, int amount) {
-        if (bounty.get(player.getUniqueId()) != null) {
-            bounty.put(player.getUniqueId(), bounty.get(player.getUniqueId()) - amount);
+        if (Currency.BOUNTIES.get(player.getUniqueId()) != null) {
+            Currency.BOUNTIES.put(player.getUniqueId(), Currency.BOUNTIES.get(player.getUniqueId()) - amount);
         } else {
-            bounty.put(player.getUniqueId(), amount);
+            Currency.BOUNTIES.put(player.getUniqueId(), amount);
         }
     }
 
     public static void setPlayerBounty(OfflinePlayer player, int amount) {
 
-        bounty.put(player.getUniqueId(), amount);
+        Currency.BOUNTIES.put(player.getUniqueId(), amount);
     }
 
     public static int getPlayerBounty(OfflinePlayer player) {
-        if (bounty.get(player.getUniqueId()) != null) {
-            return bounty.get(player.getUniqueId());
-        }else{
+        if (Currency.BOUNTIES.get(player.getUniqueId()) != null) {
+            return Currency.BOUNTIES.get(player.getUniqueId());
+        } else {
             return 0;
         }
     }
