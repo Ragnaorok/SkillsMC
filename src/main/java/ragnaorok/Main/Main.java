@@ -34,6 +34,8 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CrouchJumpListener(), this);
         getServer().getPluginManager().registerEvents(new BountyListener(), this);
         getServer().getPluginManager().registerEvents(new BlockingListener(), this);
+        getServer().getPluginManager().registerEvents(new CrossBowSkill(), this);
+        getServer().getPluginManager().registerEvents(new test(), this);
         System.out.println("Plugin Enabled");
     }
 
