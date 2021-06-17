@@ -2,10 +2,7 @@ package ragnaorok.Main.managers;
 
 import org.bukkit.OfflinePlayer;
 import ragnaorok.Main.Currency;
-
 import java.io.*;
-import java.util.HashMap;
-import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
