@@ -6,6 +6,12 @@ import ragnaorok.Main.commands.KaboomCommand;
 import ragnaorok.Main.commands.SaveAllCommand;
 import ragnaorok.Main.commands.SoulsCommand;
 import ragnaorok.Main.listeners.*;
+import ragnaorok.Main.listeners.MovementListeners.CrouchJumpListener;
+import ragnaorok.Main.listeners.PlayerDataListeners.BountyListener;
+import ragnaorok.Main.listeners.PlayerDataListeners.LevelUpListener;
+import ragnaorok.Main.listeners.ToolListeners.BlazeRodListener;
+import ragnaorok.Main.listeners.ToolListeners.CrossBowSkill;
+import ragnaorok.Main.listeners.ToolListeners.ShieldListener;
 import ragnaorok.Main.managers.BountyManager;
 import ragnaorok.Main.managers.CurrencyManager;
 
@@ -33,9 +39,9 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new LevelUpListener(), this);
         getServer().getPluginManager().registerEvents(new CrouchJumpListener(), this);
         getServer().getPluginManager().registerEvents(new BountyListener(), this);
-        getServer().getPluginManager().registerEvents(new BlockingListener(), this);
+        getServer().getPluginManager().registerEvents(new ShieldListener(), this);
         getServer().getPluginManager().registerEvents(new CrossBowSkill(), this);
-        getServer().getPluginManager().registerEvents(new test(), this);
+        getServer().getPluginManager().registerEvents(new BlazeRodListener(), this);
         System.out.println("Plugin Enabled");
     }
 
