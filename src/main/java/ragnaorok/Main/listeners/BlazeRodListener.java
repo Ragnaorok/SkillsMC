@@ -26,6 +26,8 @@ import static org.bukkit.entity.EntityType.FIREBALL;
 
 public class BlazeRodListener implements Listener {
     Map<String, Long> leftCooldown = new HashMap<String, Long>();
+    Map<String, Long> shiftCooldown = new HashMap<String, Long>();
+
 
     @EventHandler
     public void onBlock(PlayerInteractEvent event) {
@@ -40,15 +42,27 @@ public class BlazeRodListener implements Listener {
         if (player.getItemInHand() == null) return;
         if (type == Material.BLAZE_ROD) {
             if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                if (leftCooldown.containsKey(player.getName())) {
-                    if (leftCooldown.get(player.getName()) > System.currentTimeMillis()) {
-                        long time = (leftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
-                        player.sendMessage(ChatColor.DARK_GRAY + "Skill will be ready in " + time + " second(s)");
-                        return;
+                if (playerSneakEvent(player) == false) {
+                    if (leftCooldown.containsKey(player.getName())) {
+                        if (leftCooldown.get(player.getName()) > System.currentTimeMillis()) {
+                            long lefttime = (leftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
+                            player.sendMessage(ChatColor.DARK_GRAY + "Skill will be ready in " + lefttime + " second(s)");
+                            return;
+                        }
                     }
                 }
+                if (playerSneakEvent(player) == true) {
+                    if (shiftCooldown.containsKey(player.getName())) {
+                        if (shiftCooldown.get(player.getName()) > System.currentTimeMillis()) {
+                            long shifttime = (shiftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
+                            player.sendMessage(ChatColor.DARK_GRAY + "Skill will be ready in " + shifttime + " second(s)");
+                            return;
+                        }
+                    }
+                }
+
                 if (playerSneakEvent(player) == false) {
-                    leftCooldown.put(player.getName(), System.currentTimeMillis() + (2 * 1000));
+                    leftCooldown.put(player.getName(), System.currentTimeMillis() + (3 * 1000));
                     player.sendMessage(ChatColor.GREEN + "Blaze Rod Skill: Fireball");
                     for (int i = 0; i < 3; i++) {  // Fireball Skill
                         Location oloc = destination.add(direction);
@@ -59,6 +73,7 @@ public class BlazeRodListener implements Listener {
                     }
                 }
                 if (playerSneakEvent(player) == true) {
+                    shiftCooldown.put(player.getName(), System.currentTimeMillis() + (5 * 1000));
                     destination.add(direction).add(direction);
                     world.createExplosion(destination, 4, false, false);
                     player.sendMessage(ChatColor.GREEN + "Blaze Rod Skill: Implode");
@@ -73,10 +88,10 @@ public class BlazeRodListener implements Listener {
                             destination.subtract(x, y, z);
                         }
                     }
-                    }
                 }
             }
         }
+    }
 
     @EventHandler
     public void onExplode(EntityExplodeEvent event) {
