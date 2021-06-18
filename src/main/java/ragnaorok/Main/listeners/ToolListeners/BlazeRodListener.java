@@ -42,7 +42,7 @@ public class BlazeRodListener implements Listener {
         if (player.getItemInHand() == null) return;
         if (type == Material.BLAZE_ROD) {
             if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                if (playerSneakEvent(player) == false) {
+                if (!player.isSneaking()) {
                     if (leftCooldown.containsKey(player.getName())) {
                         if (leftCooldown.get(player.getName()) > System.currentTimeMillis()) {
                             long lefttime = (leftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
@@ -51,7 +51,7 @@ public class BlazeRodListener implements Listener {
                         }
                     }
                 }
-                if (playerSneakEvent(player) == true) {
+                if (player.isSneaking()) {
                     if (shiftCooldown.containsKey(player.getName())) {
                         if (shiftCooldown.get(player.getName()) > System.currentTimeMillis()) {
                             long shifttime = (shiftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
@@ -61,7 +61,7 @@ public class BlazeRodListener implements Listener {
                     }
                 }
 
-                if (playerSneakEvent(player) == false) {
+                if (!player.isSneaking()) {
                     leftCooldown.put(player.getName(), System.currentTimeMillis() + (3 * 1000));
                     player.sendMessage(ChatColor.GREEN + "Blaze Rod Skill: Fireball");
                     for (int i = 0; i < 3; i++) {  // Fireball Skill
@@ -72,7 +72,7 @@ public class BlazeRodListener implements Listener {
                         world.playSound(oloc, ENTITY_BLAZE_BURN, 20, 1);
                     }
                 }
-                if (playerSneakEvent(player) == true) {
+                if (player.isSneaking()) {
                     shiftCooldown.put(player.getName(), System.currentTimeMillis() + (5 * 1000));
                     destination.add(direction).add(direction);
                     world.createExplosion(destination, 4, false, false);
@@ -98,13 +98,5 @@ public class BlazeRodListener implements Listener {
         EntityType type = event.getEntityType();
         if (type != FIREBALL) return;
         event.setCancelled(true);
-    }
-
-    public boolean playerSneakEvent(Player event) {
-        Player player = event.getPlayer();
-        if (player.isSneaking()) {
-            return true;
-        }
-        return false;
     }
 }
