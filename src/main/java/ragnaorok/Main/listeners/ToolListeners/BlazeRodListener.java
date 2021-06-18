@@ -35,7 +35,7 @@ public class BlazeRodListener implements Listener {
         World world = player.getWorld();
         Location origin = player.getLocation();
         Vector direction = origin.getDirection();
-        direction.multiply(4);
+        direction.multiply(3);
         Location destination = origin.clone().add(direction).add(direction);
         direction.normalize();
         Material type = player.getItemInHand().getType();
@@ -50,18 +50,6 @@ public class BlazeRodListener implements Listener {
                             return;
                         }
                     }
-                }
-                if (player.isSneaking()) {
-                    if (shiftCooldown.containsKey(player.getName())) {
-                        if (shiftCooldown.get(player.getName()) > System.currentTimeMillis()) {
-                            long shifttime = (shiftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
-                            player.sendMessage(ChatColor.DARK_GRAY + "Skill will be ready in " + shifttime + " second(s)");
-                            return;
-                        }
-                    }
-                }
-
-                if (!player.isSneaking()) {
                     leftCooldown.put(player.getName(), System.currentTimeMillis() + (3 * 1000));
                     player.sendMessage(ChatColor.GREEN + "Blaze Rod Skill: Fireball");
                     for (int i = 0; i < 3; i++) {  // Fireball Skill
@@ -73,6 +61,13 @@ public class BlazeRodListener implements Listener {
                     }
                 }
                 if (player.isSneaking()) {
+                    if (shiftCooldown.containsKey(player.getName())) {
+                        if (shiftCooldown.get(player.getName()) > System.currentTimeMillis()) {
+                            long shifttime = (shiftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
+                            player.sendMessage(ChatColor.DARK_GRAY + "Skill will be ready in " + shifttime + " second(s)");
+                            return;
+                        }
+                    }
                     shiftCooldown.put(player.getName(), System.currentTimeMillis() + (5 * 1000));
                     destination.add(direction).add(direction);
                     world.createExplosion(destination, 4, false, false);
