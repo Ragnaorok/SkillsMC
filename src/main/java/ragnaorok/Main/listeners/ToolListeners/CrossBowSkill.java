@@ -1,4 +1,4 @@
-package ragnaorok.Main.listeners;
+package ragnaorok.Main.listeners.ToolListeners;
 
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;

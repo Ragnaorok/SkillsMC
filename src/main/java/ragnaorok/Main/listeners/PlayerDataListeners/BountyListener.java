@@ -1,4 +1,4 @@
-package ragnaorok.Main.listeners;
+package ragnaorok.Main.listeners.PlayerDataListeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
