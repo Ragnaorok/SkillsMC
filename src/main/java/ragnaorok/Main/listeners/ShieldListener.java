@@ -19,7 +19,7 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockingListener implements Listener { //A Skill that makes Shields usable on mainHand ((;
+public class ShieldListener implements Listener { //A Skill that makes Shields usable on mainHand ((;
     Map<String, Long> left_Cooldown = new HashMap<String, Long>();
     Map<String, Long> right_Cooldown = new HashMap<String, Long>();
     EntityType Fang = EntityType.EVOKER_FANGS;
@@ -45,7 +45,7 @@ public class BlockingListener implements Listener { //A Skill that makes Shields
                     }
                 }
                 right_Cooldown.put(player.getName(), System.currentTimeMillis() + (5 * 1000));
-                player.sendMessage(ChatColor.GREEN + "Defensive Skill: Brace");
+                player.sendMessage(ChatColor.GREEN + "Shield Skill: Brace");
                 player.addPotionEffect((brace));
                 for (int i = 0; i < 360; i += 5) { //Magic Circle
                     particleLoc.setY(ploc.getY() + 1);
@@ -63,7 +63,7 @@ public class BlockingListener implements Listener { //A Skill that makes Shields
                     }
                 }
                 left_Cooldown.put(player.getName(), System.currentTimeMillis() + (3 * 1000));
-                player.sendMessage(ChatColor.GREEN + "Offensive Skill: Vorpal Spikes");
+                player.sendMessage(ChatColor.GREEN + "Shield Skill: Vorpal Spikes");
                 player.addPotionEffect((overwhelm));
 
                 Location origin = player.getLocation(); // Spawns stuff in a line of vision of 10 blocks
