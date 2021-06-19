@@ -32,7 +32,6 @@ public class BountyManager {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static void loadBountyFile() throws Exception {
 
         File file = new File("bounty.dat");
