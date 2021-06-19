@@ -19,11 +19,10 @@ public class SoulsCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender.hasPermission("soulsmanager.use")) {
+        if (sender.isOp()) {
             if (args.length == 0) {
                 sender.sendMessage("/souls <add:remove:set> <player>");
                 return true;
-
             } else if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("add")) {
                     sender.sendMessage("/souls add <player> <int>");

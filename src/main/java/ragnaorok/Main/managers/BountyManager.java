@@ -3,6 +3,7 @@ package ragnaorok.Main.managers;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import ragnaorok.Main.Currency;
+
 import java.io.*;
 import java.nio.file.FileSystemNotFoundException;
 import java.util.UUID;
@@ -32,7 +33,6 @@ public class BountyManager {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static void loadBountyFile() throws Exception {
 
         File file = new File("bounty.dat");

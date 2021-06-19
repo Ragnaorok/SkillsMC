@@ -20,7 +20,9 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
+            System.out.println("Attempting to load Currency Stats...");
             CurrencyManager.loadCurrencyFile();
+            System.out.println("Successfully loaded Currency Stats");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,6 +49,11 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        // Sanity check, but this should be called when you close the server with /stop command
+        try {
+            CurrencyManager.saveCurrencyFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
-
