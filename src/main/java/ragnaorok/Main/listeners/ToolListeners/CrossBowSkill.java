@@ -1,7 +1,6 @@
 package ragnaorok.Main.listeners.ToolListeners;
 
 import org.bukkit.*;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -51,7 +50,7 @@ public class CrossBowSkill implements Listener {
                             return;
                         }
                     }
-                    shiftCooldown.put(player.getName(), System.currentTimeMillis() + (10 * 1000));
+                    shiftCooldown.put(player.getName(), System.currentTimeMillis() + (6 * 1000));
                     player.sendMessage(ChatColor.GREEN + "Crossbow Skill: Flashbang");
                     destination.add(direction).add(direction);
                     oloc.getWorld().spawnParticle(Particle.FLASH, destination, 10);
