@@ -68,7 +68,7 @@ public class BlazeRodListener implements Listener {
                             return;
                         }
                     }
-                    shiftCooldown.put(player.getName(), System.currentTimeMillis() + (5 * 1000));
+                    shiftCooldown.put(player.getName(), System.currentTimeMillis() + (7 * 1000));
                     destination.add(direction).add(direction);
                     world.createExplosion(destination, 4, false, false);
                     player.sendMessage(ChatColor.GREEN + "Blaze Rod Skill: Implode");
