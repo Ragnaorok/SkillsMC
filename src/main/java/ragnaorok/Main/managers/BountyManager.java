@@ -12,25 +12,22 @@ import java.util.zip.GZIPOutputStream;
 
 public class BountyManager {
 
-    public static void saveBountyFile() throws FileSystemNotFoundException, IOException {
-        for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-            File file = new File("BountyManager/bounty.dat");
-
-            ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
-
-            UUID uuid = player.getUniqueId();
-
-            if (Currency.BOUNTIES.get(player.getUniqueId().toString()) != null) {
-                Currency.BOUNTIES.put(uuid, Currency.BOUNTIES.get(uuid));
-            }
-            try {
-                output.writeObject(Currency.BOUNTIES);
-                output.flush();
-                output.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public static void saveBountyFile() throws Exception {
+        File file = new File("currency.dat");
+        boolean successful = true;
+        if (!file.exists()) {
+            successful = file.createNewFile();
         }
+
+        if (!successful)
+            return;
+
+        try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
+            output.writeObject(Currency.SOULS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     public static void loadBountyFile() throws Exception {
@@ -57,32 +54,24 @@ public class BountyManager {
     }
 
     public static void addBountyToPlayer(OfflinePlayer player, int amount) {
-        if (Currency.BOUNTIES.get(player.getUniqueId()) != null) {
-            Currency.BOUNTIES.put(player.getUniqueId(), Currency.BOUNTIES.get(player.getUniqueId()) + amount);
-        } else {
-            Currency.BOUNTIES.put(player.getUniqueId(), amount);
-        }
+        int newAmount = getPlayerBounty(player) + amount;
+        setPlayerBounty(player, newAmount);
     }
 
     public static void removePlayerBounty(OfflinePlayer player, int amount) {
-        if (Currency.BOUNTIES.get(player.getUniqueId()) != null) {
-            Currency.BOUNTIES.put(player.getUniqueId(), Currency.BOUNTIES.get(player.getUniqueId()) - amount);
-        } else {
-            Currency.BOUNTIES.put(player.getUniqueId(), amount);
-        }
+        addBountyToPlayer(player, -amount);
     }
 
     public static void setPlayerBounty(OfflinePlayer player, int amount) {
-
-        Currency.BOUNTIES.put(player.getUniqueId(), amount);
+        String playerUUID = player.getUniqueId().toString();
+        Currency.BOUNTIES.put(playerUUID, amount);
     }
 
     public static int getPlayerBounty(OfflinePlayer player) {
-        if (Currency.BOUNTIES.get(player.getUniqueId()) != null) {
-            return Currency.BOUNTIES.get(player.getUniqueId());
-        } else {
-            return 0;
-        }
+        String playerUUID = player.getUniqueId().toString();
+        // If they aren't already in the "database"
+        Currency.BOUNTIES.putIfAbsent(playerUUID, 0);
+        return Currency.BOUNTIES.get(playerUUID);
     }
 }
 
