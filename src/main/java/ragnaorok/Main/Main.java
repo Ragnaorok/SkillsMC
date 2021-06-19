@@ -9,9 +9,7 @@ import ragnaorok.Main.listeners.*;
 import ragnaorok.Main.listeners.MovementListeners.CrouchJumpListener;
 import ragnaorok.Main.listeners.PlayerDataListeners.BountyListener;
 import ragnaorok.Main.listeners.PlayerDataListeners.LevelUpListener;
-import ragnaorok.Main.listeners.ToolListeners.BlazeRodListener;
-import ragnaorok.Main.listeners.ToolListeners.CrossBowSkill;
-import ragnaorok.Main.listeners.ToolListeners.ShieldListener;
+import ragnaorok.Main.listeners.ToolListeners.*;
 import ragnaorok.Main.managers.BountyManager;
 import ragnaorok.Main.managers.CurrencyManager;
 
@@ -27,7 +25,9 @@ public final class Main extends JavaPlugin {
             e.printStackTrace();
         }
         try {
+            System.out.println("Attempting to load Bounty Stats...");
             BountyManager.loadBountyFile();
+            System.out.println("Successfully loaded Bounty Stats");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,14 +44,21 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ShieldListener(), this);
         getServer().getPluginManager().registerEvents(new CrossBowSkill(), this);
         getServer().getPluginManager().registerEvents(new BlazeRodListener(), this);
+        getServer().getPluginManager().registerEvents(new NetheriteHoeListener(), this);
+        getServer().getPluginManager().registerEvents(new test(), this);
+
         System.out.println("Plugin Enabled");
     }
 
     @Override
     public void onDisable() {
-        // Sanity check, but this should be called when you close the server with /stop command
         try {
             CurrencyManager.saveCurrencyFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            BountyManager.saveBountyFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
