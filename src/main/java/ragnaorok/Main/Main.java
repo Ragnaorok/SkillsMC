@@ -11,7 +11,7 @@ import ragnaorok.Main.listeners.PlayerDataListeners.BountyListener;
 import ragnaorok.Main.listeners.PlayerDataListeners.LevelUpListener;
 import ragnaorok.Main.listeners.ToolListeners.*;
 import ragnaorok.Main.managers.BountyManager;
-import ragnaorok.Main.managers.CurrencyManager;
+import ragnaorok.Main.managers.SoulsManager;
 
 public final class Main extends JavaPlugin {
 
@@ -19,7 +19,7 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         try {
             System.out.println("Attempting to load Currency Stats...");
-            CurrencyManager.loadCurrencyFile();
+            SoulsManager.loadCurrencyFile();
             System.out.println("Successfully loaded Currency Stats");
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,7 +45,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CrossBowSkill(), this);
         getServer().getPluginManager().registerEvents(new BlazeRodListener(), this);
         getServer().getPluginManager().registerEvents(new NetheriteHoeListener(), this);
-        getServer().getPluginManager().registerEvents(new test(), this);
+        getServer().getPluginManager().registerEvents(new BountyListener(), this);
 
         System.out.println("Plugin Enabled");
     }
@@ -53,7 +53,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
-            CurrencyManager.saveCurrencyFile();
+            SoulsManager.saveCurrencyFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
