@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-// CurrencyManager is responsible for any calls to "Souls" System
+// SoulsManager is responsible for any calls to "Souls" System
 
-public class CurrencyManager {
+public class SoulsManager {
 
     // This saves ALL objects inside SOULS hashmap
     // TODO: for optimization reasons, perhaps consider making it save data per user rather than every user in one file
