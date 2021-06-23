@@ -1,10 +1,12 @@
 package ragnaorok.Main.listeners.ToolListeners;
 
 import org.bukkit.*;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
@@ -14,6 +16,7 @@ import java.util.Map;
 public class CrossBowSkill implements Listener {
     Map<String, Long> leftCooldown = new HashMap<String, Long>();
     Map<String, Long> shiftCooldown = new HashMap<String, Long>();
+    Map<String, Long> duration = new HashMap<String, Long>();
 
     @EventHandler
     public void onBlock(PlayerInteractEvent event) {
@@ -27,7 +30,7 @@ public class CrossBowSkill implements Listener {
 
         if (player.getItemInHand() == null) return;
         if (type == Material.CROSSBOW) {
-            if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
                 if (!player.isSneaking()) {
                     if (leftCooldown.containsKey(player.getName())) {
                         if (leftCooldown.get(player.getName()) > System.currentTimeMillis()) {
@@ -46,26 +49,30 @@ public class CrossBowSkill implements Listener {
                     if (shiftCooldown.containsKey(player.getName())) {
                         if (shiftCooldown.get(player.getName()) > System.currentTimeMillis()) {
                             long time = (shiftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
-                            player.sendMessage(ChatColor.DARK_GRAY + "Flashbang will be ready in " + time + " second(s)");
+                            player.sendMessage(ChatColor.DARK_GRAY + "null " + time + " second(s)");
                             return;
                         }
                     }
-                    shiftCooldown.put(player.getName(), System.currentTimeMillis() + (6 * 1000));
-                    player.sendMessage(ChatColor.GREEN + "Crossbow Skill: Flashbang");
-                    destination.add(direction).add(direction);
-                    oloc.getWorld().spawnParticle(Particle.FLASH, destination, 10);
-                    for (double t = 0; t <= Math.PI; t += Math.PI / 10) { //Sphere
-                        double radius = Math.sin(t);
-                        double y = Math.cos(t);
-                        for (double i = 0; i < Math.PI * 2; i += Math.PI / 10) {
-                            double x = Math.cos(i) * radius;
-                            double z = Math.sin(i) * radius;
-                            destination.add(x, y, z);
-                            oloc.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, destination, 10);
-                            destination.subtract(x, y, z);
+                }
+            }
+
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+                if (player.isSneaking()) {
+                    if (shiftCooldown.containsKey(player.getName())) {
+                        if (shiftCooldown.get(player.getName()) > System.currentTimeMillis()) {
+                            long time = (shiftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
+                            player.sendMessage(ChatColor.DARK_GRAY + "RapidFire will be ready in " + time + " second(s)");
+                            return;
                         }
                     }
-                    world.createExplosion(destination, 1, false, false);
+                    shiftCooldown.put(player.getName(), System.currentTimeMillis() + (23 * 1000));
+                    duration.put(player.getName(), System.currentTimeMillis() + (3 * 1000));
+                    player.sendMessage(ChatColor.GREEN + "Rapidfire activated");
+                }
+                if (!player.isSneaking()) {
+                    if (duration.get(player.getName()) > System.currentTimeMillis()) {
+                        player.launchProjectile(Arrow.class);
+                    }
                 }
             }
         }
