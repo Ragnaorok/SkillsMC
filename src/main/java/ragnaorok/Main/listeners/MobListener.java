@@ -104,7 +104,7 @@ public class MobListener implements Listener {
                 Player player = monster.getKiller();
                 Method method = handlers.get(monster.getType());
                 if (method != null) {
-                    method.invoke(event, player, monster);
+                    method.invoke(this,event, player, monster);
                 }
                 // Skills below this belong in a different class, further revision and refactoring is required
                 if (SoulsManager.getPlayerCurrency(player) > 99) { //Skill:Blood_Lust

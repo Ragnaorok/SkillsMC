@@ -6,7 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ragnaorok.Main.Main;
-import ragnaorok.Main.managers.CurrencyManager;
+import ragnaorok.Main.managers.SoulsManager;
 
 public class SaveAllCommand implements CommandExecutor {
 
@@ -25,7 +25,7 @@ public class SaveAllCommand implements CommandExecutor {
                     return true;
                 }
                 try {
-                    CurrencyManager.saveCurrencyFile();
+                    SoulsManager.saveCurrencyFile();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
