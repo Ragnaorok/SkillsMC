@@ -79,6 +79,13 @@ public class MobListener implements Listener {
             draw(Shapes.HELIX, mloc, Particle.PORTAL, player);
         }
     }
+    @MobHandler(entity = EntityType.CREEPER)
+    public static void handleCreeperDeath(EntityDeathEvent event, Player player, Monster monster) {
+        Location mloc = monster.getLocation();
+        Location particleLoc = mloc.clone();
+            draw(Shapes.HELIX, particleLoc, Particle.FIREWORKS_SPARK, player);
+        }
+
 
     public void initHandlers() {
         for (Method method : this.getClass().getMethods()) {
@@ -104,7 +111,7 @@ public class MobListener implements Listener {
                 Player player = monster.getKiller();
                 Method method = handlers.get(monster.getType());
                 if (method != null) {
-                    method.invoke(this,event, player, monster);
+                    method.invoke(this, event, player, monster);
                 }
                 // Skills below this belong in a different class, further revision and refactoring is required
                 if (SoulsManager.getPlayerCurrency(player) > 99) { //Skill:Blood_Lust
@@ -133,7 +140,7 @@ public class MobListener implements Listener {
         switch (shape) {
             case CIRCLE:
                 for (int i = 0; i < 360; i += 5) {
-                    particleLoc.setY(mloc.getY() + 1);
+                    particleLoc.setY(mloc.getY());
                     particleLoc.setZ(mloc.getZ() + Math.sin(i));
                     particleLoc.setX(mloc.getX() + Math.cos(i));
                     player.spawnParticle(particle, particleLoc, 1);
