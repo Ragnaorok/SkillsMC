@@ -1,16 +1,12 @@
 package ragnaorok.Main.listeners.ToolListeners;
 
 import org.bukkit.*;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.EvokerFangs;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -18,6 +14,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class ShieldListener implements Listener { //A Skill that makes Shields usable on mainHand ((;
     Map<String, Long> left_Cooldown = new HashMap<String, Long>();
@@ -33,7 +30,6 @@ public class ShieldListener implements Listener { //A Skill that makes Shields u
         Location ploc = loc.clone();
         Material type = player.getItemInHand().getType();
         PotionEffect brace = new PotionEffect(PotionEffectType.ABSORPTION, 25, 1);
-        PotionEffect overwhelm = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 30, 3);
         if (player.getItemInHand() == null) return;
         if (type == Material.SHIELD) {
             if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -54,27 +50,26 @@ public class ShieldListener implements Listener { //A Skill that makes Shields u
                     world.spawnParticle(Particle.SPELL_INSTANT, particleLoc, 1);
                 }
             } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) { //Unfinished Stub
-                {
-                    if (left_Cooldown.containsKey(player.getName())) {
+                if (player.isSneaking()) {
+                    {
+                        if (left_Cooldown.containsKey(player.getName())) {
 
-                        if (left_Cooldown.get(player.getName()) > System.currentTimeMillis()) {
-                            return;
+                            if (left_Cooldown.get(player.getName()) > System.currentTimeMillis()) {
+                                return;
+                            }
                         }
                     }
-                }
-                left_Cooldown.put(player.getName(), System.currentTimeMillis() + (3 * 1000));
-                player.sendMessage(ChatColor.GREEN + "Shield Skill: Vorpal Spikes");
-                player.addPotionEffect((overwhelm));
-
-                Location origin = player.getLocation(); // Spawns stuff in a line of vision of 10 blocks
-                Vector direction = origin.getDirection();
-                direction.multiply(10);
-                Location destination = origin.clone().add(direction);
-                direction.normalize();
-                for (int i = 0; i < 10; i++) {
-                    Location oloc = origin.add(direction);
-                    oloc.getWorld().spawnParticle(Particle.CRIT, oloc, 10);
-                    player.getWorld().spawnEntity(oloc, Fang);
+                    left_Cooldown.put(player.getName(), System.currentTimeMillis() + (3 * 1000));
+                    player.sendMessage(ChatColor.GREEN + "Shield Skill: Vorpal Spikes");
+                    Location origin = player.getLocation();
+                    Vector direction = origin.getDirection();
+                    direction.multiply(10);
+                    direction.normalize();
+                    for (int i = 0; i < 10; i++) {
+                        Location oloc = origin.add(direction);
+                        oloc.getWorld().spawnParticle(Particle.CRIT, oloc, 10);
+                        player.getWorld().spawnEntity(oloc, Fang);
+                    }
                 }
             }
         }
@@ -85,6 +80,17 @@ public class ShieldListener implements Listener { //A Skill that makes Shields u
         if (event.getDamager() instanceof EvokerFangs) {
             if (event.getEntityType() != EntityType.PLAYER) return;
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void reinforceEnchant(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof Monster) {
+            Player player = (Player) event.getDamager();
+            if (player.getInventory().getItemInMainHand().getType() == Material.SHIELD) {
+                if (player.getInventory().getItemInMainHand().getItemMeta().getLore().contains("Reinforce"))
+                    event.setDamage(event.getDamage() + 5);
+            }
         }
     }
 }
