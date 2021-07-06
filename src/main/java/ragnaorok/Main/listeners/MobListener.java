@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -23,6 +24,7 @@ import java.util.Map;
 
 public class MobListener implements Listener {
 
+    static ItemStack firework = new ItemStack(Material.FIREWORK_ROCKET);
     private static final Map<EntityType, Method> handlers = new HashMap<>();
 
     public MobListener() {
@@ -35,7 +37,7 @@ public class MobListener implements Listener {
 
     @MobHandler(entity = EntityType.ZOMBIE, entities = {EntityType.ZOMBIE_HORSE,
             EntityType.ZOMBIE_VILLAGER, EntityType.PILLAGER, EntityType.PHANTOM,
-            EntityType.ZOMBIFIED_PIGLIN, EntityType.PIGLIN})
+            EntityType.ZOMBIFIED_PIGLIN, EntityType.PIGLIN, EntityType.WITCH})
     public static void handleZombiesDeath(EntityDeathEvent event, Player player, Monster monster) {
         Location mloc = monster.getLocation();
         draw(Shapes.HELIX, mloc, Particle.TOWN_AURA, player);
@@ -79,12 +81,17 @@ public class MobListener implements Listener {
             draw(Shapes.HELIX, mloc, Particle.PORTAL, player);
         }
     }
+
     @MobHandler(entity = EntityType.CREEPER)
     public static void handleCreeperDeath(EntityDeathEvent event, Player player, Monster monster) {
         Location mloc = monster.getLocation();
         Location particleLoc = mloc.clone();
-            draw(Shapes.HELIX, particleLoc, Particle.FIREWORKS_SPARK, player);
+        draw(Shapes.HELIX, particleLoc, Particle.FIREWORKS_SPARK, player);
+        int chance = (int) Math.random();
+        if (chance == 10){
+            player.getInventory().addItem(firework);
         }
+    }
 
 
     public void initHandlers() {
