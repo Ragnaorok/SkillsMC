@@ -18,7 +18,7 @@ public class KaboomCommand implements CommandExecutor {
 
     public KaboomCommand(Main plugin) {
         this.plugin = plugin;
-        plugin.getCommand("souls").setExecutor(this);
+        plugin.getCommand("kaboom").setExecutor(this);
     }
 
 
