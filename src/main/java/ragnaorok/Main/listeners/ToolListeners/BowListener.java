@@ -20,7 +20,7 @@ public class BowListener implements Listener {
     Map<String, Long> duration = new HashMap<String, Long>();
 
     @EventHandler
-    public void test(PlayerInteractEvent event) {
+    public void bowListener(PlayerInteractEvent event) {
         PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 25, 3);
         Player player = event.getPlayer();  //player
         Material type = player.getItemInHand().getType();
