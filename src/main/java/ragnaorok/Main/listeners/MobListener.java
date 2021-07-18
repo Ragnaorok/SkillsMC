@@ -87,7 +87,7 @@ public class MobListener implements Listener {
         Location mloc = monster.getLocation();
         Location particleLoc = mloc.clone();
         draw(Shapes.HELIX, particleLoc, Particle.FIREWORKS_SPARK, player);
-        int chance = (int) Math.random();
+        int chance = (int) Math.random()*10;
         if (chance == 10){
             player.getInventory().addItem(firework);
         }
@@ -124,6 +124,9 @@ public class MobListener implements Listener {
                 if (SoulsManager.getPlayerCurrency(player) > 99) { //Skill:Blood_Lust
                     if (player.getHealth() < 20) {
                         player.setHealth(player.getHealth() + 1);
+                    }
+                    else{
+                        return;
                     }
                 }
                 if (SoulsManager.getPlayerCurrency(player) > 199) { //Skill:Second_Wind
