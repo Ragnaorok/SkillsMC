@@ -70,6 +70,8 @@ public class CrossBowSkill implements Listener {
                     player.sendMessage(ChatColor.GREEN + "Rapidfire activated");
                 }
                 if (!player.isSneaking()) {
+                    if (duration.get(player.getName()) == null)
+                        return;
                     if (duration.get(player.getName()) > System.currentTimeMillis()) {
                         player.launchProjectile(Arrow.class);
                     }
