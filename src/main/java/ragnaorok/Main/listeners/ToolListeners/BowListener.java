@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -31,7 +32,7 @@ public class BowListener implements Listener {
                     if (leftCooldown.containsKey(player.getName())) {
                         if (leftCooldown.get(player.getName()) > System.currentTimeMillis()) {
                             long time = (leftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
-                            player.sendMessage(ChatColor.DARK_GRAY + "Bow Skill Speed: will be ready in " + time + " second(s)");
+                            player.sendMessage(ChatColor.DARK_GRAY + "Speed will be ready in " + time + " second(s)");
                             return;
                         }
                     }
@@ -65,7 +66,8 @@ public class BowListener implements Listener {
             Location particleLoc = loc.clone();
             Location ploc = loc.clone();
             Vector direction = origin.getDirection();
-
+            if (duration.get(player.getName()) == null)
+                return;
             if (duration.get(player.getName()) > System.currentTimeMillis()) {
                 Arrow arrow = (Arrow) event.getProjectile();
                 Vector vec = player.getEyeLocation().getDirection();
@@ -76,6 +78,12 @@ public class BowListener implements Listener {
                     world.spawnParticle(Particle.GLOW, trail, 10);
                 }
             }
+        }
+    }
+    @EventHandler
+    public void onItem(PlayerPickupItemEvent event){
+        if (event.getItem().getType() == EntityType.ARROW){
+            event.setCancelled(true);
         }
     }
 }
