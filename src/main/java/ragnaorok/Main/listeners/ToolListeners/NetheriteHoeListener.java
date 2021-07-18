@@ -31,7 +31,7 @@ public class NetheriteHoeListener implements Listener {
     }
 
     @EventHandler
-    public void onCooldown(PlayerMoveEvent event) { //Calls groundUpdate
+    public void onCooldown(PlayerMoveEvent event) {
         Player player = event.getPlayer();  //player
         if (leftCooldown.containsKey(player.getName())) {
             if (leftCooldown.get(player.getName()) == System.currentTimeMillis()) {
@@ -48,11 +48,13 @@ public class NetheriteHoeListener implements Listener {
 
     @EventHandler
     public void onGlideEvent(EntityToggleGlideEvent event) {
-        Player player = (Player) event.getEntity();
-        if (player.getItemInHand().getType() == Material.NETHERITE_HOE){
-            event.setCancelled(true);
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            if (player.getItemInHand().getType() == Material.NETHERITE_HOE) {
+                event.setCancelled(true);
+            }
+        }
     }
-}
 
 
     @EventHandler
