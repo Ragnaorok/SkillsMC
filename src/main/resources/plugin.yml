@@ -16,3 +16,9 @@ commands:
   kaboom:
     description: blow up
     usage: kaboom
+  reinforce:
+    description: enchants shields
+    usage: reinforce
+  check:
+    description: check enchants
+    usage: checks enchants
