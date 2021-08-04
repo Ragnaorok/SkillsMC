@@ -8,7 +8,6 @@ import ragnaorok.Main.commands.SoulsCommand;
 import ragnaorok.Main.customEnchants.ReinforceEnchant;
 import ragnaorok.Main.listeners.*;
 import ragnaorok.Main.listeners.MovementListeners.CrouchJumpListener;
-import ragnaorok.Main.listeners.MovementListeners.DoubleJumpListener;
 import ragnaorok.Main.listeners.PlayerDataListeners.BountyListener;
 import ragnaorok.Main.listeners.PlayerDataListeners.LevelUpListener;
 import ragnaorok.Main.listeners.ToolListeners.*;
@@ -51,6 +50,9 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BountyListener(), this);
         getServer().getPluginManager().registerEvents(new BowListener(), this);
         getServer().getPluginManager().registerEvents(new NetheriteHoeListener(), this);
+        getServer().getPluginManager().registerEvents(new AxeListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathInventory(this), this);
+        new PlayerDeathInventory(this);
         System.out.println("Plugin Enabled");
     }
 
