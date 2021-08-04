@@ -52,7 +52,6 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new NetheriteHoeListener(), this);
         getServer().getPluginManager().registerEvents(new AxeListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathInventory(this), this);
-        new PlayerDeathInventory(this);
         System.out.println("Plugin Enabled");
     }
 

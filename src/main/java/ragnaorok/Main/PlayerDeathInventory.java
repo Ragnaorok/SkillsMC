@@ -12,12 +12,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerDeathInventory implements Listener {
     private Inventory gui;
-    Map<String, ItemStack[]> playerInventory = new HashMap<>();
+    private final static Map<String, ItemStack[]> playerInventory = new HashMap<>();
     private JavaPlugin plugin;
 
     public PlayerDeathInventory(JavaPlugin plugin) {
@@ -32,10 +34,9 @@ public class PlayerDeathInventory implements Listener {
     public void playerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         ItemStack[] inventory = player.getInventory().getContents();
+        Collections.shuffle(Arrays.asList(inventory));
         playerInventory.put(player.getName(), inventory);
-        for (ItemStack item : inventory) {
-            event.getDrops().remove(item);
-        }
+        event.getDrops().clear();
     }
 
     @EventHandler
@@ -49,11 +50,10 @@ public class PlayerDeathInventory implements Listener {
     }
 
     public void openNewGui(Player player) {
-        gui = Bukkit.createInventory(null, 54, ChatColor.BLACK + "Items");
+        gui = Bukkit.createInventory(null, 45, ChatColor.BLACK + "Retrieve Items");
         ItemStack[] content = playerInventory.get(player.getName());
         gui.setContents(content);
         player.openInventory(gui);
-        System.out.println("Death Gui Opened");
     }
 
 }
