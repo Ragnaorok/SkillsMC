@@ -50,10 +50,14 @@ public class PlayerDeathInventory implements Listener {
     }
 
     public void openNewGui(Player player) {
-        gui = Bukkit.createInventory(null, 45, ChatColor.BLACK + "Retrieve Items");
+        gui = Bukkit.createInventory(null, 27, ChatColor.BLACK + "Retrieve Items");
         ItemStack[] content = playerInventory.get(player.getName());
-        gui.setContents(content);
+        for (int i = 0; i < gui.getSize(); i++) {
+            if (content[i] != null) {
+                gui.addItem(content[i]);
+            }
+        }
         player.openInventory(gui);
     }
-
 }
+
