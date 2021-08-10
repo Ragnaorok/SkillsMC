@@ -37,14 +37,14 @@ public class SoulsCommand implements CommandExecutor {
                 int amount = Integer.parseInt(args[2]);
                 if (args[0].equalsIgnoreCase("add")) {
                     if (player != null) {
-                        SoulsManager.addCurrencyToPlayer(player, amount);
+                        SoulsManager.addSoulsToPlayer(player, amount);
                         sender.sendMessage("You have successfully added " + args[2] + " souls to "+ player.getName());
                     } else {
                         sender.sendMessage("could not be found");
                     }
                 } else if (args[0].equalsIgnoreCase("set")) {
                     if (player != null) {
-                        SoulsManager.setPlayerCurrency(player, amount);
+                        SoulsManager.setPlayerSouls(player, amount);
                         sender.sendMessage("you have successfully set the player " + player.getName());
                     } else {
                         sender.sendMessage("player could not be found");
@@ -58,7 +58,7 @@ public class SoulsCommand implements CommandExecutor {
             OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
             if (player != null || player.hasPlayedBefore()) {
                 if (args[0].equalsIgnoreCase("get")) {
-                    sender.sendMessage(player.getName() + " currently has " + SoulsManager.getPlayerCurrency(player) + " souls");
+                    sender.sendMessage(player.getName() + " currently has " + SoulsManager.getPlayerSouls(player) + " souls");
                     return true;
                 } else {
                     sender.sendMessage(player.getName() + "<amount>");
