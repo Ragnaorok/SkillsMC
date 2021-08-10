@@ -17,6 +17,8 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.util.Vector;
+import ragnaorok.Main.ClassType;
+import ragnaorok.Main.managers.PlayerClassManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,63 +32,17 @@ public class BlazeRodListener implements Listener {
 
 
     @EventHandler
-    public void onBlock(PlayerInteractEvent event) {
+    public void onCast(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        World world = player.getWorld();
-        Location origin = player.getLocation();
-        Vector direction = origin.getDirection();
-        direction.multiply(3);
-        Location destination = origin.clone().add(direction).add(direction);
-        direction.normalize();
-        Material type = player.getItemInHand().getType();
-        if (player.getItemInHand() == null) return;
-        if (type == Material.BLAZE_ROD) {
-            if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                if (!player.isSneaking()) {
-                    if (leftCooldown.containsKey(player.getName())) {
-                        if (leftCooldown.get(player.getName()) > System.currentTimeMillis()) {
-                            long lefttime = (leftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
-                            player.sendMessage(ChatColor.DARK_GRAY + "Skill will be ready in " + lefttime + " second(s)");
-                            return;
-                        }
-                    }
-                    leftCooldown.put(player.getName(), System.currentTimeMillis() + (3 * 1000));
-                    player.sendMessage(ChatColor.GREEN + "Blaze Rod Skill: Fireball");
-                    for (int i = 0; i < 3; i++) {  // Fireball Skill
-                        Location oloc = destination.add(direction);
-                        oloc.getWorld().spawnParticle(Particle.LAVA, oloc, 10);
-                        world.spawnEntity(oloc, FIREBALL);
-                        world.playSound(oloc, ENTITY_BLAZE_SHOOT, 20, 1);
-                        world.playSound(oloc, ENTITY_BLAZE_BURN, 20, 1);
-                    }
-                }
-                if (player.isSneaking()) {
-                    if (shiftCooldown.containsKey(player.getName())) {
-                        if (shiftCooldown.get(player.getName()) > System.currentTimeMillis()) {
-                            long shifttime = (shiftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
-                            player.sendMessage(ChatColor.DARK_GRAY + "Skill will be ready in " + shifttime + " second(s)");
-                            return;
-                        }
-                    }
-                    shiftCooldown.put(player.getName(), System.currentTimeMillis() + (7 * 1000));
-                    destination.add(direction).add(direction);
-                    world.createExplosion(destination, 4, false, false);
-                    player.sendMessage(ChatColor.GREEN + "Blaze Rod Skill: Implode");
-                    for (double t = 0; t <= Math.PI; t += Math.PI / 10) { //Sphere
-                        double radius = Math.sin(t);
-                        double y = Math.cos(t);
-                        for (double i = 0; i < Math.PI * 2; i += Math.PI / 10) {
-                            double x = Math.cos(i) * radius;
-                            double z = Math.sin(i) * radius;
-                            destination.add(x, y, z);
-                            world.spawnParticle(Particle.FLASH, destination, 50);
-                            destination.subtract(x, y, z);
-                        }
-                    }
-                }
-            }
+        if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            PlayerClassManager.useAbility(player);
+            PlayerClassManager.displayManaBar(player);
         }
-    }
+        if (event.getAction() == Action.RIGHT_CLICK_AIR) {
+            PlayerClassManager.addMana();
+            PlayerClassManager.displayManaBar(player);
+        }
+        }
 
     @EventHandler
     public void onExplode(EntityExplodeEvent event) {
