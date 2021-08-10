@@ -61,7 +61,7 @@ public class ReinforceEnchant implements CommandExecutor {
             Player player = (Player) sender;
             if (!(player.getInventory().getItemInMainHand().getType() == Material.SHIELD))
                 return true;
-            if (SoulsManager.getPlayerCurrency(player) < 50) {
+            if (SoulsManager.getPlayerSouls(player) < 50) {
                 player.sendMessage(ChatColor.RED + "You do not have enough souls");
                 return true;
             }
@@ -69,7 +69,7 @@ public class ReinforceEnchant implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "You do not have enough levels");
                 return true;
             }
-            SoulsManager.removePlayerCurrency(player, 50);
+            SoulsManager.removePlayerSouls(player, 50);
             player.setLevel(20);
             player.getInventory().remove(Material.SHIELD);
             ItemStack item = new ItemStack(Material.SHIELD);
