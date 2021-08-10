@@ -60,7 +60,6 @@ public class AxeListener implements Listener {
                     player.sendMessage("Blight");
                 }
             }
-
         }
     }
 }
