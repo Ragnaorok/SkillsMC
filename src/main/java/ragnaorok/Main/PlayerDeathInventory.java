@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import ragnaorok.Main.managers.SoulsManager;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,10 +25,6 @@ public class PlayerDeathInventory implements Listener {
 
     public PlayerDeathInventory(JavaPlugin plugin) {
         this.plugin = plugin;
-    }
-
-    public PlayerDeathInventory() {
-
     }
 
     @EventHandler
@@ -50,11 +47,25 @@ public class PlayerDeathInventory implements Listener {
     }
 
     public void openNewGui(Player player) {
-        gui = Bukkit.createInventory(null, 27, ChatColor.BLACK + "Retrieve Items");
+        int slots = 0;
+        if (SoulsManager.getPlayerSouls(player) < 25)
+            slots = 18;
+        else if (SoulsManager.getPlayerSouls(player) >= 25 && SoulsManager.getPlayerSouls(player) < 50)
+            slots = 27;
+        else if (SoulsManager.getPlayerSouls(player) >= 50 && SoulsManager.getPlayerSouls(player) < 75)
+            slots = 36;
+        else if (SoulsManager.getPlayerSouls(player) >= 75)
+            slots = 45;
+        gui = Bukkit.createInventory(null,slots, ChatColor.BLACK + "Retrieve Items");
         ItemStack[] content = playerInventory.get(player.getName());
         for (int i = 0; i < gui.getSize(); i++) {
-            if (content[i] != null) {
-                gui.addItem(content[i]);
+            try {
+                if (content[i] != null) {
+                    gui.addItem(content[i]);
+                }
+            }
+            catch(ArrayIndexOutOfBoundsException exception) {
+                continue;
             }
         }
         player.openInventory(gui);
