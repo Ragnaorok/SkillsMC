@@ -6,4 +6,6 @@ import java.util.UUID;
 public class Currency {
     public static final HashMap<String, Integer> SOULS = new HashMap<>();
     public static final HashMap<String, Integer> BOUNTIES = new HashMap<>();
+    public static final HashMap<String, ClassType> CLASSTYPE = new HashMap<>();
+
 }
