@@ -25,7 +25,7 @@ public class SaveAllCommand implements CommandExecutor {
                     return true;
                 }
                 try {
-                    SoulsManager.saveCurrencyFile();
+                    SoulsManager.saveSoulsFile();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
