@@ -5,20 +5,23 @@ api-version: 1.17
 authors: [ Ragnaorok ]
 description: 1.17 Spigot Plugin
 commands:
-  skill:
-    description: select a skill!
+  profile:
+    description: show profile
+    usage: /<command>
+  class:
+    description: select a class
     usage: /<command>
   souls:
     description: a currency command
   saveAll:
     description: a save command
-    usage: saveAll
+    usage: /<command>
   kaboom:
     description: blow up
-    usage: kaboom
+    usage: /<command>
   reinforce:
     description: enchants shields
-    usage: reinforce
+    usage: /<command>
   check:
     description: check enchants
-    usage: checks enchants
+    usage: /<command>
