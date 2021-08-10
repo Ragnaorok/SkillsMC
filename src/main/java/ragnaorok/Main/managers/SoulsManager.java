@@ -12,8 +12,7 @@ import java.util.zip.GZIPOutputStream;
 public class SoulsManager {
 
     // This saves ALL objects inside SOULS hashmap
-    // TODO: for optimization reasons, perhaps consider making it save data per user rather than every user in one file
-    public static void saveCurrencyFile() throws Exception {
+    public static void saveSoulsFile() throws Exception {
         File file = new File("currency.dat");
         boolean successful = true;
         if (!file.exists()) {
@@ -31,7 +30,7 @@ public class SoulsManager {
 
     }
 
-    public static void loadCurrencyFile() throws Exception {
+    public static void loadSoulsFile() throws Exception {
 
         File file = new File("currency.dat");
         boolean successful = true;
@@ -56,21 +55,21 @@ public class SoulsManager {
         }
     }
 
-    public static void addCurrencyToPlayer(OfflinePlayer player, int amount) {
-        int newAmount = getPlayerCurrency(player) + amount;
-        setPlayerCurrency(player, newAmount);
+    public static void addSoulsToPlayer(OfflinePlayer player, int amount) {
+        int newAmount = getPlayerSouls(player) + amount;
+        setPlayerSouls(player, newAmount);
     }
 
-    public static void removePlayerCurrency(OfflinePlayer player, int amount) {
-        addCurrencyToPlayer(player, -amount);
+    public static void removePlayerSouls(OfflinePlayer player, int amount) {
+        addSoulsToPlayer(player, -amount);
     }
 
-    public static void setPlayerCurrency(OfflinePlayer player, int amount) {
+    public static void setPlayerSouls(OfflinePlayer player, int amount) {
         String playerUUID = player.getUniqueId().toString();
         Currency.SOULS.put(playerUUID, amount);
     }
 
-    public static int getPlayerCurrency(OfflinePlayer player) {
+    public static int getPlayerSouls(OfflinePlayer player) {
         String playerUUID = player.getUniqueId().toString();
         // If they aren't already in the "database"
         Currency.SOULS.putIfAbsent(playerUUID, 0);
