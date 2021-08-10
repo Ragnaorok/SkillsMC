@@ -43,7 +43,7 @@ public class MobListener implements Listener {
         draw(Shapes.HELIX, mloc, Particle.TOWN_AURA, player);
         draw(Shapes.SPHERE, mloc, Particle.ASH, player);
         player.spawnParticle(Particle.SOUL, mloc, 10);
-        SoulsManager.addCurrencyToPlayer(player, +1);
+        SoulsManager.addSoulsToPlayer(player, +1);
         player.sendMessage(ChatColor.GREEN + " +1 soul");
     }
 
@@ -63,7 +63,7 @@ public class MobListener implements Listener {
         draw(Shapes.CIRCLE, mloc, Particle.WATER_BUBBLE, player);
         draw(Shapes.CIRCLE, mloc, Particle.WATER_SPLASH, player);
         player.spawnParticle(Particle.SOUL, mloc, 10);
-        SoulsManager.addCurrencyToPlayer(player, 1);
+        SoulsManager.addSoulsToPlayer(player, 1);
         player.sendMessage(ChatColor.GREEN + " +1 soul");
     }
 
@@ -121,7 +121,7 @@ public class MobListener implements Listener {
                     method.invoke(this, event, player, monster);
                 }
                 // Skills below this belong in a different class, further revision and refactoring is required
-                if (SoulsManager.getPlayerCurrency(player) > 99) { //Skill:Blood_Lust
+                if (SoulsManager.getPlayerSouls(player) > 99) { //Skill:Blood_Lust
                     if (player.getHealth() < 20) {
                         player.setHealth(player.getHealth() + 1);
                     }
@@ -129,12 +129,12 @@ public class MobListener implements Listener {
                         return;
                     }
                 }
-                if (SoulsManager.getPlayerCurrency(player) > 199) { //Skill:Second_Wind
+                if (SoulsManager.getPlayerSouls(player) > 199) { //Skill:Second_Wind
                     if (player.getHealth() <= 10) {
                         player.addPotionEffect((new PotionEffect(PotionEffectType.SPEED, 15, 1)));
                     }
                 }
-                if (SoulsManager.getPlayerCurrency(player) > 299) { //Skill:Conqueror
+                if (SoulsManager.getPlayerSouls(player) > 299) { //Skill:Conqueror
                     if (player.getHealth() >= 15) {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 15, 1));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 15, 1));
