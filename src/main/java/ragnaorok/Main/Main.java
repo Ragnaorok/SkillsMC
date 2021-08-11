@@ -10,6 +10,7 @@ import ragnaorok.Main.listeners.PlayerDataListeners.BountyListener;
 import ragnaorok.Main.listeners.PlayerDataListeners.LevelUpListener;
 import ragnaorok.Main.listeners.ToolListeners.*;
 import ragnaorok.Main.managers.BountyManager;
+import ragnaorok.Main.managers.ManaManager;
 import ragnaorok.Main.managers.SoulsManager;
 
 public final class Main extends JavaPlugin {
@@ -33,6 +34,13 @@ public final class Main extends JavaPlugin {
         try {
             System.out.println("Attempting to load PlayerClass Data...");
             ClassType.loadPlayerClassTypeFile();
+            System.out.println("Successfully loaded PlayerClass Data");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            System.out.println("Attempting to load PlayerClass Data...");
+            ManaManager.loadManaFile();
             System.out.println("Successfully loaded PlayerClass Data");
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,6 +85,11 @@ public final class Main extends JavaPlugin {
         }
         try {
             ClassType.savePlayerClassTypeFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            ManaManager.saveManaFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
