@@ -15,85 +15,73 @@ import ragnaorok.Main.ClassType;
 import static org.bukkit.Sound.ENTITY_BLAZE_BURN;
 import static org.bukkit.Sound.ENTITY_BLAZE_SHOOT;
 import static org.bukkit.entity.EntityType.FIREBALL;
+import static ragnaorok.Main.managers.ManaManager.getMana;
+import static ragnaorok.Main.managers.ManaManager.removePlayerMana;
 
 public class PlayerClassManager {
     private static ClassType classType;
-    private static int mana;
     private JavaPlugin plugin;
 
     public PlayerClassManager(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void ClassManager(Player player) {
-        mana = 10;
-    }
-
-    public static void addMana() {
-        if (getMana() < 10) {
-            mana += 1;
-        }
-    }
-
     public static void displayManaBar(Player player) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                new ComponentBuilder(getMana() + "/10").color(ChatColor.DARK_BLUE).create());
+                new ComponentBuilder(getMana(player) + "/10").color(ChatColor.DARK_BLUE).create());
     }
 
     public static void useAbility(Player player) {
         if (ClassType.getPlayerClassType(player) == null) return;
         switch (ClassType.getPlayerClassType(player)) {
             case WARRIOR:
-                useMana(1);
-                World world = player.getWorld();
-                Location origin = player.getEyeLocation();
-                Vector direction = origin.getDirection();
-                direction.normalize();
-                direction.multiply(3);
-                Location destination = origin.clone().add(direction);
-                Material type = player.getItemInHand().getType();
-                if (player.getItemInHand() == null) return;
-                if (type == Material.BLAZE_ROD) {
-                    player.sendMessage(org.bukkit.ChatColor.GREEN + "Blaze Rod Skill: Fireball");
-                    // Fireball Skill
-                    Location oloc = destination.add(direction);
-                    oloc.getWorld().spawnParticle(Particle.LAVA, oloc, 10);
-                    world.spawnEntity(oloc, FIREBALL);
-                    world.playSound(oloc, ENTITY_BLAZE_SHOOT, 20, 1);
-                    world.playSound(oloc, ENTITY_BLAZE_BURN, 20, 1);
+                if (useMana(player,1) == true) {
+                    World world = player.getWorld();
+                    Location origin = player.getEyeLocation();
+                    Vector direction = origin.getDirection();
+                    direction.normalize();
+                    direction.multiply(3);
+                    Location destination = origin.clone().add(direction);
+                    Material type = player.getItemInHand().getType();
+                    if (player.getItemInHand() == null) return;
+                    if (type == Material.BLAZE_ROD) {
+                        player.sendMessage(org.bukkit.ChatColor.GREEN + "Blaze Rod Skill: Fireball");
+                        // Fireball Skill
+                        Location oloc = destination.add(direction);
+                        oloc.getWorld().spawnParticle(Particle.LAVA, oloc, 10);
+                        world.spawnEntity(oloc, FIREBALL);
+                        world.playSound(oloc, ENTITY_BLAZE_SHOOT, 20, 1);
+                        world.playSound(oloc, ENTITY_BLAZE_BURN, 20, 1);
+                    }
                 }
+                return;
             case MAGE:
-                useMana(5);
+                useMana(player,5);
                 //ability
             case CLERIC:
-                useMana(4);
+                useMana(player,4);
 
 
             case ARCHER:
-                useMana(3);
+                useMana(player,3);
                 //ability
         }
     }
 
-    public static void useMana(int val) {
-        if (getMana() >= val) {
-            setMana(getMana() - val);
+    public static boolean useMana(Player player, int val) {
+        boolean cancel = false;
+        if (getMana(player) >= val) {
+            removePlayerMana(player, val);
+            cancel = true;
         }
         else{
             System.out.println("Not enough mana");
         }
+      return cancel;
     }
 
     public static ClassType getClassType() {
         return classType;
-    }
-
-    public static int getMana() {
-        return mana;
-    }
-
-    public static void setMana(int val) {
-        mana = val;
     }
 
 }
