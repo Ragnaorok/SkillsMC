@@ -23,13 +23,13 @@ public enum ClassType {
 
     public static void setPlayerClassType(OfflinePlayer player, ClassType type) {
         String playerUUID = player.getUniqueId().toString();
-        Currency.CLASSTYPE.put(playerUUID, type);
+        Constant.CLASSTYPE.put(playerUUID, type);
     }
 
     public static ClassType getPlayerClassType(OfflinePlayer player) {
         String playerUUID = player.getUniqueId().toString();
-        Currency.CLASSTYPE.putIfAbsent(playerUUID, NONE);
-        return Currency.CLASSTYPE.get(playerUUID);
+        Constant.CLASSTYPE.putIfAbsent(playerUUID, NONE);
+        return Constant.CLASSTYPE.get(playerUUID);
     }
 
     public static void loadPlayerClassTypeFile() throws Exception {
@@ -48,7 +48,7 @@ public enum ClassType {
             HashMap<String, ClassType> readObject = (HashMap<String, ClassType>) input.readObject();
             for (String key : readObject.keySet()) {
                 ClassType type = readObject.get(key);
-                Currency.CLASSTYPE.put(key, type);
+                Constant.CLASSTYPE.put(key, type);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -66,7 +66,7 @@ public enum ClassType {
             return;
 
         try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
-            output.writeObject(Currency.CLASSTYPE);
+            output.writeObject(Constant.CLASSTYPE);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

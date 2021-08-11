@@ -1,7 +1,7 @@
 package ragnaorok.Main.managers;
 
 import org.bukkit.OfflinePlayer;
-import ragnaorok.Main.Currency;
+import ragnaorok.Main.Constant;
 import java.io.*;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
@@ -20,7 +20,7 @@ public class BountyManager {
             return;
 
         try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
-            output.writeObject(Currency.BOUNTIES);
+            output.writeObject(Constant.BOUNTIES);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -45,7 +45,7 @@ public class BountyManager {
             // which we assume is a HashMap<String, Integer>
             for (String key : readObject.keySet()) {
                 int val = readObject.get(key);
-                Currency.BOUNTIES.put(key, val);
+                Constant.BOUNTIES.put(key, val);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -63,14 +63,14 @@ public class BountyManager {
 
     public static void setPlayerBounty(OfflinePlayer player, int amount) {
         String playerUUID = player.getUniqueId().toString();
-        Currency.BOUNTIES.put(playerUUID, amount);
+        Constant.BOUNTIES.put(playerUUID, amount);
     }
 
     public static int getPlayerBounty(OfflinePlayer player) {
         String playerUUID = player.getUniqueId().toString();
         // If they aren't already in the "database"
-        Currency.BOUNTIES.putIfAbsent(playerUUID, 0);
-        return Currency.BOUNTIES.get(playerUUID);
+        Constant.BOUNTIES.putIfAbsent(playerUUID, 0);
+        return Constant.BOUNTIES.get(playerUUID);
     }
 }
 

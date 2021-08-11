@@ -1,7 +1,7 @@
 package ragnaorok.Main.managers;
 
 import org.bukkit.OfflinePlayer;
-import ragnaorok.Main.Currency;
+import ragnaorok.Main.Constant;
 import java.io.*;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
@@ -23,7 +23,7 @@ public class SoulsManager {
             return;
 
         try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
-            output.writeObject(Currency.SOULS);
+            output.writeObject(Constant.SOULS);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -48,7 +48,7 @@ public class SoulsManager {
             // which we assume is a HashMap<String, Integer>
             for (String key : readObject.keySet()) {
                 int val = readObject.get(key);
-                Currency.SOULS.put(key, val);
+                Constant.SOULS.put(key, val);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -66,13 +66,13 @@ public class SoulsManager {
 
     public static void setPlayerSouls(OfflinePlayer player, int amount) {
         String playerUUID = player.getUniqueId().toString();
-        Currency.SOULS.put(playerUUID, amount);
+        Constant.SOULS.put(playerUUID, amount);
     }
 
     public static int getPlayerSouls(OfflinePlayer player) {
         String playerUUID = player.getUniqueId().toString();
         // If they aren't already in the "database"
-        Currency.SOULS.putIfAbsent(playerUUID, 0);
-        return Currency.SOULS.get(playerUUID);
+        Constant.SOULS.putIfAbsent(playerUUID, 0);
+        return Constant.SOULS.get(playerUUID);
     }
 }
