@@ -18,33 +18,16 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
-            System.out.println("Attempting to load Currency Stats...");
+            System.out.println("Attempting to load Player Data...");
             SoulsManager.loadSoulsFile();
-            System.out.println("Successfully loaded Currency Stats");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println("Attempting to load Bounty Stats...");
             BountyManager.loadBountyFile();
-            System.out.println("Successfully loaded Bounty Stats");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println("Attempting to load PlayerClass Data...");
-            ClassType.loadPlayerClassTypeFile();
-            System.out.println("Successfully loaded PlayerClass Data");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println("Attempting to load PlayerClass Data...");
             ManaManager.loadManaFile();
-            System.out.println("Successfully loaded PlayerClass Data");
+            ClassType.loadPlayerClassTypeFile();
+            System.out.println("Successfully loaded Player Data");
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         PluginManager pm = this.getServer().getPluginManager();
         this.getCommand("souls").setExecutor(new SoulsCommand(this));
         this.getCommand("kaboom").setExecutor(new KaboomCommand(this));
@@ -75,21 +58,9 @@ public final class Main extends JavaPlugin {
     public void onDisable() {
         try {
             SoulsManager.saveSoulsFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             BountyManager.saveBountyFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            ClassType.savePlayerClassTypeFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
             ManaManager.saveManaFile();
+            ClassType.savePlayerClassTypeFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
