@@ -1,6 +1,7 @@
 package ragnaorok.Main.managers;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import ragnaorok.Main.Constant;
 
 import java.io.*;
@@ -50,23 +51,23 @@ public class ManaManager {
         }
     }
 
-    public static void addMana(OfflinePlayer player, int amount) {
+    public static void addMana(Player player, int amount) {
         int newAmount = getMana(player) + amount;
         setMana(player, newAmount);
     }
 
-    public static void removePlayerMana(OfflinePlayer player, int amount) {
+    public static void removePlayerMana(Player player, int amount) {
         addMana(player, -amount);
     }
 
     public static void setMana(OfflinePlayer player, int amount) {
         String playerUUID = player.getUniqueId().toString();
-        Constant.BOUNTIES.put(playerUUID, amount);
+        Constant.MANA.put(playerUUID, amount);
     }
 
     public static int getMana(OfflinePlayer player) {
         String playerUUID = player.getUniqueId().toString();
-        Constant.BOUNTIES.putIfAbsent(playerUUID, 10);
-        return Constant.BOUNTIES.get(playerUUID);
+        Constant.MANA.putIfAbsent(playerUUID, 10);
+        return Constant.MANA.get(playerUUID);
     }
 }
