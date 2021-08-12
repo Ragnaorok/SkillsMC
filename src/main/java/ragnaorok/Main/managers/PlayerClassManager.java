@@ -74,9 +74,6 @@ public class PlayerClassManager {
             removePlayerMana(player, val);
             cancel = true;
         }
-        else{
-            System.out.println("Not enough mana");
-        }
       return cancel;
     }
 
