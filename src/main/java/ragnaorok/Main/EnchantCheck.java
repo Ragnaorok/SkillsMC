@@ -8,13 +8,14 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.Objects;
 
-public class enchantCheck implements CommandExecutor {
+public class EnchantCheck implements CommandExecutor {
     public Main plugin;
 
-    public enchantCheck(Main plugin) {
+    public EnchantCheck(Main plugin) {
         this.plugin = plugin;
-        plugin.getCommand("check").setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("check")).setExecutor(this);
     }
 
     @Override
@@ -25,7 +26,7 @@ public class enchantCheck implements CommandExecutor {
                 return true;
             }
             Player player = (Player) sender;
-            if(player.getItemInHand() !=null) {
+            if (player.getItemInHand() != null) {
                 if (player.getItemInHand().hasItemMeta() && player.getItemInHand().getItemMeta().hasEnchants()) {
                     Map<Enchantment, Integer> enchantments = player.getItemInHand().getEnchantments();
                     for (Enchantment enchantment : enchantments.keySet()) {

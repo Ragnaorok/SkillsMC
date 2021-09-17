@@ -1,4 +1,4 @@
-package ragnaorok.Main.MobDeathParticles;
+package ragnaorok.Main.mobDeathParticles;
 
 public enum Shapes {
     CIRCLE,
