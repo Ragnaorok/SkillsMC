@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-import ragnaorok.Main.MobDeathParticles.Shapes;
+import ragnaorok.Main.mobDeathParticles.Shapes;
 import ragnaorok.Main.managers.SoulsManager;
 
 import java.lang.reflect.InvocationTargetException;

@@ -1,4 +1,4 @@
-package ragnaorok.Main.listeners.ToolListeners;
+package ragnaorok.Main.listeners.toolListeners;
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -6,18 +6,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class test implements Listener {
+public class Test implements Listener {
     Map<String, Long> leftCooldown = new HashMap<String, Long>();
     Map<String, Long> shiftCooldown = new HashMap<String, Long>();
     Map<String, Long> duration = new HashMap<String, Long>();

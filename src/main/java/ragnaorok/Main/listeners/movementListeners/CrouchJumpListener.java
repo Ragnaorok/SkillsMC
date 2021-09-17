@@ -1,4 +1,4 @@
-package ragnaorok.Main.listeners.MovementListeners;
+package ragnaorok.Main.listeners.movementListeners;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;

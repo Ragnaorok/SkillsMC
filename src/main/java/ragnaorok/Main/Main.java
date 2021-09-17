@@ -5,13 +5,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ragnaorok.Main.commands.*;
 import ragnaorok.Main.customEnchants.ReinforceEnchant;
 import ragnaorok.Main.listeners.*;
-import ragnaorok.Main.listeners.MovementListeners.CrouchJumpListener;
-import ragnaorok.Main.listeners.PlayerDataListeners.BountyListener;
-import ragnaorok.Main.listeners.PlayerDataListeners.LevelUpListener;
-import ragnaorok.Main.listeners.ToolListeners.*;
+import ragnaorok.Main.listeners.movementListeners.CrouchJumpListener;
+import ragnaorok.Main.listeners.playerDataListeners.BountyListener;
+import ragnaorok.Main.listeners.playerDataListeners.LevelUpListener;
+import ragnaorok.Main.listeners.toolListeners.*;
 import ragnaorok.Main.managers.BountyManager;
 import ragnaorok.Main.managers.ManaManager;
 import ragnaorok.Main.managers.SoulsManager;
+
+import java.util.Objects;
 
 public final class Main extends JavaPlugin {
 
@@ -29,13 +31,13 @@ public final class Main extends JavaPlugin {
         }
 
         PluginManager pm = this.getServer().getPluginManager();
-        this.getCommand("souls").setExecutor(new SoulsCommand(this));
-        this.getCommand("kaboom").setExecutor(new KaboomCommand(this));
-        this.getCommand("saveAll").setExecutor(new SaveAllCommand(this));
-        this.getCommand("reinforce").setExecutor(new ReinforceEnchant(this));
-        this.getCommand("check").setExecutor(new enchantCheck(this));
-        this.getCommand("class").setExecutor(new ClassCommand(this));
-        this.getCommand("profile").setExecutor(new ProfileCommand(this));
+        Objects.requireNonNull(this.getCommand("souls")).setExecutor(new SoulsCommand(this));
+        Objects.requireNonNull(this.getCommand("kaboom")).setExecutor(new KaboomCommand(this));
+        Objects.requireNonNull(this.getCommand("saveAll")).setExecutor(new SaveAllCommand(this));
+        Objects.requireNonNull(this.getCommand("reinforce")).setExecutor(new ReinforceEnchant(this));
+        Objects.requireNonNull(this.getCommand("check")).setExecutor(new EnchantCheck(this));
+        Objects.requireNonNull(this.getCommand("class")).setExecutor(new ClassCommand(this));
+        Objects.requireNonNull(this.getCommand("profile")).setExecutor(new ProfileCommand(this));
         pm.registerEvents(new ClassCommand(this), this);
         getServer().getPluginManager().registerEvents(new ClassCommand(), this);
         getServer().getPluginManager().registerEvents(new MobListener(), this);
