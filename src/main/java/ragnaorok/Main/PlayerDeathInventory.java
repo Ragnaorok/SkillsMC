@@ -18,6 +18,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ragnaorok.Main.SkillsMCPlayer.getSouls;
+
 public class PlayerDeathInventory implements Listener {
     private Inventory gui;
     private final static Map<String, ItemStack[]> playerInventory = new HashMap<>();
@@ -48,13 +50,13 @@ public class PlayerDeathInventory implements Listener {
 
     public void openNewGui(Player player) {
         int slots = 0;
-        if (SoulsManager.getPlayerSouls(player) < 25)
+        if (getSouls(player) < 25)
             slots = 18;
-        else if (SoulsManager.getPlayerSouls(player) >= 25 && SoulsManager.getPlayerSouls(player) < 50)
+        else if (getSouls(player) >= 25 && getSouls(player) < 50)
             slots = 27;
-        else if (SoulsManager.getPlayerSouls(player) >= 50 && SoulsManager.getPlayerSouls(player) < 75)
+        else if (getSouls(player) >= 50 && getSouls(player) < 75)
             slots = 36;
-        else if (SoulsManager.getPlayerSouls(player) >= 75)
+        else if (getSouls(player) >= 75)
             slots = 45;
         gui = Bukkit.createInventory(null,slots, ChatColor.BLACK + "Retrieve Items");
         ItemStack[] content = playerInventory.get(player.getName());

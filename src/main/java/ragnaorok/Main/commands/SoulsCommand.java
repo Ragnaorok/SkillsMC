@@ -5,7 +5,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import ragnaorok.Main.Main;
+import ragnaorok.Main.SkillsMCPlayer;
 import ragnaorok.Main.managers.SoulsManager;
 
 public class SoulsCommand implements CommandExecutor {
@@ -37,14 +39,14 @@ public class SoulsCommand implements CommandExecutor {
                 int amount = Integer.parseInt(args[2]);
                 if (args[0].equalsIgnoreCase("add")) {
                     if (player != null) {
-                        SoulsManager.addSoulsToPlayer(player, amount);
+                        SoulsManager.addSoulsToPlayer((Player) player, amount);
                         sender.sendMessage("You have successfully added " + args[2] + " souls to "+ player.getName());
                     } else {
                         sender.sendMessage("could not be found");
                     }
                 } else if (args[0].equalsIgnoreCase("set")) {
                     if (player != null) {
-                        SoulsManager.setPlayerSouls(player, amount);
+                        SoulsManager.setPlayerSouls((Player) player, amount);
                         sender.sendMessage("you have successfully set the player " + player.getName());
                     } else {
                         sender.sendMessage("player could not be found");
@@ -58,7 +60,7 @@ public class SoulsCommand implements CommandExecutor {
             OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
             if (player != null || player.hasPlayedBefore()) {
                 if (args[0].equalsIgnoreCase("get")) {
-                    sender.sendMessage(player.getName() + " currently has " + SoulsManager.getPlayerSouls(player) + " souls");
+                    sender.sendMessage(player.getName() + " currently has " + SkillsMCPlayer.getSouls((Player) player) + " souls");
                     return true;
                 } else {
                     sender.sendMessage(player.getName() + "<amount>");

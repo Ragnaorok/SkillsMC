@@ -12,6 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import ragnaorok.Main.Tools;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,10 +27,10 @@ public class AxeListener implements Listener {
 
     @EventHandler
     public void test(PlayerInteractEvent event) {
-        Player player = event.getPlayer();  //player
-        Material type = player.getItemInHand().getType();
+        Player player = event.getPlayer();
+        PlayerInventory inventory = player.getInventory();
         if (player.getItemInHand() == null) return;
-        if (type == Material.STONE_AXE || type == Material.IRON_AXE || type == Material.DIAMOND_AXE || type == Material.NETHERITE_AXE) {
+        if (Tools.getMainHand(inventory) == Tools.AXE) {
             if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 if (player.isSneaking()) {
                     if (shiftCooldown.containsKey(player.getName())) {

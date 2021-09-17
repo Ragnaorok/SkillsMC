@@ -13,10 +13,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-
 import ragnaorok.Main.MobDeathParticles.Shapes;
 import ragnaorok.Main.managers.SoulsManager;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -121,7 +119,7 @@ public class MobListener implements Listener {
                     method.invoke(this, event, player, monster);
                 }
                 // Skills below this belong in a different class, further revision and refactoring is required
-                if (SoulsManager.getPlayerSouls(player) > 99) { //Skill:Blood_Lust
+                if (getSouls(player) > 99) { //Skill:Blood_Lust
                     if (player.getHealth() < 20) {
                         player.setHealth(player.getHealth() + 1);
                     }
@@ -129,12 +127,12 @@ public class MobListener implements Listener {
                         return;
                     }
                 }
-                if (SoulsManager.getPlayerSouls(player) > 199) { //Skill:Second_Wind
+                if (getSouls(player) > 199) { //Skill:Second_Wind
                     if (player.getHealth() <= 10) {
                         player.addPotionEffect((new PotionEffect(PotionEffectType.SPEED, 15, 1)));
                     }
                 }
-                if (SoulsManager.getPlayerSouls(player) > 299) { //Skill:Conqueror
+                if (getSouls(player) > 299) { //Skill:Conqueror
                     if (player.getHealth() >= 15) {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 15, 1));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 15, 1));

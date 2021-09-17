@@ -1,11 +1,14 @@
 package ragnaorok.Main.managers;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import ragnaorok.Main.Constant;
 import java.io.*;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import static ragnaorok.Main.SkillsMCPlayer.getBounty;
 
 public class BountyManager {
 
@@ -52,25 +55,20 @@ public class BountyManager {
         }
     }
 
-    public static void addBountyToPlayer(OfflinePlayer player, int amount) {
-        int newAmount = getPlayerBounty(player) + amount;
+    public static void addBountyToPlayer(Player player, int amount) {
+        int newAmount = getBounty(player) + amount;
         setPlayerBounty(player, newAmount);
     }
 
-    public static void removePlayerBounty(OfflinePlayer player, int amount) {
+    public static void removePlayerBounty(Player player, int amount) {
         addBountyToPlayer(player, -amount);
     }
 
-    public static void setPlayerBounty(OfflinePlayer player, int amount) {
+    public static void setPlayerBounty(Player player, int amount) {
         String playerUUID = player.getUniqueId().toString();
         Constant.BOUNTIES.put(playerUUID, amount);
     }
 
-    public static int getPlayerBounty(OfflinePlayer player) {
-        String playerUUID = player.getUniqueId().toString();
-        // If they aren't already in the "database"
-        Constant.BOUNTIES.putIfAbsent(playerUUID, 0);
-        return Constant.BOUNTIES.get(playerUUID);
-    }
+
 }
 

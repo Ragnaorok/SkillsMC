@@ -1,7 +1,10 @@
 package ragnaorok.Main.managers;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import ragnaorok.Main.Constant;
+import ragnaorok.Main.SkillsMCPlayer;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
@@ -55,24 +58,18 @@ public class SoulsManager {
         }
     }
 
-    public static void addSoulsToPlayer(OfflinePlayer player, int amount) {
-        int newAmount = getPlayerSouls(player) + amount;
+    public static void addSoulsToPlayer(Player player, int amount) {
+        int newAmount = SkillsMCPlayer.getSouls((Player) player) + amount;
         setPlayerSouls(player, newAmount);
     }
 
-    public static void removePlayerSouls(OfflinePlayer player, int amount) {
+    public static void removePlayerSouls(Player player, int amount) {
         addSoulsToPlayer(player, -amount);
     }
 
-    public static void setPlayerSouls(OfflinePlayer player, int amount) {
+    public static void setPlayerSouls(Player player, int amount) {
         String playerUUID = player.getUniqueId().toString();
         Constant.SOULS.put(playerUUID, amount);
     }
 
-    public static int getPlayerSouls(OfflinePlayer player) {
-        String playerUUID = player.getUniqueId().toString();
-        // If they aren't already in the "database"
-        Constant.SOULS.putIfAbsent(playerUUID, 0);
-        return Constant.SOULS.get(playerUUID);
-    }
 }

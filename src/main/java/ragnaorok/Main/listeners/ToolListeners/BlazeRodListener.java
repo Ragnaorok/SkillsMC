@@ -9,8 +9,8 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import ragnaorok.Main.managers.ManaManager;
 import ragnaorok.Main.managers.PlayerClassManager;
-
 import static org.bukkit.entity.EntityType.FIREBALL;
+import static ragnaorok.Main.SkillsMCPlayer.getMana;
 
 public class BlazeRodListener implements Listener {
 
@@ -23,7 +23,7 @@ public class BlazeRodListener implements Listener {
             PlayerClassManager.displayManaBar(player);
         }
         if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-            if (ManaManager.getMana(player) < 10) {
+            if (getMana(player) < 10) {
                 ManaManager.addMana(player, 1);
             } else {
                 player.sendMessage("You have full mana");

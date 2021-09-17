@@ -26,11 +26,7 @@ public enum ClassType {
         Constant.CLASSTYPE.put(playerUUID, type);
     }
 
-    public static ClassType getPlayerClassType(OfflinePlayer player) {
-        String playerUUID = player.getUniqueId().toString();
-        Constant.CLASSTYPE.putIfAbsent(playerUUID, NONE);
-        return Constant.CLASSTYPE.get(playerUUID);
-    }
+
 
     public static void loadPlayerClassTypeFile() throws Exception {
 

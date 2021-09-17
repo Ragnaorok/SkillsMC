@@ -15,6 +15,8 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ragnaorok.Main.SkillsMCPlayer.getSouls;
+
 
 public class ReinforceEnchant implements CommandExecutor {
     public static final Enchantment REINFORCE = new EnchantmentWrapper("reinforce", "Reinforce", 1);
@@ -61,7 +63,7 @@ public class ReinforceEnchant implements CommandExecutor {
             Player player = (Player) sender;
             if (!(player.getInventory().getItemInMainHand().getType() == Material.SHIELD))
                 return true;
-            if (SoulsManager.getPlayerSouls(player) < 50) {
+            if (getSouls(player) < 50) {
                 player.sendMessage(ChatColor.RED + "You do not have enough souls");
                 return true;
             }

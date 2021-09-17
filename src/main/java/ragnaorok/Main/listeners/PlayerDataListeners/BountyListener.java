@@ -9,6 +9,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import ragnaorok.Main.managers.BountyManager;
 import ragnaorok.Main.managers.SoulsManager;
 
+import static ragnaorok.Main.SkillsMCPlayer.getBounty;
+
 
 public class BountyListener implements Listener {
     @EventHandler
@@ -18,12 +20,12 @@ public class BountyListener implements Listener {
             Player victim = event.getEntity();
             if (victim.getKiller() instanceof Player) {
                 Player killer = victim.getKiller();
-                if (BountyManager.getPlayerBounty(victim) == 0) {
+                if (getBounty(victim) == 0) {
                     BountyManager.addBountyToPlayer(killer, 1);
                     Bukkit.broadcastMessage(ChatColor.RED + killer.getName() + "'s bounty has increased");
-                } else if (BountyManager.getPlayerBounty(victim) > 0) {
-                    SoulsManager.removePlayerSouls(victim, BountyManager.getPlayerBounty(victim));
-                    SoulsManager.addSoulsToPlayer(killer, BountyManager.getPlayerBounty(victim));
+                } else if (getBounty(victim) > 0) {
+                    SoulsManager.removePlayerSouls(victim, getBounty(victim));
+                    SoulsManager.addSoulsToPlayer(killer, getBounty(victim));
                     BountyManager.setPlayerBounty(victim, 0);
                     Bukkit.broadcastMessage(ChatColor.GREEN + killer.getName() + " has killed " + victim.getName() + " and obtained their bounty");
                 }

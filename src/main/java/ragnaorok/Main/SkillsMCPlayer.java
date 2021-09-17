@@ -3,18 +3,35 @@ package ragnaorok.Main;
 import org.bukkit.entity.Player;
 
 import java.io.*;
+import java.util.UUID;
+import java.util.zip.GZIPOutputStream;
 
 public class SkillsMCPlayer implements Serializable {
     private int mana, souls, currency;
     private ClassType classType;
     private Player player;
 
-    public SkillsMCPlayer() {
+    public SkillsMCPlayer() throws IOException {
+        File file = new File(getPlayer().getUniqueId() + ".dat");
+        boolean successful = true;
+        if (!file.exists()) {
+            successful = file.createNewFile();
+        }
+
+        if (!successful)
+            return;
+
+        try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
+            output.writeObject(Constant.SkillsMCPlayer);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public SkillsMCPlayer(Player player) {
-        player.getUniqueId();
+        String uuid = player.getUniqueId().toString();
     }
+
 
     public SkillsMCPlayer(int mana, int souls, int currency) {
         this.mana = mana;

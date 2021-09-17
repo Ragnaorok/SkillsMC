@@ -60,14 +60,12 @@ public class ManaManager {
         addMana(player, -amount);
     }
 
-    public static void setMana(OfflinePlayer player, int amount) {
+
+
+
+
+    public static void setMana(Player player, int amount) {
         String playerUUID = player.getUniqueId().toString();
         Constant.MANA.put(playerUUID, amount);
-    }
-
-    public static int getMana(OfflinePlayer player) {
-        String playerUUID = player.getUniqueId().toString();
-        Constant.MANA.putIfAbsent(playerUUID, 10);
-        return Constant.MANA.get(playerUUID);
     }
 }

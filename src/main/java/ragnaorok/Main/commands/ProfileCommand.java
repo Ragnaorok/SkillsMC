@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import ragnaorok.Main.ClassType;
 import ragnaorok.Main.Main;
+import ragnaorok.Main.SkillsMCPlayer;
 
 public class ProfileCommand implements CommandExecutor {
 
@@ -33,7 +34,7 @@ public class ProfileCommand implements CommandExecutor {
                 return true;
             }
             Player player = (Player) sender;
-            player.sendMessage(ChatColor.GREEN + ClassType.getPlayerClassType(player).toString());
+            player.sendMessage(ChatColor.GREEN + SkillsMCPlayer.getClass(player).toString());
             return true;
         }
         return false;
