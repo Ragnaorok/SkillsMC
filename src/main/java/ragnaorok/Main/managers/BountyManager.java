@@ -1,14 +1,11 @@
 package ragnaorok.Main.managers;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import ragnaorok.Main.Constant;
 import java.io.*;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-import static ragnaorok.Main.SkillsMCPlayer.getBounty;
 
 public class BountyManager {
 

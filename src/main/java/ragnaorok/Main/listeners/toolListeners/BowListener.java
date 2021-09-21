@@ -1,4 +1,4 @@
-package ragnaorok.Main.listeners.toolListeners;
+package ragnaorok.Main.listeners.ToolListeners;
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -16,9 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BowListener implements Listener {
-    Map<String, Long> leftCooldown = new HashMap<String, Long>();
-    Map<String, Long> shiftCooldown = new HashMap<String, Long>();
-    Map<String, Long> duration = new HashMap<String, Long>();
+    Map<String, Long> leftCooldown = new HashMap<>();
+    Map<String, Long> shiftCooldown = new HashMap<>();
+    Map<String, Long> duration = new HashMap<>();
 
     @EventHandler
     public void bowListener(PlayerInteractEvent event) {

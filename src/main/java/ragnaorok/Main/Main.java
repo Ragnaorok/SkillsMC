@@ -5,10 +5,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ragnaorok.Main.commands.*;
 import ragnaorok.Main.customEnchants.ReinforceEnchant;
 import ragnaorok.Main.listeners.*;
+import ragnaorok.Main.listeners.ToolListeners.AxeListener;
 import ragnaorok.Main.listeners.movementListeners.CrouchJumpListener;
-import ragnaorok.Main.listeners.playerDataListeners.BountyListener;
 import ragnaorok.Main.listeners.playerDataListeners.LevelUpListener;
-import ragnaorok.Main.listeners.toolListeners.*;
+import ragnaorok.Main.listeners.ToolListeners.*;
 import ragnaorok.Main.managers.BountyManager;
 import ragnaorok.Main.managers.ManaManager;
 import ragnaorok.Main.managers.SoulsManager;
@@ -43,16 +43,14 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MobListener(), this);
         getServer().getPluginManager().registerEvents(new LevelUpListener(), this);
         getServer().getPluginManager().registerEvents(new CrouchJumpListener(), this);
-        getServer().getPluginManager().registerEvents(new BountyListener(), this);
-        getServer().getPluginManager().registerEvents(new ShieldListener(), this);
-        getServer().getPluginManager().registerEvents(new CrossBowSkill(), this);
-        getServer().getPluginManager().registerEvents(new BlazeRodListener(), this);
-        getServer().getPluginManager().registerEvents(new BountyListener(), this);
-        getServer().getPluginManager().registerEvents(new BowListener(), this);
         getServer().getPluginManager().registerEvents(new NetheriteHoeListener(), this);
+        getServer().getPluginManager().registerEvents(new BlazeRodListener(), this);
+        getServer().getPluginManager().registerEvents(new BowListener(), this);
+        getServer().getPluginManager().registerEvents(new CrossBowListener(), this);
+        getServer().getPluginManager().registerEvents(new ShieldListener(), this);
         getServer().getPluginManager().registerEvents(new AxeListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathInventory(this), this);
-        getServer().getPluginManager().registerEvents(new loginMessage(), this);
+        getServer().getPluginManager().registerEvents(new LoginListener(), this);
         System.out.println("Plugin Enabled");
     }
 

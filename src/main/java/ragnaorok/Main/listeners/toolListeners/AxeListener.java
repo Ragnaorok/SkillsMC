@@ -1,4 +1,4 @@
-package ragnaorok.Main.listeners.toolListeners;
+package ragnaorok.Main.listeners.ToolListeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -12,8 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import ragnaorok.Main.Tools;
 

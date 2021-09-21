@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import ragnaorok.Main.MobDeathParticles.Shapes;
+import ragnaorok.Main.mobDeathParticles.Shapes;
 import ragnaorok.Main.managers.SoulsManager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -143,7 +143,7 @@ public class MobListener implements Listener {
     }
 
     // TODO: I would move this function else where - Brandon
-    public static void draw(Shapes shape, Location mloc, Particle particle, Player player) {
+    public static void draw(ragnaorok.Main.mobDeathParticles.Shapes shape, Location mloc, Particle particle, Player player) {
         Location particleLoc = mloc.clone();
         switch (shape) {
             case CIRCLE:
