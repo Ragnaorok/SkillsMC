@@ -20,11 +20,8 @@ public class CrossBowListener implements Listener {
     @EventHandler
     public void onBlock(PlayerInteractEvent event) {
         Player player = event.getPlayer();  //player
-        Location origin = player.getLocation();  //player origin
-        Vector direction = origin.getDirection();
-        Location oloc = origin.add(direction);  // cloning to prevent weird side effects
-        Location destination = origin.clone().add(direction).add(direction);  //flashbang destination
-        World world = player.getWorld();
+        Location origin = player.getLocation(); //player origin
+        Vector direction = origin.getDirection();   //player direction
         Material type = player.getItemInHand().getType();
 
         if (player.getItemInHand() == null) return;
