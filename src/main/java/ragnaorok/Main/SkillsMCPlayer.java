@@ -1,43 +1,39 @@
 package ragnaorok.Main;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.UUID;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class SkillsMCPlayer implements Serializable {
-    private int mana, souls, currency;
+    private int mana, souls, currency, bounty;
     private ClassType classType;
     private Player player;
 
-    public SkillsMCPlayer() throws IOException {
-        File file = new File(getPlayer().getUniqueId() + ".dat");
-        boolean successful = true;
-        if (!file.exists()) {
-            successful = file.createNewFile();
-        }
+    public SkillsMCPlayer() {
 
-        if (!successful)
-            return;
-
-        try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
-            output.writeObject(Constant.SkillsMCPlayer);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     public SkillsMCPlayer(Player player) {
         String uuid = player.getUniqueId().toString();
     }
 
-
-    public SkillsMCPlayer(int mana, int souls, int currency) {
+    public SkillsMCPlayer(Player player, int mana, int souls, int currency, int bounty, ClassType classType) {
+        this.player = player;
         this.mana = mana;
         this.souls = souls;
         this.currency = currency;
+        this.bounty = bounty;
+        this.classType = classType;
     }
+
 
     public int getMana() {
         return mana;
@@ -63,6 +59,14 @@ public class SkillsMCPlayer implements Serializable {
         this.currency = currency;
     }
 
+    public int getBounty() {
+        return bounty;
+    }
+
+    public void setBounty(int bounty) {
+        this.bounty = bounty;
+    }
+
     public ClassType getClassType() {
         return classType;
     }
@@ -75,8 +79,14 @@ public class SkillsMCPlayer implements Serializable {
         return player;
     }
 
+    public String getUUID() {
+        return player.getUniqueId().toString();
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+
 }
+
