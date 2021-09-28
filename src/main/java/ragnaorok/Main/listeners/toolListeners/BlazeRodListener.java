@@ -1,30 +1,34 @@
 package ragnaorok.Main.listeners.ToolListeners;
 
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import ragnaorok.Main.managers.ManaManager;
+import ragnaorok.Main.Constant;
+import ragnaorok.Main.SkillsMCPlayer;
 import ragnaorok.Main.managers.PlayerClassManager;
+
 import static org.bukkit.entity.EntityType.FIREBALL;
-import static ragnaorok.Main.SkillsMCPlayer.getMana;
 
 public class BlazeRodListener implements Listener {
 
     @EventHandler
     public void onCast(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        World world = player.getWorld();
+        String uuid = player.getUniqueId().toString();
+        SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
         if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             PlayerClassManager.useAbility(player);
             PlayerClassManager.displayManaBar(player);
         }
         if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-            if (getMana(player) < 10) {
-                ManaManager.addMana(player, 1);
+            if (smPlayer.getMana() <= 10) {
+                smPlayer.setMana(smPlayer.getMana() + 1);
             } else {
                 player.sendMessage("You have full mana");
             }
