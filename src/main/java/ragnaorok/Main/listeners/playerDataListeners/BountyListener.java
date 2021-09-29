@@ -6,8 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import ragnaorok.Main.managers.BountyManager;
-import ragnaorok.Main.managers.SoulsManager;
 
 import static ragnaorok.Main.SkillsMCPlayer.getBounty;
 

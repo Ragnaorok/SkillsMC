@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import ragnaorok.Main.Main;
-import ragnaorok.Main.managers.SoulsManager;
+
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
