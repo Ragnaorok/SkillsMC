@@ -1,4 +1,4 @@
-package ragnaorok.Main.listeners.playerDataListeners;
+package ragnaorok.Main.listeners.PlayerDataListeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +20,7 @@ public class BountyListener implements Listener {
             Player victim = event.getEntity();
             if (victim.getKiller() instanceof Player) {
                 Player killer = victim.getKiller();
-                if (getBounty(victim) == 0) {
+                if (smPlayer.getBounty(victim) == 0) {
                     BountyManager.addBountyToPlayer(killer, 1);
                     Bukkit.broadcastMessage(ChatColor.RED + killer.getName() + "'s bounty has increased");
                 } else if (getBounty(victim) > 0) {
