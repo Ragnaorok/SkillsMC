@@ -30,7 +30,7 @@ public class EnchantCheck implements CommandExecutor {
                 if (player.getItemInHand().hasItemMeta() && player.getItemInHand().getItemMeta().hasEnchants()) {
                     Map<Enchantment, Integer> enchantments = player.getItemInHand().getEnchantments();
                     for (Enchantment enchantment : enchantments.keySet()) {
-                        player.sendMessage("Enchantment: " + enchantment.getName());
+                        player.sendMessage("Enchantment(s): " + enchantment.getName());
                     }
                 }
             }

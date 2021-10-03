@@ -24,7 +24,7 @@ public class LoginListener implements Listener {
         World world = player.getWorld();
         Location loc = player.getLocation();
         Location soundLoc = loc.clone();
-        player.sendMessage("Welcome to RagnarokMC V:1.9 (Alpha)" + ChatColor.ITALIC);
+        player.sendMessage("Welcome to RagnarokMC V:1.0 (Beta)" + ChatColor.ITALIC);
         world.playSound(soundLoc, BLOCK_BEACON_AMBIENT, 73, 1);
         world.playSound(soundLoc, ENTITY_EXPERIENCE_ORB_PICKUP, 73, 1);
     }
