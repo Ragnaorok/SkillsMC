@@ -11,6 +11,9 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import ragnaorok.Main.ClassType;
+import ragnaorok.Main.Constant;
+import ragnaorok.Main.SkillsMCPlayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,30 +63,25 @@ public class BowListener implements Listener {
     public void ShootEvent(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            World world = player.getWorld();
-            Location origin = player.getLocation();  //player origin
-            Location loc = player.getLocation();
-            Location particleLoc = loc.clone();
-            Location ploc = loc.clone();
-            Vector direction = origin.getDirection();
-            if (duration.get(player.getName()) == null)
-                return;
-            if (duration.get(player.getName()) > System.currentTimeMillis()) {
-                Arrow arrow = (Arrow) event.getProjectile();
-                Vector vec = player.getEyeLocation().getDirection();
-                arrow.setVelocity(vec.multiply(4));
-                arrow.setCritical(true);
-                for (int i = 0; i < 50; i++) {
-                    Location trail = origin.add(direction);
-                    world.spawnParticle(Particle.GLOW, trail, 10);
+            String uuid = player.getUniqueId().toString();
+            SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
+            if (smPlayer.getClassType() == ClassType.ARCHER) {
+                World world = player.getWorld();
+                Location origin = player.getLocation();  //player origin
+                Vector direction = origin.getDirection();
+                if (duration.get(player.getName()) == null)
+                    return;
+                if (duration.get(player.getName()) > System.currentTimeMillis()) {
+                    Arrow arrow = (Arrow) event.getProjectile();
+                    Vector vec = player.getEyeLocation().getDirection();
+                    arrow.setVelocity(vec.multiply(4));
+                    arrow.setCritical(true);
+                    for (int i = 0; i < 50; i++) {
+                        Location trail = origin.add(direction);
+                        world.spawnParticle(Particle.GLOW, trail, 10);
+                    }
                 }
             }
-        }
-    }
-    @EventHandler
-    public void onItem(PlayerPickupItemEvent event){
-        if (event.getItem().getType() == EntityType.ARROW){
-            event.setCancelled(true);
         }
     }
 }
