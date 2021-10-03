@@ -8,12 +8,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import ragnaorok.Main.mobDeathParticles.Shapes;
+import static ragnaorok.Main.MobDeathParticles.ParticleShapes.draw;
+
+import ragnaorok.Main.MobDeathParticles.EnumShapes;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,8 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MobListener implements Listener {
-
-    static ItemStack firework = new ItemStack(Material.FIREWORK_ROCKET);
     private static final Map<EntityType, Method> handlers = new HashMap<>();
 
     public MobListener() {
@@ -38,8 +34,8 @@ public class MobListener implements Listener {
             EntityType.ZOMBIFIED_PIGLIN, EntityType.PIGLIN, EntityType.WITCH})
     public static void handleZombiesDeath(EntityDeathEvent event, Player player, Monster monster) {
         Location mloc = monster.getLocation();
-        draw(Shapes.HELIX, mloc, Particle.TOWN_AURA, player);
-        draw(Shapes.SPHERE, mloc, Particle.ASH, player);
+        draw(EnumShapes.HELIX, mloc, Particle.TOWN_AURA, player);
+        draw(EnumShapes.SPHERE, mloc, Particle.ASH, player);
         player.spawnParticle(Particle.SOUL, mloc, 10);
         SoulsManager.addSoulsToPlayer(player, +1);
         player.sendMessage(ChatColor.GREEN + " +1 soul");
@@ -49,17 +45,17 @@ public class MobListener implements Listener {
             EntityType.WITHER_SKELETON, EntityType.HUSK, EntityType.WITHER})
     public static void handleSkeletonsDeath(EntityDeathEvent event, Player player, Monster monster) {
         Location mloc = monster.getLocation();
-        draw(Shapes.HELIX, mloc, Particle.ASH, player);
-        draw(Shapes.CIRCLE, mloc, Particle.WHITE_ASH, player);
-        draw(Shapes.CIRCLE, mloc, Particle.ASH, player);
+        draw(EnumShapes.HELIX, mloc, Particle.ASH, player);
+        draw(EnumShapes.CIRCLE, mloc, Particle.WHITE_ASH, player);
+        draw(EnumShapes.CIRCLE, mloc, Particle.ASH, player);
     }
 
     @MobHandler(entity = EntityType.DROWNED)
     public static void handleDrownedDeath(EntityDeathEvent event, Player player, Monster monster) {
         Location mloc = monster.getLocation();
-        draw(Shapes.HELIX, mloc, Particle.FALLING_WATER, player);
-        draw(Shapes.CIRCLE, mloc, Particle.WATER_BUBBLE, player);
-        draw(Shapes.CIRCLE, mloc, Particle.WATER_SPLASH, player);
+        draw(EnumShapes.HELIX, mloc, Particle.FALLING_WATER, player);
+        draw(EnumShapes.CIRCLE, mloc, Particle.WATER_BUBBLE, player);
+        draw(EnumShapes.CIRCLE, mloc, Particle.WATER_SPLASH, player);
         player.spawnParticle(Particle.SOUL, mloc, 10);
         SoulsManager.addSoulsToPlayer(player, 1);
         player.sendMessage(ChatColor.GREEN + " +1 soul");
@@ -76,7 +72,7 @@ public class MobListener implements Listener {
                 particleLoc.setY(mloc.getY() + 1);
                 player.spawnParticle(Particle.FALLING_OBSIDIAN_TEAR, particleLoc, 1);
             }
-            draw(Shapes.HELIX, mloc, Particle.PORTAL, player);
+            draw(EnumShapes.HELIX, mloc, Particle.PORTAL, player);
         }
     }
 
@@ -84,11 +80,7 @@ public class MobListener implements Listener {
     public static void handleCreeperDeath(EntityDeathEvent event, Player player, Monster monster) {
         Location mloc = monster.getLocation();
         Location particleLoc = mloc.clone();
-        draw(Shapes.HELIX, particleLoc, Particle.FIREWORKS_SPARK, player);
-        int chance = (int) Math.random()*10;
-        if (chance == 10){
-            player.getInventory().addItem(firework);
-        }
+        draw(EnumShapes.HELIX, particleLoc, Particle.FIREWORKS_SPARK, player);
     }
 
 
@@ -108,76 +100,13 @@ public class MobListener implements Listener {
     public void onEntityDeath(EntityDeathEvent event) throws InvocationTargetException, IllegalAccessException {
         if (event.getEntity() instanceof Monster) {
             Monster monster = (Monster) event.getEntity();
-            EntityType type = event.getEntityType();
-            Location mloc = monster.getLocation();
-            Location particleLoc = mloc.clone();
-
             if (monster.getKiller() instanceof Player) {
                 Player player = monster.getKiller();
                 Method method = handlers.get(monster.getType());
                 if (method != null) {
                     method.invoke(this, event, player, monster);
                 }
-                // Skills below this belong in a different class, further revision and refactoring is required
-                if (getSouls(player) > 99) { //Skill:Blood_Lust
-                    if (player.getHealth() < 20) {
-                        player.setHealth(player.getHealth() + 1);
-                    }
-                    else{
-                        return;
-                    }
-                }
-                if (getSouls(player) > 199) { //Skill:Second_Wind
-                    if (player.getHealth() <= 10) {
-                        player.addPotionEffect((new PotionEffect(PotionEffectType.SPEED, 15, 1)));
-                    }
-                }
-                if (getSouls(player) > 299) { //Skill:Conqueror
-                    if (player.getHealth() >= 15) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 15, 1));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 15, 1));
-                    }
-                }
             }
-        }
-    }
-
-    // TODO: I would move this function else where - Brandon
-    public static void draw(ragnaorok.Main.mobDeathParticles.Shapes shape, Location mloc, Particle particle, Player player) {
-        Location particleLoc = mloc.clone();
-        switch (shape) {
-            case CIRCLE:
-                for (int i = 0; i < 360; i += 5) {
-                    particleLoc.setY(mloc.getY());
-                    particleLoc.setZ(mloc.getZ() + Math.sin(i));
-                    particleLoc.setX(mloc.getX() + Math.cos(i));
-                    player.spawnParticle(particle, particleLoc, 1);
-                    player.spawnParticle(particle, particleLoc, 1);
-                }
-            case HELIX:
-                double phi = Math.PI / 8;
-                for (double t = 0; t <= 2 * Math.PI; t += Math.PI / 16) {
-                    for (double i = 0; i <= 1; i += 1) {
-                        double x = 0.3 * (2 * Math.PI - t) * 0.5 * cos(t + phi + i * Math.PI);
-                        double y = 0.4 * t;
-                        double z = 0.3 * (2 * Math.PI - t) * 0.5 * sin(t + phi + i * Math.PI);
-                        particleLoc.add(x, y, z);
-                        player.spawnParticle(particle, particleLoc, 2);
-                        particleLoc.subtract(x, y, z);
-                    }
-                }
-            case SPHERE:
-                for (double t = 0; t <= Math.PI; t += Math.PI / 10) {
-                    double radius = Math.sin(t);
-                    double y = Math.cos(t);
-                    for (double i = 0; i < Math.PI * 2; i += Math.PI / 10) {
-                        double x = Math.cos(i) * radius;
-                        double z = Math.sin(i) * radius;
-                        mloc.add(x, y, z);
-                        player.spawnParticle(particle, particleLoc, 1);
-                        mloc.subtract(x, y, z);
-                    }
-                }
         }
     }
 }
