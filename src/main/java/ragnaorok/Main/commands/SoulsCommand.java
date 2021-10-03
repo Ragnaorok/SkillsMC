@@ -6,9 +6,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import ragnaorok.Main.Constant;
 import ragnaorok.Main.Main;
 import ragnaorok.Main.SkillsMCPlayer;
-import ragnaorok.Main.managers.SoulsManager;
 
 public class SoulsCommand implements CommandExecutor {
 
@@ -35,18 +35,20 @@ public class SoulsCommand implements CommandExecutor {
                 sender.sendMessage("/souls set <player> <int>");
             } else if (args.length == 3) {
                 @SuppressWarnings("deprecation")
-                OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
+                Player player = Bukkit.getPlayer(args[1]);
+                String uuid = player.getUniqueId().toString();
+                SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
                 int amount = Integer.parseInt(args[2]);
                 if (args[0].equalsIgnoreCase("add")) {
                     if (player != null) {
-                        SoulsManager.addSoulsToPlayer((Player) player, amount);
+                        smPlayer.setSouls(smPlayer.getSouls() + amount);
                         sender.sendMessage("You have successfully added " + args[2] + " souls to "+ player.getName());
                     } else {
                         sender.sendMessage("could not be found");
                     }
                 } else if (args[0].equalsIgnoreCase("set")) {
                     if (player != null) {
-                        SoulsManager.setPlayerSouls((Player) player, amount);
+                        smPlayer.setSouls(amount);
                         sender.sendMessage("you have successfully set the player " + player.getName());
                     } else {
                         sender.sendMessage("player could not be found");
@@ -57,10 +59,12 @@ public class SoulsCommand implements CommandExecutor {
             sender.sendMessage("no permission");
         }if (args.length == 2) {
             @SuppressWarnings("deprecation")
-            OfflinePlayer player = Bukkit.getOfflinePlayer(args[1]);
+            Player player = Bukkit.getPlayer(args[1]);
+            String uuid = player.getUniqueId().toString();
+            SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
             if (player != null || player.hasPlayedBefore()) {
                 if (args[0].equalsIgnoreCase("get")) {
-                    sender.sendMessage(player.getName() + " currently has " + SkillsMCPlayer.getSouls((Player) player) + " souls");
+                    sender.sendMessage(player.getName() + " currently has " + smPlayer.getSouls() + " souls");
                     return true;
                 } else {
                     sender.sendMessage(player.getName() + "<amount>");
