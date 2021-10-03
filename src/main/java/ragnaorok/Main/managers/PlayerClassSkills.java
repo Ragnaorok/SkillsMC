@@ -49,11 +49,11 @@ public class PlayerClassSkills {
                         player.sendMessage(org.bukkit.ChatColor.GREEN + "Blaze Rod Skill: Fireball"); // Fireball Skill
                         direction.normalize();
                         direction.multiply(3);
-                        Location oloc = destination.add(direction);
-                        Objects.requireNonNull(oloc.getWorld()).spawnParticle(Particle.LAVA, oloc, 10);
-                        world.spawnEntity(oloc, FIREBALL);
-                        world.playSound(oloc, ENTITY_BLAZE_SHOOT, 20, 1);
-                        world.playSound(oloc, ENTITY_BLAZE_BURN, 20, 1);
+                        Location loc = destination.add(direction);
+                        Objects.requireNonNull(loc.getWorld()).spawnParticle(Particle.LAVA, loc, 10);
+                        world.spawnEntity(loc, FIREBALL);
+                        world.playSound(loc, ENTITY_BLAZE_SHOOT, 20, 1);
+                        world.playSound(loc, ENTITY_BLAZE_BURN, 20, 1);
                     }
                     displayManaBar(player);
                 }
