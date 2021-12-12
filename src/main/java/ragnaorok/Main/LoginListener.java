@@ -17,7 +17,7 @@ import java.util.zip.GZIPOutputStream;
 
 import static org.bukkit.Sound.*;
 
-public class LoginListener implements Listener {
+public class LoginListener implements Listener, Serializable {
     @EventHandler
     public void onLogin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -31,16 +31,24 @@ public class LoginListener implements Listener {
 
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) { // adds/loads player to a global Hashmap when they join
+    public void onPlayerJoin(PlayerJoinEvent event) throws IOException { // adds/loads player to a global Hashmap when they join
         Player player = event.getPlayer();
         File file = new File(player.getUniqueId() + ".dat");
 
         if (!file.exists()) {  // case that file doesn't exist, creates a new SkillsMCPlayer object for new player and pushes to global hashmap
             SkillsMCPlayer smPlayer = new SkillsMCPlayer(player, 10, 0, 0, 0, ClassType.NONE);
+
+            System.out.println("Player id when joining: " + player.getUniqueId());
+
             Constant.SKILLS_MC_PLAYER_HASH_MAP.put(player.getUniqueId().toString(), smPlayer);
-            return;
+
+            System.out.println("Map contents when joining: " + Constant.SKILLS_MC_PLAYER_HASH_MAP.size());
         } else {
-            try (ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)))) {
+            FileInputStream fis = new FileInputStream(file);
+            GZIPInputStream gzip = new GZIPInputStream(fis);
+            ObjectInputStream ois = new ObjectInputStream(gzip);
+
+            try (ObjectInputStream input = ois) {
                 SkillsMCPlayer smPlayer = (SkillsMCPlayer) input.readObject();
                 smPlayer.setPlayer(player);
                 Constant.SKILLS_MC_PLAYER_HASH_MAP.put(player.getUniqueId().toString(), smPlayer);
@@ -56,18 +64,26 @@ public class LoginListener implements Listener {
         String uuid = player.getUniqueId().toString();
         File file = new File(player.getUniqueId() + ".dat");
 
+        System.out.println("Actual player info: " + player.getUniqueId());
+
+        System.out.println("Map contents: " + Constant.SKILLS_MC_PLAYER_HASH_MAP.size());
+
 
         if (!file.exists()) {  // case that file doesn't exist, creates a new file
             file.createNewFile();
         }
-        if (Constant.SKILLS_MC_PLAYER_HASH_MAP.containsKey(uuid)) {
-            try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
-                output.writeObject(Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid));
 
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        // if (Constant.SKILLS_MC_PLAYER_HASH_MAP.containsKey(uuid)) {
+        try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
+            SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
+
+            System.out.println("Player info: " + smPlayer.getUUID());
+
+            output.writeObject(smPlayer);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+        //}
     }
 }
 
