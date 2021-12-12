@@ -11,7 +11,9 @@ import org.bukkit.inventory.ItemStack;
 
 import static ragnaorok.Main.MobDeathParticles.ParticleShapes.draw;
 
+import ragnaorok.Main.Constant;
 import ragnaorok.Main.MobDeathParticles.EnumShapes;
+import ragnaorok.Main.SkillsMCPlayer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,11 +35,13 @@ public class MobListener implements Listener {
             EntityType.ZOMBIE_VILLAGER, EntityType.PILLAGER, EntityType.PHANTOM,
             EntityType.ZOMBIFIED_PIGLIN, EntityType.PIGLIN, EntityType.WITCH})
     public static void handleZombiesDeath(EntityDeathEvent event, Player player, Monster monster) {
+        String uuid = player.getUniqueId().toString();
+        SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
         Location mloc = monster.getLocation();
         draw(EnumShapes.HELIX, mloc, Particle.TOWN_AURA, player);
         draw(EnumShapes.SPHERE, mloc, Particle.ASH, player);
         player.spawnParticle(Particle.SOUL, mloc, 10);
-        SoulsManager.addSoulsToPlayer(player, +1);
+        smPlayer.setSouls(smPlayer.getSouls() +1 );
         player.sendMessage(ChatColor.GREEN + " +1 soul");
     }
 
@@ -52,12 +56,14 @@ public class MobListener implements Listener {
 
     @MobHandler(entity = EntityType.DROWNED)
     public static void handleDrownedDeath(EntityDeathEvent event, Player player, Monster monster) {
+        String uuid = player.getUniqueId().toString();
+        SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
         Location mloc = monster.getLocation();
         draw(EnumShapes.HELIX, mloc, Particle.FALLING_WATER, player);
         draw(EnumShapes.CIRCLE, mloc, Particle.WATER_BUBBLE, player);
         draw(EnumShapes.CIRCLE, mloc, Particle.WATER_SPLASH, player);
         player.spawnParticle(Particle.SOUL, mloc, 10);
-        SoulsManager.addSoulsToPlayer(player, 1);
+        smPlayer.setSouls(smPlayer.getSouls() +1 );
         player.sendMessage(ChatColor.GREEN + " +1 soul");
     }
 

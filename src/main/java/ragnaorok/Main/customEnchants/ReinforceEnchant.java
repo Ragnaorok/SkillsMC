@@ -9,13 +9,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import ragnaorok.Main.Constant;
 import ragnaorok.Main.Main;
+import ragnaorok.Main.SkillsMCPlayer;
 
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static ragnaorok.Main.SkillsMCPlayer.getSouls;
 
 
 public class ReinforceEnchant implements CommandExecutor {
@@ -61,9 +61,11 @@ public class ReinforceEnchant implements CommandExecutor {
                 return true;
             }
             Player player = (Player) sender;
+            String uuid = player.getUniqueId().toString();
+            SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
             if (!(player.getInventory().getItemInMainHand().getType() == Material.SHIELD))
                 return true;
-            if (getSouls(player) < 50) {
+            if (smPlayer.getSouls() < 50) {
                 player.sendMessage(ChatColor.RED + "You do not have enough souls");
                 return true;
             }
@@ -71,7 +73,6 @@ public class ReinforceEnchant implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "You do not have enough levels");
                 return true;
             }
-            SoulsManager.removePlayerSouls(player, 50);
             player.setLevel(20);
             player.getInventory().remove(Material.SHIELD);
             ItemStack item = new ItemStack(Material.SHIELD);

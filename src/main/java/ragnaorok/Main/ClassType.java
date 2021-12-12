@@ -1,14 +1,11 @@
 package ragnaorok.Main;
 
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
-public enum ClassType {
+
+public enum ClassType  implements  Serializable{
     NONE(""),
     WARRIOR(ChatColor.RED + "WARRIOR"),
     MAGE(ChatColor.LIGHT_PURPLE + "MAGE"),

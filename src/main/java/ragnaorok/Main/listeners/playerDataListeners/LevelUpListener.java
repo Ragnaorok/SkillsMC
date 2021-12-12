@@ -1,4 +1,4 @@
-package ragnaorok.Main.listeners.playerDataListeners;
+package ragnaorok.Main.listeners.PlayerDataListeners;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
