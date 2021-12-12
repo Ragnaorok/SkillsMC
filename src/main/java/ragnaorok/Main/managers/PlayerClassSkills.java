@@ -8,10 +8,12 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import ragnaorok.Main.Constant;
 import ragnaorok.Main.SkillsMCPlayer;
+import ragnaorok.Main.Tools;
 
 import java.util.Objects;
 
@@ -41,7 +43,7 @@ public class PlayerClassSkills {
         Vector direction = origin.getDirection();
         Location destination = origin.clone().add(direction);
         Material mainHand = player.getInventory().getItemInMainHand().getType();
-
+        PlayerInventory inventory = player.getInventory();
         switch (smPlayer.getClassType()) {
             case MAGE:
                 if (useMana(player, 1)) {
@@ -81,13 +83,14 @@ public class PlayerClassSkills {
         Material mainHand = player.getInventory().getItemInMainHand().getType();
         String uuid = player.getUniqueId().toString();
         SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
+        PlayerInventory inventory = player.getInventory();
         if (smPlayer.getClassType() == null)
             return;
 
         switch (smPlayer.getClassType()) {
             case MAGE:
                 if (mainHand == Material.BLAZE_ROD) {
-                    if (smPlayer.getMana() <= 10) {
+                    if (smPlayer.getMana() < 10) {
                         smPlayer.setMana(smPlayer.getMana() + 1);
                     } else {
                         player.sendMessage("You have full mana");
@@ -98,6 +101,11 @@ public class PlayerClassSkills {
             case ARCHER:
             case CLERIC:
             case WARRIOR:
+                if (Tools.getMainHand(inventory) == Tools.SWORD && Tools.getOffHand(inventory) == Tools.SWORD) {
+                        player.swingOffHand();
+                    displayManaBar(player);
+                }
+
         }
     }
 

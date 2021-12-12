@@ -19,6 +19,17 @@ public enum Tools {
         }
         return mainHand;
     }
+    public static Enum getOffHand(PlayerInventory inventory) {
+        Enum offHand = inventory.getItemInOffHand().getType();
+        if (offHand == Material.WOODEN_SWORD || offHand == Material.STONE_SWORD || offHand == Material.IRON_SWORD || offHand == Material.DIAMOND_SWORD || offHand == Material.NETHERITE_SWORD) {
+            offHand = SWORD;
+        } else if (offHand == Material.WOODEN_AXE || offHand == Material.STONE_AXE || offHand == Material.IRON_AXE || offHand == Material.DIAMOND_AXE || offHand == Material.NETHERITE_AXE) {
+            offHand = AXE;
+        } else if (offHand == Material.AIR || offHand == Material.CAVE_AIR ||offHand == Material.VOID_AIR) {
+            offHand = NONE;
+        }
+        return offHand;
+    }
 
 }
 
