@@ -13,7 +13,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import ragnaorok.Main.Constant;
 import ragnaorok.Main.Main;
+import ragnaorok.Main.SkillsMCPlayer;
 
 import static ragnaorok.Main.ClassType.*;
 
@@ -24,10 +26,6 @@ public class ClassCommand implements CommandExecutor, Listener {
     public ClassCommand(Main plugin) {
         this.plugin = plugin;
         plugin.getCommand("class").setExecutor(this);
-    }
-
-    public ClassCommand() {
-
     }
 
     @Override
@@ -82,7 +80,9 @@ public class ClassCommand implements CommandExecutor, Listener {
 
         if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Warrior Class")) {
             Player player = (Player) event.getWhoClicked();
-            setPlayerClassType(player, WARRIOR);
+            String uuid = player.getUniqueId().toString();
+            SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
+            smPlayer.setClassType(WARRIOR);
             System.out.println("Warrior Class selected");
             event.setCancelled(true);
             player.closeInventory();
@@ -90,7 +90,9 @@ public class ClassCommand implements CommandExecutor, Listener {
         }
         if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Mage Class")) {
             Player player = (Player) event.getWhoClicked();
-            setPlayerClassType(player, MAGE);
+            String uuid = player.getUniqueId().toString();
+            SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
+            smPlayer.setClassType(MAGE);
             System.out.println("Mage Class selected");
             event.setCancelled(true);
             player.closeInventory();
@@ -98,7 +100,9 @@ public class ClassCommand implements CommandExecutor, Listener {
         }
         if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Cleric Class")) {
             Player player = (Player) event.getWhoClicked();
-            setPlayerClassType(player, CLERIC);
+            String uuid = player.getUniqueId().toString();
+            SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
+            smPlayer.setClassType(CLERIC);
             System.out.println("Cleric Class selected");
             event.setCancelled(true);
             player.closeInventory();
@@ -106,7 +110,9 @@ public class ClassCommand implements CommandExecutor, Listener {
         }
         if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Archer Class")) {
             Player player = (Player) event.getWhoClicked();
-            setPlayerClassType(player, ARCHER);
+            String uuid = player.getUniqueId().toString();
+            SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
+            smPlayer.setClassType(ARCHER);
             System.out.println("Archer Class selected");
             event.setCancelled(true);
             player.closeInventory();

@@ -5,9 +5,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ragnaorok.Main.commands.*;
 import ragnaorok.Main.customEnchants.ReinforceEnchant;
 import ragnaorok.Main.listeners.*;
+import ragnaorok.Main.listeners.PlayerDataListeners.LevelUpListener;
 import ragnaorok.Main.listeners.ToolListeners.AxeListener;
 import ragnaorok.Main.listeners.movementListeners.CrouchJumpListener;
-import ragnaorok.Main.listeners.playerDataListeners.LevelUpListener;
 import ragnaorok.Main.listeners.ToolListeners.*;
 
 import java.util.Objects;
@@ -25,7 +25,7 @@ public final class Main extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("class")).setExecutor(new ClassCommand(this));
         Objects.requireNonNull(this.getCommand("profile")).setExecutor(new ProfileCommand(this));
         pm.registerEvents(new ClassCommand(this), this);
-        getServer().getPluginManager().registerEvents(new ClassCommand(), this);
+        pm.registerEvents(new ProfileCommand(this), this);
         getServer().getPluginManager().registerEvents(new MobListener(), this);
         getServer().getPluginManager().registerEvents(new LevelUpListener(), this);
         getServer().getPluginManager().registerEvents(new CrouchJumpListener(), this);
@@ -37,6 +37,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AxeListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathInventory(this), this);
         getServer().getPluginManager().registerEvents(new LoginListener(), this);
+        getServer().getPluginManager().registerEvents(new Test(), this);
         System.out.println("Plugin Enabled");
     }
 

@@ -1,21 +1,14 @@
 package ragnaorok.Main;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 public class SkillsMCPlayer implements Serializable {
     private int mana, souls, currency, bounty;
     private ClassType classType;
-    private Player player;
+    private transient Player player;
+
 
     public SkillsMCPlayer() {
 
