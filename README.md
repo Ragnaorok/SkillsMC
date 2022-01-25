@@ -1,2 +1,2 @@
 # SkillsMC
-a Spigot 1.17.X Plugin
+a Paper 1.18.X Plugin
