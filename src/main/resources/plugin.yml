@@ -1,12 +1,15 @@
 name: SkillsMC
 version: ${project.version}
 main: ragnaorok.Main.Main
-api-version: 1.17
+api-version: 1.19
 authors: [ Ragnaorok ]
-description: 1.17 Spigot Plugin
+description: 1.19 Paper Plugin
 commands:
   profile:
     description: show profile
+    usage: /<command>
+  el:
+    description: test
     usage: /<command>
   class:
     description: select a class
