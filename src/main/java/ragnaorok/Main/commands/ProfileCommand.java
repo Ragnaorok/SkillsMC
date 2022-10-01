@@ -1,6 +1,5 @@
 package ragnaorok.Main.commands;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -78,10 +77,14 @@ public class ProfileCommand implements CommandExecutor, Listener {
 
     @EventHandler
     public void onClickEvent(InventoryClickEvent event) { //Click event to see player profile
-      if (event.getCurrentItem().getItemMeta().getDisplayName().contains(":"))
-          event.setCancelled(true);
-        Player player = (Player) event.getWhoClicked();
-        player.closeInventory();
+        if (event.getCurrentItem().getItemMeta() == null) return;
+        if (event.getCurrentItem().getItemMeta().getDisplayName().contains(":")) {
+            event.setCancelled(true);
+            Player player = (Player) event.getWhoClicked();
+            player.closeInventory();
+        } else {
+            return;
+        }
     }
 }
 

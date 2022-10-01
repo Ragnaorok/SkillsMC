@@ -43,21 +43,21 @@ public class PlayerClassSkills {
         Vector direction = origin.getDirection();
         Location destination = origin.clone().add(direction);
         Material mainHand = player.getInventory().getItemInMainHand().getType();
-        PlayerInventory inventory = player.getInventory();
+        Material offHand = player.getInventory().getItemInOffHand().getType();
         switch (smPlayer.getClassType()) {
             case MAGE:
                 if (useMana(player, 1)) {
                     if (mainHand == Material.BLAZE_ROD) {
                         player.sendMessage(org.bukkit.ChatColor.GREEN + "Blaze Rod Skill: Fireball"); // Fireball Skill
                         direction.normalize();
-                        direction.multiply(3);
+                        direction.multiply(1);
                         Location loc = destination.add(direction);
                         Objects.requireNonNull(loc.getWorld()).spawnParticle(Particle.LAVA, loc, 10);
                         world.spawnEntity(loc, FIREBALL);
                         world.playSound(loc, ENTITY_BLAZE_SHOOT, 20, 1);
                         world.playSound(loc, ENTITY_BLAZE_BURN, 20, 1);
+
                     }
-                    displayManaBar(player);
                 }
                 return;
             case WARRIOR:
@@ -76,7 +76,15 @@ public class PlayerClassSkills {
 
                 }
                 return;
+            case NONE:
+                if (useMana(player, 0)) {
+                    if (mainHand == Material.BLAZE_ROD) {
+
+                    }
+
+                }
         }
+        displayManaBar(player);
     }
 
     public static void useRightSkill(Player player) {

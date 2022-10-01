@@ -1,4 +1,4 @@
-package ragnaorok.Main.MobDeathParticles;
+package ragnaorok.Main.Particles;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -42,6 +42,14 @@ public class ParticleShapes {
                         player.spawnParticle(particle, particleLoc, 1);
                         mloc.subtract(x, y, z);
                     }
+                }
+            case CRESCENT:
+                double yaw = particleLoc.getYaw();
+                for (double i = 0; i < 180; i += 10) {
+                    double angle = (i + yaw) * Math.PI / 180;
+                    double x1 = particleLoc.getX() + 5 * Math.cos(angle);
+                    double z1 = particleLoc.getZ() + 5 * Math.sin(angle);
+                    player.spawnParticle(Particle.DRIPPING_OBSIDIAN_TEAR, x1, particleLoc.getY(), z1 ,10);
                 }
         }
     }

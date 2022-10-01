@@ -7,12 +7,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemStack;
 
-import static ragnaorok.Main.MobDeathParticles.ParticleShapes.draw;
+import static ragnaorok.Main.Particles.ParticleShapes.draw;
 
 import ragnaorok.Main.Constant;
-import ragnaorok.Main.MobDeathParticles.EnumShapes;
+import ragnaorok.Main.Particles.EnumShapes;
 import ragnaorok.Main.SkillsMCPlayer;
 
 import java.lang.reflect.InvocationTargetException;
