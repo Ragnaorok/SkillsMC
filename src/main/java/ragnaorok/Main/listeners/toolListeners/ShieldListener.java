@@ -29,6 +29,8 @@ public class ShieldListener implements Listener { //A Skill that makes Shields u
         Location particleLoc = loc.clone();
         Location ploc = loc.clone();
         Material type = player.getItemInHand().getType();
+        double yaw = particleLoc.getYaw();
+        Particle.DustOptions dustOptions = new Particle.DustOptions(Color.SILVER, 1);
         PotionEffect brace = new PotionEffect(PotionEffectType.ABSORPTION, 25, 1);
         if (player.getItemInHand() == null) return;
         if (type == Material.SHIELD) {
@@ -40,37 +42,25 @@ public class ShieldListener implements Listener { //A Skill that makes Shields u
                         return;
                     }
                 }
-                right_Cooldown.put(player.getName(), System.currentTimeMillis() + (5 * 1000));
+                right_Cooldown.put(player.getName(), System.currentTimeMillis() + (2 * 1000));
                 player.sendMessage(ChatColor.GREEN + "Shield Skill: Brace");
                 player.addPotionEffect((brace));
-                for (int i = 0; i < 360; i += 5) { //Magic Circle
-                    particleLoc.setY(ploc.getY() + 1);
-                    particleLoc.setZ(ploc.getZ() + Math.sin(i));
-                    particleLoc.setX(ploc.getX() + Math.cos(i));
-                    world.spawnParticle(Particle.SPELL_INSTANT, particleLoc, 1);
+                for (double i = 0; i < 180; i += 10) {
+                    double angle = (i + yaw) * Math.PI / 180;
+                    double x1 = particleLoc.getX() + 2 * Math.cos(angle);
+                    double z1 = particleLoc.getZ() + 2 * Math.sin(angle);
+                    double y1 = particleLoc.getY() + 0.4 * Math.sin(angle);
+                    player.spawnParticle(Particle.REDSTONE, x1, y1, z1 ,5, dustOptions);
                 }
-            } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) { //Unfinished Stub
-                if (player.isSneaking()) {
-                    {
-                        if (left_Cooldown.containsKey(player.getName())) {
-
-                            if (left_Cooldown.get(player.getName()) > System.currentTimeMillis()) {
-                                return;
-                            }
-                        }
+            } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                    double y1 = particleLoc.getY() + 0.6;
+                    for (double i = 0; i < 120; i += 10) {
+                        double angle = (i + yaw) * Math.PI / 180;
+                        double x1 = particleLoc.getX() + 1.5 * Math.cos(angle);
+                        double z1 = particleLoc.getZ() + 1.5 * Math.sin(angle);
+                        player.spawnParticle(Particle.REDSTONE, x1, y1, z1 ,5, dustOptions);
+                        y1  = y1 + (Math.random()*0.5) * Math.sin(angle);
                     }
-                    left_Cooldown.put(player.getName(), System.currentTimeMillis() + (3 * 1000));
-                    player.sendMessage(ChatColor.GREEN + "Shield Skill: Vorpal Spikes");
-                    Location origin = player.getLocation();
-                    Vector direction = origin.getDirection();
-                    direction.multiply(10);
-                    direction.normalize();
-                    for (int i = 0; i < 10; i++) {
-                        Location oloc = origin.add(direction);
-                        oloc.getWorld().spawnParticle(Particle.CRIT, oloc, 10);
-                        player.getWorld().spawnEntity(oloc, Fang);
-                    }
-                }
             }
         }
     }

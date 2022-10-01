@@ -1,7 +1,13 @@
 package ragnaorok.Main;
 
+import de.slikey.effectlib.EffectManager;
+import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 import ragnaorok.Main.commands.*;
 import ragnaorok.Main.customEnchants.ReinforceEnchant;
 import ragnaorok.Main.listeners.*;
@@ -12,11 +18,12 @@ import ragnaorok.Main.listeners.ToolListeners.*;
 
 import java.util.Objects;
 
-public final class Main extends JavaPlugin {
+public final class Main extends JavaPlugin implements @NotNull Listener {
+    private EffectManager effectManager;
 
     @Override
     public void onEnable() {
-
+        effectManager = new EffectManager(this);
         PluginManager pm = this.getServer().getPluginManager();
         Objects.requireNonNull(this.getCommand("souls")).setExecutor(new SoulsCommand(this));
         Objects.requireNonNull(this.getCommand("kaboom")).setExecutor(new KaboomCommand(this));
@@ -36,13 +43,20 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ShieldListener(), this);
         getServer().getPluginManager().registerEvents(new AxeListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathInventory(this), this);
-        getServer().getPluginManager().registerEvents(new LoginListener(), this);
+        getServer().getPluginManager().registerEvents(new LoginListener(effectManager), this);
         getServer().getPluginManager().registerEvents(new Test(), this);
+        Bukkit.getPluginManager().registerEvents(this, this);
         System.out.println("Plugin Enabled");
     }
 
     @Override
-    public void onDisable() {
+    public @NotNull Logger getSLF4JLogger() {
+        return super.getSLF4JLogger();
+    }
 
+    @Override
+    public void onDisable() {
+        effectManager.dispose();
+        HandlerList.unregisterAll((Listener) this);
     }
 }

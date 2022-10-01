@@ -1,5 +1,7 @@
 package ragnaorok.Main;
 
+import de.slikey.effectlib.EffectManager;
+import de.slikey.effectlib.effect.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -7,17 +9,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import static org.bukkit.Sound.*;
 
 public class LoginListener implements Listener, Serializable {
+    private EffectManager effectManager;
+
+    public LoginListener(EffectManager effectManager) {
+        this.effectManager = effectManager;
+    }
+
     @EventHandler
     public void onLogin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -27,6 +33,19 @@ public class LoginListener implements Listener, Serializable {
         player.sendMessage("Welcome to RagnarokMC V:1.0 (Beta)" + ChatColor.ITALIC);
         world.playSound(soundLoc, BLOCK_BEACON_AMBIENT, 73, 1);
         world.playSound(soundLoc, ENTITY_EXPERIENCE_ORB_PICKUP, 73, 1);
+        VortexEffect warpEffect = new VortexEffect(effectManager);
+        warpEffect.setEntity(event.getPlayer());
+
+        warpEffect.callback = new Runnable() {
+
+            @Override
+            public void run() {
+                event.getPlayer().sendMessage("You bled out..");
+            }
+
+        };
+        warpEffect.iterations = 15 * 20;
+        warpEffect.start();
     }
 
 
