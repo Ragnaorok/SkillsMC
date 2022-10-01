@@ -1,2 +1,2 @@
 # SkillsMC
-a Paper 1.18.X Plugin
+a Paper 1.19.X Plugin

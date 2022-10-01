@@ -74,6 +74,11 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
 
+        <repository>
+            <id>elMakers</id>
+            <url>http://maven.elmakers.com/repository/</url>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -89,6 +94,13 @@
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.6.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.elmakers.mine.bukkit</groupId>
+            <artifactId>EffectLib</artifactId>
+            <version>9.4</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
