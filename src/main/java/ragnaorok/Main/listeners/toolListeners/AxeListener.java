@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AxeListener implements Listener {
-    Map<String, Long> leftCooldown = new HashMap<String, Long>();
     Map<String, Long> shiftCooldown = new HashMap<String, Long>();
     Map<String, Long> duration = new HashMap<String, Long>();
 
