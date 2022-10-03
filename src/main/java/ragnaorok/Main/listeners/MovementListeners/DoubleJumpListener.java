@@ -1,4 +1,4 @@
-package ragnaorok.Main.listeners.movementListeners;
+package ragnaorok.Main.listeners.MovementListeners;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
