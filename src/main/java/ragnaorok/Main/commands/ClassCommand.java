@@ -73,9 +73,9 @@ public class ClassCommand implements CommandExecutor, Listener {
     //TODO Clean up repeating code below this
     @EventHandler
     public void onClickEvent(InventoryClickEvent event) { //Click event to set class
-        if (!ChatColor.stripColor(event.getView().getTitle()).equalsIgnoreCase("Class Selection")) return;
         if (event.getCurrentItem() == null) return;
         if (event.getCurrentItem().getItemMeta() == null) return;
+        if (!ChatColor.stripColor(event.getView().getTitle()).equalsIgnoreCase("Class Selection")) return;
         if (event.getCurrentItem().getItemMeta().getDisplayName() == null) return;
 
         if (ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Warrior Class")) {
@@ -117,7 +117,8 @@ public class ClassCommand implements CommandExecutor, Listener {
             event.setCancelled(true);
             player.closeInventory();
             return;
+        } else {
+            return;
         }
-        return;
     }
 }

@@ -77,6 +77,7 @@ public class ProfileCommand implements CommandExecutor, Listener {
 
     @EventHandler
     public void onClickEvent(InventoryClickEvent event) { //Click event to see player profile
+        if (event.getCurrentItem() == null) return;
         if (event.getCurrentItem().getItemMeta() == null) return;
         if (event.getCurrentItem().getItemMeta().getDisplayName().contains(":")) {
             event.setCancelled(true);
