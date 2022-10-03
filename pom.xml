@@ -11,7 +11,7 @@
 
     <name>SkillsMC</name>
 
-    <description>1.18.1 Paper Plugin</description>
+    <description>1.19.2 Paper Plugin</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,8 +24,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>17</release>
                 </configuration>
             </plugin>
 
@@ -45,6 +44,7 @@
                     </execution>
                 </executions>
             </plugin>
+
 
         </plugins>
 
@@ -86,7 +86,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.18.1-R0.1-SNAPSHOT</version>
+            <version>1.19.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
