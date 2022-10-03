@@ -18,11 +18,7 @@ import java.util.zip.GZIPOutputStream;
 import static org.bukkit.Sound.*;
 
 public class LoginListener implements Listener, Serializable {
-    private EffectManager effectManager;
 
-    public LoginListener(EffectManager effectManager) {
-        this.effectManager = effectManager;
-    }
 
     @EventHandler
     public void onLogin(PlayerJoinEvent event) {
@@ -30,24 +26,10 @@ public class LoginListener implements Listener, Serializable {
         World world = player.getWorld();
         Location loc = player.getLocation();
         Location soundLoc = loc.clone();
-        player.sendMessage("Welcome to RagnarokMC V:1.0 (Beta)" + ChatColor.ITALIC);
+        player.sendMessage("Welcome to RagnarokMC V:1.1 (Beta)" + ChatColor.ITALIC);
         world.playSound(soundLoc, BLOCK_BEACON_AMBIENT, 73, 1);
         world.playSound(soundLoc, ENTITY_EXPERIENCE_ORB_PICKUP, 73, 1);
-        VortexEffect warpEffect = new VortexEffect(effectManager);
-        warpEffect.setEntity(event.getPlayer());
-
-        warpEffect.callback = new Runnable() {
-
-            @Override
-            public void run() {
-                event.getPlayer().sendMessage("You bled out..");
-            }
-
-        };
-        warpEffect.iterations = 15 * 20;
-        warpEffect.start();
     }
-
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) throws IOException { // adds/loads player to a global Hashmap when they join
@@ -56,12 +38,9 @@ public class LoginListener implements Listener, Serializable {
 
         if (!file.exists()) {  // case that file doesn't exist, creates a new SkillsMCPlayer object for new player and pushes to global hashmap
             SkillsMCPlayer smPlayer = new SkillsMCPlayer(player, 10, 0, 0, 0, ClassType.NONE);
-
             System.out.println("Player id when joining: " + player.getUniqueId());
-
             Constant.SKILLS_MC_PLAYER_HASH_MAP.put(player.getUniqueId().toString(), smPlayer);
-
-            System.out.println("Map contents when joining: " + Constant.SKILLS_MC_PLAYER_HASH_MAP.size());
+            System.out.println("Player Map Size: " + Constant.SKILLS_MC_PLAYER_HASH_MAP.size());
         } else {
             FileInputStream fis = new FileInputStream(file);
             GZIPInputStream gzip = new GZIPInputStream(fis);
