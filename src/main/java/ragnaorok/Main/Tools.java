@@ -6,7 +6,16 @@ import org.bukkit.inventory.PlayerInventory;
 public enum Tools {
     NONE,
     SWORD,
-    AXE;
+    AXE,
+    FIRE_WAND,
+    HOE,
+    BOW,
+    CROSSBOW,
+    SHIELD,
+    SWORD_SHIELD,
+    DUAL_AXE,
+    DUAL_SWORD;
+
 
     public static Enum getMainHand(PlayerInventory inventory) {
         Enum mainHand = inventory.getItemInMainHand().getType();
@@ -14,6 +23,8 @@ public enum Tools {
             mainHand = SWORD;
         } else if (mainHand == Material.WOODEN_AXE || mainHand == Material.STONE_AXE || mainHand == Material.IRON_AXE || mainHand == Material.DIAMOND_AXE || mainHand == Material.NETHERITE_AXE) {
             mainHand = AXE;
+        } else if (mainHand == Material.WOODEN_HOE || mainHand == Material.STONE_HOE || mainHand == Material.IRON_HOE || mainHand == Material.DIAMOND_HOE || mainHand == Material.NETHERITE_HOE) {
+            mainHand = HOE;
         } else if (mainHand == Material.AIR || mainHand == Material.CAVE_AIR ||mainHand == Material.VOID_AIR) {
             mainHand = NONE;
         }
@@ -29,6 +40,33 @@ public enum Tools {
             offHand = NONE;
         }
         return offHand;
+    }
+
+    public static Enum getLoadOut(PlayerInventory inventory) {
+        Enum loadout = null;
+        if (getMainHand(inventory) == SWORD && getOffHand(inventory) == SWORD) {
+            loadout = DUAL_SWORD;
+        }
+        else if (getMainHand(inventory) == AXE && getOffHand(inventory) == AXE) {
+            loadout = DUAL_AXE;
+        }
+        else if (getMainHand(inventory) == HOE && getOffHand(inventory) == NONE) {
+            loadout = HOE;
+        }
+        else if (getMainHand(inventory) == SWORD && getOffHand(inventory) == NONE) {
+            loadout = SWORD;
+        }
+        else if (getMainHand(inventory) == SWORD && getOffHand(inventory) == Material.SHIELD) {
+            loadout = SWORD_SHIELD;
+        }
+        else if (getMainHand(inventory) == Material.BLAZE_ROD) {
+            loadout = FIRE_WAND;
+        }
+        else {
+            loadout = NONE;
+        }
+
+    return loadout;
     }
 
 }

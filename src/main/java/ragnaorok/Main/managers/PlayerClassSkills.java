@@ -38,16 +38,16 @@ public class PlayerClassSkills {
     public static void useLeftSkill(Player player) {
         String uuid = player.getUniqueId().toString();
         SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
+        PlayerInventory hand = player.getInventory();
         World world = player.getWorld();
         Location origin = player.getEyeLocation();
         Vector direction = origin.getDirection();
         Location destination = origin.clone().add(direction);
         Material mainHand = player.getInventory().getItemInMainHand().getType();
-        Material offHand = player.getInventory().getItemInOffHand().getType();
         switch (smPlayer.getClassType()) {
             case MAGE:
-                if (useMana(player, 1)) {
-                    if (mainHand == Material.BLAZE_ROD) {
+                if (Tools.getLoadOut(hand).equals(Tools.FIRE_WAND)) {
+                    if (useMana(player, 1)) {
                         player.sendMessage(org.bukkit.ChatColor.GREEN + "Blaze Rod Skill: Fireball"); // Fireball Skill
                         direction.normalize();
                         direction.multiply(1);
@@ -61,7 +61,10 @@ public class PlayerClassSkills {
                 }
                 return;
             case WARRIOR:
-                if (useMana(player, 5)) {
+                if (Tools.getLoadOut(hand).equals(Tools.SWORD)){
+                    if (useMana(player, 1)) {
+
+                    }
 
                 }
                 return;
