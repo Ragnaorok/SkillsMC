@@ -8,8 +8,8 @@ commands:
   profile:
     description: show profile
     usage: /<command>
-  el:
-    description: test
+  guide:
+    description: gives guidebook
     usage: /<command>
   class:
     description: select a class

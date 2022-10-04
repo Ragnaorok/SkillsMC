@@ -29,6 +29,8 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         Objects.requireNonNull(this.getCommand("check")).setExecutor(new EnchantCheck(this));
         Objects.requireNonNull(this.getCommand("class")).setExecutor(new ClassCommand(this));
         Objects.requireNonNull(this.getCommand("profile")).setExecutor(new ProfileCommand(this));
+        Objects.requireNonNull(this.getCommand("guide")).setExecutor(new ProfileCommand(this));
+        pm.registerEvents(new Guidebook(this), this);
         pm.registerEvents(new ClassCommand(this), this);
         pm.registerEvents(new ProfileCommand(this), this);
         getServer().getPluginManager().registerEvents(new MobListener(), this);
