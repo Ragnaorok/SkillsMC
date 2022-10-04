@@ -6,13 +6,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+import java.util.ArrayList;
+
 public class Book {
     String title;
     String author;
     String currentPage = "";
     int numPages = 0;
     int numLines = 0;
-
+    ArrayList<String> pages = new ArrayList<String>();
     ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
     BookMeta bookMeta = (BookMeta) book.getItemMeta();
 
@@ -27,6 +29,16 @@ public class Book {
     public int getNumPages()
     {
         return numPages;
+    }
+    public ArrayList<String> getPages(){
+        return pages;
+    }
+    public BookMeta getBookMeta(){
+        return (BookMeta) book.getItemMeta();
+    }
+    public void setBookMeta(Book itemStack){
+        this.book = book;
+        book.setItemMeta(book.getItemMeta());
     }
 
     public void setTitle(String title)
@@ -50,27 +62,13 @@ public class Book {
         ++numPages;
     }
 
-    public void addToPage (String line)
-    {
-        if (numLines == 13)
-        {
-            addPage();
-            this.currentPage = "";
-            this.numLines = 0;
-            this.currentPage = this.currentPage + title + "\n";
-            this.currentPage = this.currentPage + line + "\n";
-        }
-        else if (numLines == 0)
-        {
-            this.currentPage = this.currentPage + title + "\n";
-            this.currentPage = this.currentPage + line + "\n";
-        }
-        else
-        {
-            this.currentPage = this.currentPage + line + "\n";
-        }
 
-        ++numLines;
+    public void addToPage (int num, String line)
+    {
+        pages.add(num, line);
+    }
+    public void getPage(int i) {
+
     }
 
     public void addInfo()
@@ -89,4 +87,6 @@ public class Book {
             p.sendMessage("cant give you " + title + " book, your inventory is full!");
         }
     }
+
+
 }
