@@ -50,17 +50,18 @@ public class ShieldListener implements Listener { //A Skill that makes Shields u
                     double x1 = particleLoc.getX() + 2 * Math.cos(angle);
                     double z1 = particleLoc.getZ() + 2 * Math.sin(angle);
                     double y1 = particleLoc.getY() + 0.4 * Math.sin(angle);
-                    player.spawnParticle(Particle.REDSTONE, x1, y1, z1 ,5, dustOptions);
+                    player.spawnParticle(Particle.REDSTONE, x1, y1, z1, 5, dustOptions);
                 }
-            } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                    double y1 = particleLoc.getY() + 0.6;
-                    for (double i = 0; i < 120; i += 10) {
-                        double angle = (i + yaw) * Math.PI / 180;
-                        double x1 = particleLoc.getX() + 1.5 * Math.cos(angle);
-                        double z1 = particleLoc.getZ() + 1.5 * Math.sin(angle);
-                        player.spawnParticle(Particle.REDSTONE, x1, y1, z1 ,5, dustOptions);
-                        y1  = y1 + (Math.random()*0.5) * Math.sin(angle);
-                    }
+            }
+            else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                for (double i = 100; i <= 130; i += 10) { // right to left quarter circle
+                    double angle = (i + yaw) * Math.PI / 180;
+                    double x1 = particleLoc.getX() + 2 * Math.cos(angle);
+                    double z1 = particleLoc.getZ() + 2 * Math.sin(angle);
+                    double y1 = particleLoc.getY()+ 1 + 0.4 * Math.sin(angle);
+                    player.spawnParticle(Particle.REDSTONE, x1, y1, z1, 5, dustOptions);
+                }
+                player.sendMessage("left swing");
             }
         }
     }
