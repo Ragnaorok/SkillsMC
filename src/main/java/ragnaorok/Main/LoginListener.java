@@ -19,7 +19,6 @@ import static org.bukkit.Sound.*;
 
 public class LoginListener implements Listener, Serializable {
 
-
     @EventHandler
     public void onLogin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -42,16 +41,17 @@ public class LoginListener implements Listener, Serializable {
             Constant.SKILLS_MC_PLAYER_HASH_MAP.put(player.getUniqueId().toString(), smPlayer);
             System.out.println("Player Map Size: " + Constant.SKILLS_MC_PLAYER_HASH_MAP.size());
         } else {
-            FileInputStream fis = new FileInputStream(file);
-            GZIPInputStream gzip = new GZIPInputStream(fis);
-            ObjectInputStream ois = new ObjectInputStream(gzip);
+            try (FileInputStream fis = new FileInputStream(file);
+                 GZIPInputStream gzip = new GZIPInputStream(fis);
+                 ObjectInputStream ois = new ObjectInputStream(gzip)) {
 
-            try (ObjectInputStream input = ois) {
-                SkillsMCPlayer smPlayer = (SkillsMCPlayer) input.readObject();
+                SkillsMCPlayer smPlayer = (SkillsMCPlayer) ois.readObject();
                 smPlayer.setPlayer(player);
                 Constant.SKILLS_MC_PLAYER_HASH_MAP.put(player.getUniqueId().toString(), smPlayer);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (EOFException e) {
+                System.err.println("Reached end of file while reading player data for " + player.getName());
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -63,26 +63,18 @@ public class LoginListener implements Listener, Serializable {
         File file = new File(player.getUniqueId() + ".dat");
 
         System.out.println("Actual player info: " + player.getUniqueId());
-
         System.out.println("Map contents: " + Constant.SKILLS_MC_PLAYER_HASH_MAP.size());
-
 
         if (!file.exists()) {  // case that file doesn't exist, creates a new file
             file.createNewFile();
         }
 
-        // if (Constant.SKILLS_MC_PLAYER_HASH_MAP.containsKey(uuid)) {
         try (ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
             SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
-
             System.out.println("Player info: " + smPlayer.getUUID());
-
             output.writeObject(smPlayer);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        //}
     }
 }
-
-
