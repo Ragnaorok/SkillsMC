@@ -9,11 +9,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import ragnaorok.Main.commands.*;
-import ragnaorok.Main.customEnchants.ReinforceEnchant;
+//import ragnaorok.Main.customEnchants.ReinforceEnchant;
 import ragnaorok.Main.listeners.*;
 import ragnaorok.Main.listeners.PlayerDataListeners.LevelUpListener;
 import ragnaorok.Main.listeners.ToolListeners.AxeListener;
 import ragnaorok.Main.listeners.ToolListeners.*;
+
 import java.util.Objects;
 
 public final class Main extends JavaPlugin implements @NotNull Listener {
@@ -25,8 +26,8 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         PluginManager pm = this.getServer().getPluginManager();
         Objects.requireNonNull(this.getCommand("souls")).setExecutor(new SoulsCommand(this));
         Objects.requireNonNull(this.getCommand("kaboom")).setExecutor(new KaboomCommand(this));
-        Objects.requireNonNull(this.getCommand("reinforce")).setExecutor(new ReinforceEnchant(this));
-        Objects.requireNonNull(this.getCommand("check")).setExecutor(new EnchantCheck(this));
+        //Objects.requireNonNull(this.getCommand("reinforce")).setExecutor(new ReinforceEnchant(this));
+        //Objects.requireNonNull(this.getCommand("check")).setExecutor(new EnchantCheck(this));
         Objects.requireNonNull(this.getCommand("class")).setExecutor(new ClassCommand(this));
         Objects.requireNonNull(this.getCommand("profile")).setExecutor(new ProfileCommand(this));
         Objects.requireNonNull(this.getCommand("guide")).setExecutor(new ProfileCommand(this));
@@ -36,10 +37,10 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         getServer().getPluginManager().registerEvents(new MobListener(), this);
         getServer().getPluginManager().registerEvents(new LoginListener(), this);
         getServer().getPluginManager().registerEvents(new LevelUpListener(), this);
-        getServer().getPluginManager().registerEvents(new CrouchJumpListener(),this);
+        getServer().getPluginManager().registerEvents(new CrouchJumpListener(), this);
         getServer().getPluginManager().registerEvents(new NetheriteHoeListener(), this);
         getServer().getPluginManager().registerEvents(new BlazeRodListener(), this);
-        getServer().getPluginManager().registerEvents(new BowListener(), this);
+        getServer().getPluginManager().registerEvents(new BowListener(this), this);
         getServer().getPluginManager().registerEvents(new CrossBowListener(), this);
         getServer().getPluginManager().registerEvents(new ShieldListener(), this);
         getServer().getPluginManager().registerEvents(new AxeListener(), this);
