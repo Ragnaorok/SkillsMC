@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class ReinforceEnchant implements CommandExecutor {
+/*public class ReinforceEnchant implements CommandExecutor {
     public static final Enchantment REINFORCE = new EnchantmentWrapper("reinforce", "Reinforce", 1);
     public Main plugin;
 
@@ -89,4 +89,4 @@ public class ReinforceEnchant implements CommandExecutor {
         return true;
     }
 }
-
+*/

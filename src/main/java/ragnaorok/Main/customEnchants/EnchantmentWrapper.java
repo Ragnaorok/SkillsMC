@@ -1,4 +1,4 @@
-package ragnaorok.Main.customEnchants;
+/*package ragnaorok.Main.customEnchants;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
 import net.kyori.adventure.text.Component;
@@ -97,6 +97,6 @@ public class EnchantmentWrapper extends Enchantment {
         return null;
     }
 }
-
+*/
 
 
