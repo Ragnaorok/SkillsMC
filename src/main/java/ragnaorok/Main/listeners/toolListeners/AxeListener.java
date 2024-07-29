@@ -1,65 +1,81 @@
 package ragnaorok.Main.listeners.ToolListeners;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.util.Vector;
 import ragnaorok.Main.Tools;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class AxeListener implements Listener {
-    Map<String, Long> shiftCooldown = new HashMap<String, Long>();
-    Map<String, Long> duration = new HashMap<String, Long>();
+    Map<String, Long> axeCooldown = new HashMap<>();
 
     @EventHandler
-    public void test(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        PlayerInventory inventory = player.getInventory();
-        if (player.getItemInHand() == null) return;
-        if (Tools.getMainHand(inventory) == Tools.AXE) {
-            if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                if (player.isSneaking()) {
-                    if (shiftCooldown.containsKey(player.getName())) {
-                        if (shiftCooldown.get(player.getName()) > System.currentTimeMillis()) {
-                            long time = (shiftCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
-                            player.sendMessage(ChatColor.DARK_GRAY + "" + time + " second(s)");
+    public void onAxeHit(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+
+            if (Tools.getMainHand(player.getInventory()) == Tools.AXE) {
+                if (event.getEntity() instanceof Monster) {
+                    if (!player.isSprinting()) {
+                        player.sendMessage(ChatColor.DARK_GRAY + "You must be sprinting to use Shockwave.");
+                        return;
+                    }
+                    if (axeCooldown.containsKey(player.getName())) {
+                        if (axeCooldown.get(player.getName()) > System.currentTimeMillis()) {
+                            long time = (axeCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
+                            player.sendMessage(ChatColor.DARK_GRAY + "Shockwave will be ready in " + time + " second(s)");
                             return;
                         }
                     }
-                    shiftCooldown.put(player.getName(), System.currentTimeMillis() + (30 * 1000));
-                    duration.put(player.getName(), System.currentTimeMillis() + (4 * 1000));
-                    player.sendMessage(ChatColor.GREEN + "Blight activated"); //left click skill
+                    axeCooldown.put(player.getName(), System.currentTimeMillis() + (1 * 1000)); // 1 second cooldown for testing
+                    player.sendMessage(ChatColor.GREEN + "Axe Skill: Shockwave");
+
+                    // Create shockwave effect originating from the mob's location
+                    createShockwave(event.getEntity().getLocation(), player);
                 }
             }
         }
     }
 
+    private void createShockwave(Location origin, Player player) {
+        World world = origin.getWorld();
+        Vector direction = player.getLocation().getDirection().normalize();
+        double playerVelocityMagnitude = player.getVelocity().length();
+        double baseDamage = 9.0;
+        double damage = baseDamage * playerVelocityMagnitude; // Damage scales with player velocity
+
+        for (int i = 1; i <= 10; i++) { // Shockwave length
+            Location shockwaveLoc = origin.clone().add(direction.multiply(i));
+            world.spawnParticle(Particle.EXPLOSION_LARGE, shockwaveLoc, 1, 0.2, 0.2, 0.2, 0);
+            world.spawnParticle(Particle.BLOCK_CRACK, shockwaveLoc, 10, 0.5, 0.5, 0.5, Material.STONE.createBlockData());
+            world.spawnParticle(Particle.CLOUD, shockwaveLoc, 5, 0.2, 0.2, 0.2, 0);
+            world.playSound(shockwaveLoc, Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f); // Play metal impact sound
+            world.playSound(shockwaveLoc, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.1f); // Play explosion sound
+
+            for (Entity entity : world.getNearbyEntities(shockwaveLoc, 1, 1, 1)) {
+                if (entity instanceof LivingEntity && entity != player) {
+                    ((LivingEntity) entity).damage(damage); // Deal velocity-scaled damage to entities in the path
+                    Vector knockback = direction.clone().multiply(2); // Adjust knockback strength as needed
+                    knockback.setY(0.5); // Add some vertical knockback
+                    entity.setVelocity(knockback);
+                }
+            }
+        }
+        player.sendMessage("You dealt: " + damage);
+    }
+
     @EventHandler
-    public void Blight(EntityDamageByEntityEvent event) {
+    public void reinforceEnchant(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player && event.getEntity() instanceof Monster) {
             Player player = (Player) event.getDamager();
-            Material type = player.getItemInHand().getType();
-            if (type == Material.STONE_AXE || type == Material.IRON_AXE || type == Material.DIAMOND_AXE || type == Material.NETHERITE_AXE) {
-                World world = player.getWorld();
-                Monster monster = (Monster) event.getEntity();
-                Location loc = monster.getLocation();
-                Location mloc = loc.clone();
-                if (duration.get(player.getName()) > System.currentTimeMillis()) {
-                    EntityType Fang = EntityType.EVOKER_FANGS;
-                    world.spawnEntity(mloc, Fang);
-                    player.sendMessage("Blight");
-                }
+            if (player.getInventory().getItemInMainHand().getType() == Material.DIAMOND_AXE || player.getInventory().getItemInMainHand().getType() == Material.IRON_AXE || player.getInventory().getItemInMainHand().getType() == Material.STONE_AXE || player.getInventory().getItemInMainHand().getType() == Material.GOLDEN_AXE || player.getInventory().getItemInMainHand().getType() == Material.WOODEN_AXE) {
+                if (player.getInventory().getItemInMainHand().getItemMeta().getLore().contains("Reinforce"))
+                    event.setDamage(event.getDamage() + 5);
             }
         }
     }
