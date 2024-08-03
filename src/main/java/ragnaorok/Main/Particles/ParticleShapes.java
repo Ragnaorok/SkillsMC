@@ -49,7 +49,7 @@ public class ParticleShapes {
                     double angle = (i + yaw) * Math.PI / 180;
                     double x1 = particleLoc.getX() + 5 * Math.cos(angle);
                     double z1 = particleLoc.getZ() + 5 * Math.sin(angle);
-                    player.spawnParticle(Particle.DRIPPING_OBSIDIAN_TEAR, x1, particleLoc.getY(), z1 ,10);
+                    player.spawnParticle(particle, x1, particleLoc.getY(), z1 ,10);
                 }
         }
     }
