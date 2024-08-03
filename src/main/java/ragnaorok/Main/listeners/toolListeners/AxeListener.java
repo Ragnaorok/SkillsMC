@@ -32,7 +32,7 @@ public class AxeListener implements Listener {
                             return;
                         }
                     }
-                    axeCooldown.put(player.getName(), System.currentTimeMillis() + (1 * 1000)); // 1 second cooldown for testing
+                    axeCooldown.put(player.getName(), System.currentTimeMillis() + (3 * 1000)); // 1 second cooldown for testing
                     player.sendMessage(ChatColor.GREEN + "Axe Skill: Shockwave");
 
                     // Create shockwave effect originating from the mob's location
@@ -60,23 +60,12 @@ public class AxeListener implements Listener {
             for (Entity entity : world.getNearbyEntities(shockwaveLoc, 1, 1, 1)) {
                 if (entity instanceof LivingEntity && entity != player) {
                     ((LivingEntity) entity).damage(damage); // Deal velocity-scaled damage to entities in the path
-                    Vector knockback = direction.clone().multiply(2); // Adjust knockback strength as needed
+                    Vector knockback = direction.clone().multiply(3); // knockback strength
                     knockback.setY(0.5); // Add some vertical knockback
                     entity.setVelocity(knockback);
                 }
             }
         }
         player.sendMessage("You dealt: " + damage);
-    }
-
-    @EventHandler
-    public void reinforceEnchant(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player && event.getEntity() instanceof Monster) {
-            Player player = (Player) event.getDamager();
-            if (player.getInventory().getItemInMainHand().getType() == Material.DIAMOND_AXE || player.getInventory().getItemInMainHand().getType() == Material.IRON_AXE || player.getInventory().getItemInMainHand().getType() == Material.STONE_AXE || player.getInventory().getItemInMainHand().getType() == Material.GOLDEN_AXE || player.getInventory().getItemInMainHand().getType() == Material.WOODEN_AXE) {
-                if (player.getInventory().getItemInMainHand().getItemMeta().getLore().contains("Reinforce"))
-                    event.setDamage(event.getDamage() + 5);
-            }
-        }
     }
 }
