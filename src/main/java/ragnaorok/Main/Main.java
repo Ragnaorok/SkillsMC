@@ -19,25 +19,28 @@ import java.util.Objects;
 
 public final class Main extends JavaPlugin implements @NotNull Listener {
     private EffectManager effectManager;
+    private static Main instance;
 
     @Override
     public void onEnable() {
+        instance = this;
         effectManager = new EffectManager(this);
         PluginManager pm = this.getServer().getPluginManager();
         Objects.requireNonNull(this.getCommand("souls")).setExecutor(new SoulsCommand(this));
         Objects.requireNonNull(this.getCommand("kaboom")).setExecutor(new KaboomCommand(this));
-        //Objects.requireNonNull(this.getCommand("reinforce")).setExecutor(new ReinforceEnchant(this));
-        //Objects.requireNonNull(this.getCommand("check")).setExecutor(new EnchantCheck(this));
         Objects.requireNonNull(this.getCommand("class")).setExecutor(new ClassCommand(this));
         Objects.requireNonNull(this.getCommand("profile")).setExecutor(new ProfileCommand(this));
         Objects.requireNonNull(this.getCommand("guide")).setExecutor(new ProfileCommand(this));
+        //Objects.requireNonNull(this.getCommand("reinforce")).setExecutor(new ReinforceEnchant(this));
+        //Objects.requireNonNull(this.getCommand("check")).setExecutor(new EnchantCheck(this));
+
         pm.registerEvents(new Guidebook(this), this);
         pm.registerEvents(new ClassCommand(this), this);
         pm.registerEvents(new ProfileCommand(this), this);
+
         getServer().getPluginManager().registerEvents(new MobListener(), this);
         getServer().getPluginManager().registerEvents(new LoginListener(), this);
         getServer().getPluginManager().registerEvents(new LevelUpListener(), this);
-        getServer().getPluginManager().registerEvents(new CrouchJumpListener(), this);
         getServer().getPluginManager().registerEvents(new NetheriteHoeListener(), this);
         getServer().getPluginManager().registerEvents(new BlazeRodListener(), this);
         getServer().getPluginManager().registerEvents(new BowListener(this), this);
@@ -46,7 +49,13 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         getServer().getPluginManager().registerEvents(new AxeListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathInventory(this), this);
         getServer().getPluginManager().registerEvents(new Test(), this);
+        //getServer().getPluginManager().registerEvents(new CrouchJumpListener(), this);
+
         Bukkit.getPluginManager().registerEvents(this, this);
+
+        // Create and register the custom item and recipe
+        BlastAxe.createBlastAxe(this);
+
         System.out.println("Plugin Enabled");
     }
 
@@ -59,5 +68,9 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
     public void onDisable() {
         effectManager.dispose();
         HandlerList.unregisterAll((Listener) this);
+    }
+
+    public static Main getInstance() {
+        return instance;
     }
 }
