@@ -13,9 +13,9 @@ public class CrouchJumpListener implements Listener {
     @EventHandler
     public void onPlayerToggleSneakEvent(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
-        Location loc = player.getLocation();
-        Location particleLoc = loc.clone();
+        //Location loc = player.getLocation();
+        //Location particleLoc = loc.clone();
         player.addPotionEffect((new PotionEffect(PotionEffectType.JUMP, 10, 1)));
-        player.spawnParticle(Particle.SONIC_BOOM, particleLoc, 1);
+        //player.spawnParticle(Particle.SONIC_BOOM, particleLoc, 1);
     }
 }
