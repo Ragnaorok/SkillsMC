@@ -15,24 +15,34 @@ This Minecraft plugin introduces custom skills for different tools and weapons b
 
 ## Usage
 ### Shield Surfing
-- Equip a shield and start blocking while falling to initiate shield surfing.
-- Upon landing, you will bounce forward.
+- Block while crouching to initiate shield surfing.
+- Upon landing, if player would take fall damage you would bounce in the direction you're looking instead.
 - Shield surfing is disabled if the shield has only 1 durability left to prevent shield from breaking.
+  
+### Class Modifiers
+- Warrior: +1 Heart
+- Archer : +.2 Walkspeed
+- Cleric : Passive Rejuvation 1 potion effect
+- Mage   : -1 Heart & Mana Shield (reduce incoming damage by 10% at the cost of mana)
 
-### Souls System
-- Kill certain mobs for a chance to obtain souls
-- Souls can be used to unlock new skills
+### Loadouts
+- Different combinations of main and offhand result in different skills 
+- Current available loadouts: Mainhand Sword, Sword and Shield, Mainhand Shield, Dual Swords, Axe/Blast Axe, Crossbow, Blaze Rod, Netherite Hoe
 
 ## Custom Items and Recipes
 ### Blast Axe
 - Combines an Iron Axe and Flint & Steel to create the Blast Axe.
 - Hit a monster while sprinting for a powerful strike.
-
+  
+### Souls System (Unimplemented at the moment)
+- Kill certain mobs for a chance to obtain souls.
+- Souls can be used to improve or unlock new skills
+  
 ## Commands
-- `/souls` admin command
+- `/souls` admin command to modify soul count
 - `/kaboom` gag command
 - `/class` choose your class
-- `/profile` view a player's class and currency
+- `/profile` view a player's class stats & currency
 - `/guide` gives the player a guidebook
 
 ## Dependencies
