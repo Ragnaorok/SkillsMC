@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -22,9 +23,9 @@ public class CrossBowListener implements Listener {
         Player player = event.getPlayer();  //player
         Location origin = player.getLocation(); //player origin
         Vector direction = origin.getDirection();   //player direction
-        Material type = player.getItemInHand().getType();
+        Material type = player.getInventory().getItemInMainHand().getType();
 
-        if (player.getItemInHand() == null) return;
+        if (player.getInventory().getItemInMainHand() == null) return;
         if (type == Material.CROSSBOW) {
             if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
                 if (!player.isSneaking()) {
@@ -69,7 +70,8 @@ public class CrossBowListener implements Listener {
                     if (duration.get(player.getName()) == null)
                         return;
                     if (duration.get(player.getName()) > System.currentTimeMillis()) {
-                        player.launchProjectile(Arrow.class);
+                        Arrow arrow = player.launchProjectile(Arrow.class);
+                        arrow.setPickupStatus(Arrow.PickupStatus.DISALLOWED);
                     }
                 }
             }
