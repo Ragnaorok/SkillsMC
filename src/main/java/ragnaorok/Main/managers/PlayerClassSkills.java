@@ -1,4 +1,4 @@
-package ragnaorok.Main.managers;
+/*package ragnaorok.Main.managers;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -132,4 +132,4 @@ public class PlayerClassSkills {
     }
 
 }
-
+*/
