@@ -42,14 +42,17 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         getServer().getPluginManager().registerEvents(new LoginListener(), this);
         getServer().getPluginManager().registerEvents(new LevelUpListener(), this);
         getServer().getPluginManager().registerEvents(new NetheriteHoeListener(), this);
-        getServer().getPluginManager().registerEvents(new BlazeRodListener(), this);
-        getServer().getPluginManager().registerEvents(new BowListener(this), this);
         getServer().getPluginManager().registerEvents(new CrossBowListener(), this);
         getServer().getPluginManager().registerEvents(new ShieldListener(), this);
         getServer().getPluginManager().registerEvents(new AxeListener(), this);
+        getServer().getPluginManager().registerEvents(new CrouchJumpListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathInventory(this), this);
-        getServer().getPluginManager().registerEvents(new Test(), this);
-        //getServer().getPluginManager().registerEvents(new CrouchJumpListener(), this);
+        getServer().getPluginManager().registerEvents(new BlazeRodListener(this), this);
+        getServer().getPluginManager().registerEvents(new BowListener(this), this);
+        getServer().getPluginManager().registerEvents(new SwordListener(this), this);
+        getServer().getPluginManager().registerEvents(new DualSwordListener(this), this);
+
+        //getServer().getPluginManager().registerEvents(new Test(), this);
 
         Bukkit.getPluginManager().registerEvents(this, this);
 
