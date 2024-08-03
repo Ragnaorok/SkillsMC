@@ -17,7 +17,6 @@ import ragnaorok.Main.Constant;
 import ragnaorok.Main.Main;
 import ragnaorok.Main.SkillsMCPlayer;
 
-
 public class ProfileCommand implements CommandExecutor, Listener {
     public Main plugin;
 
@@ -47,31 +46,44 @@ public class ProfileCommand implements CommandExecutor, Listener {
         int currency_ = smPlayer.getCurrency();
         int souls_ = smPlayer.getSouls();
         int bounty_ = smPlayer.getBounty();
+        double maxHearts_ = smPlayer.getMaxHearts();
+        double speed_ = smPlayer.getMovementSpeed();
+        double mana_ = smPlayer.getMana();
 
         ItemStack playerClass = new ItemStack(Material.PLAYER_HEAD);
         ItemStack currency = new ItemStack(Material.EMERALD);
         ItemStack souls = new ItemStack(Material.SOUL_LANTERN);
         ItemStack bounty = new ItemStack(Material.RED_DYE);
+        ItemStack maxHearts = new ItemStack(Material.GOLDEN_APPLE);
+        ItemStack speed = new ItemStack(Material.FEATHER);
 
         ItemMeta classItemMeta = playerClass.getItemMeta();
         ItemMeta currencyItemMeta = currency.getItemMeta();
         ItemMeta soulsItemMeta = souls.getItemMeta();
         ItemMeta bountyItemMeta = bounty.getItemMeta();
+        ItemMeta maxHeartsItemMeta = maxHearts.getItemMeta();
+        ItemMeta speedItemMeta = speed.getItemMeta();
 
         classItemMeta.setDisplayName(ChatColor.GREEN + "Class: " + smPlayer.getClassType().toString());
         currencyItemMeta.setDisplayName(ChatColor.GREEN + "Currency: " + currency_);
         soulsItemMeta.setDisplayName(ChatColor.GREEN + "Souls: " + souls_);
         bountyItemMeta.setDisplayName(ChatColor.GREEN + "Bounty: " + bounty_);
+        maxHeartsItemMeta.setDisplayName(ChatColor.GREEN + "Max Hearts: " + maxHearts_);
+        speedItemMeta.setDisplayName(ChatColor.GREEN + "Movement Speed: " + speed_);
 
         playerClass.setItemMeta(classItemMeta);
         currency.setItemMeta(currencyItemMeta);
         souls.setItemMeta(soulsItemMeta);
         bounty.setItemMeta(bountyItemMeta);
+        maxHearts.setItemMeta(maxHeartsItemMeta);
+        speed.setItemMeta(speedItemMeta);
 
         gui.setItem(22, playerClass);
         gui.setItem(32, currency);
         gui.setItem(31, souls);
         gui.setItem(13, bounty);
+        gui.setItem(23, maxHearts);
+        gui.setItem(24, speed);
         player.openInventory(gui);
     }
 
@@ -88,5 +100,3 @@ public class ProfileCommand implements CommandExecutor, Listener {
         }
     }
 }
-
-
