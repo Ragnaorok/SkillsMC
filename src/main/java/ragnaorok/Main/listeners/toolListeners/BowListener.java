@@ -10,10 +10,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
-import ragnaorok.Main.ClassType;
-import ragnaorok.Main.Constant;
-import ragnaorok.Main.SkillsMCPlayer;
 import ragnaorok.Main.Main;
 
 import java.util.HashMap;
@@ -23,7 +19,7 @@ public class BowListener implements Listener {
     private final Main plugin;
     private final Map<String, Long> leftCooldown = new HashMap<>();
     private final Map<String, Long> shiftCooldown = new HashMap<>();
-    private final Map<String, Long> duration = new HashMap<>();
+    private final Map<String, Boolean> trueshotReady = new HashMap<>();
 
     public BowListener(Main plugin) {
         this.plugin = plugin;
@@ -69,9 +65,9 @@ public class BowListener implements Listener {
             return;
         }
 
-        shiftCooldown.put(player.getName(), System.currentTimeMillis() + (30 * 1000));
-        duration.put(player.getName(), System.currentTimeMillis() + (4 * 1000));
-        player.sendMessage(ChatColor.GREEN + "Trueshot activated");
+        shiftCooldown.put(player.getName(), System.currentTimeMillis() + (10 * 1000));
+        trueshotReady.put(player.getName(), true);
+        player.sendMessage(ChatColor.GREEN + "Trueshot ready for the next shot");
     }
 
     private boolean isCooldownActive(Player player, Map<String, Long> cooldownMap) {
@@ -86,22 +82,17 @@ public class BowListener implements Listener {
     public void onEntityShootBow(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString());
-
-            if (smPlayer.getClassType() == ClassType.ARCHER && isTrueshotActive(player)) {
+            if (trueshotReady.getOrDefault(player.getName(), false)) {
                 enhanceArrow(event.getProjectile(), player);
+                trueshotReady.put(player.getName(), false);  // Consume the trueshot
             }
         }
-    }
-
-    private boolean isTrueshotActive(Player player) {
-        return duration.getOrDefault(player.getName(), 0L) > System.currentTimeMillis();
     }
 
     private void enhanceArrow(Entity projectile, Player player) {
         if (projectile instanceof Arrow) {
             Arrow arrow = (Arrow) projectile;
-            arrow.setVelocity(player.getEyeLocation().getDirection().multiply(4));
+            arrow.setVelocity(player.getEyeLocation().getDirection().multiply(8));
             arrow.setCritical(true);
             createArrowTrail(arrow);
         }
@@ -116,7 +107,7 @@ public class BowListener implements Listener {
                     return;
                 }
                 Location arrowLocation = arrow.getLocation();
-                arrow.getWorld().spawnParticle(Particle.GLOW, arrowLocation, 10);
+                arrow.getWorld().spawnParticle(Particle.GLOW, arrowLocation, 15);
             }
         }.runTaskTimer(plugin, 0L, 1L);
     }
