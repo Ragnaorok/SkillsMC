@@ -25,7 +25,7 @@ public class LoginListener implements Listener, Serializable {
         World world = player.getWorld();
         Location loc = player.getLocation();
         Location soundLoc = loc.clone();
-        player.sendMessage("Welcome to RagnarokMC V:1.1 (Beta)" + ChatColor.ITALIC);
+        player.sendMessage("SkillsMC 1.21 V1.0 loaded" + ChatColor.ITALIC);
         world.playSound(soundLoc, BLOCK_BEACON_AMBIENT, 73, 1);
         world.playSound(soundLoc, ENTITY_EXPERIENCE_ORB_PICKUP, 73, 1);
     }
@@ -36,7 +36,7 @@ public class LoginListener implements Listener, Serializable {
         File file = new File(player.getUniqueId() + ".dat");
 
         if (!file.exists()) {  // case that file doesn't exist, creates a new SkillsMCPlayer object for new player and pushes to global hashmap
-            SkillsMCPlayer smPlayer = new SkillsMCPlayer(player, 10, 0, 0, 0, ClassType.NONE);
+            SkillsMCPlayer smPlayer = new SkillsMCPlayer(player,10,10,0,0,0, ClassType.NONE);
             System.out.println("Player id when joining: " + player.getUniqueId());
             Constant.SKILLS_MC_PLAYER_HASH_MAP.put(player.getUniqueId().toString(), smPlayer);
             System.out.println("Player Map Size: " + Constant.SKILLS_MC_PLAYER_HASH_MAP.size());
