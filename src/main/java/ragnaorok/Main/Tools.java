@@ -59,7 +59,7 @@ public enum Tools {
         else if (getMainHand(inventory) == SWORD && getOffHand(inventory) == Material.SHIELD) {
             loadout = SWORD_SHIELD;
         }
-        else if (getMainHand(inventory) == Material.BLAZE_ROD) {
+        else if (getMainHand(inventory) == Material.BLAZE_ROD && getOffHand(inventory) == NONE) {
             loadout = FIRE_WAND;
         }
         else {
