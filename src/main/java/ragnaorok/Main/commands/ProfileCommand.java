@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -48,14 +49,15 @@ public class ProfileCommand implements CommandExecutor, Listener {
         int bounty_ = smPlayer.getBounty();
         double maxHearts_ = smPlayer.getMaxHearts();
         double speed_ = smPlayer.getMovementSpeed();
-        double mana_ = smPlayer.getMana();
+        double mana_ = smPlayer.getMaxMana();
 
         ItemStack playerClass = new ItemStack(Material.PLAYER_HEAD);
         ItemStack currency = new ItemStack(Material.EMERALD);
         ItemStack souls = new ItemStack(Material.SOUL_LANTERN);
-        ItemStack bounty = new ItemStack(Material.RED_DYE);
+        ItemStack bounty = new ItemStack(Material.SKELETON_SKULL);
         ItemStack maxHearts = new ItemStack(Material.GOLDEN_APPLE);
         ItemStack speed = new ItemStack(Material.FEATHER);
+        ItemStack mana = new ItemStack(Material.BLUE_DYE);
 
         ItemMeta classItemMeta = playerClass.getItemMeta();
         ItemMeta currencyItemMeta = currency.getItemMeta();
@@ -63,6 +65,8 @@ public class ProfileCommand implements CommandExecutor, Listener {
         ItemMeta bountyItemMeta = bounty.getItemMeta();
         ItemMeta maxHeartsItemMeta = maxHearts.getItemMeta();
         ItemMeta speedItemMeta = speed.getItemMeta();
+        ItemMeta manaItemMeta = mana.getItemMeta();
+
 
         classItemMeta.setDisplayName(ChatColor.GREEN + "Class: " + smPlayer.getClassType().toString());
         currencyItemMeta.setDisplayName(ChatColor.GREEN + "Currency: " + currency_);
@@ -70,6 +74,7 @@ public class ProfileCommand implements CommandExecutor, Listener {
         bountyItemMeta.setDisplayName(ChatColor.GREEN + "Bounty: " + bounty_);
         maxHeartsItemMeta.setDisplayName(ChatColor.GREEN + "Max Hearts: " + maxHearts_);
         speedItemMeta.setDisplayName(ChatColor.GREEN + "Movement Speed: " + speed_);
+        manaItemMeta.setDisplayName(ChatColor.GREEN + "Mana Pool: " + mana_);
 
         playerClass.setItemMeta(classItemMeta);
         currency.setItemMeta(currencyItemMeta);
@@ -77,6 +82,7 @@ public class ProfileCommand implements CommandExecutor, Listener {
         bounty.setItemMeta(bountyItemMeta);
         maxHearts.setItemMeta(maxHeartsItemMeta);
         speed.setItemMeta(speedItemMeta);
+        mana.setItemMeta(manaItemMeta);
 
         gui.setItem(22, playerClass);
         gui.setItem(32, currency);
@@ -84,6 +90,7 @@ public class ProfileCommand implements CommandExecutor, Listener {
         gui.setItem(13, bounty);
         gui.setItem(23, maxHearts);
         gui.setItem(24, speed);
+        gui.setItem(25,mana);
         player.openInventory(gui);
     }
 
