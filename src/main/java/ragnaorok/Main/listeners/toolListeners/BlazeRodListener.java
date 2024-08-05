@@ -74,7 +74,7 @@ public class BlazeRodListener implements Listener {
 
             @Override
             public void run() {
-                if (count >= 5) {
+                if (count >= 3) {
                     this.cancel();
                     return;
                 }
