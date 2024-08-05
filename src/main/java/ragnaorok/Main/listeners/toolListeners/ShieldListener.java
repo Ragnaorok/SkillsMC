@@ -107,7 +107,6 @@ public class ShieldListener implements Listener {
                     player.getInventory().setItemInOffHand(shield);
                 }
 
-                // Create dynamic particle effects to simulate bouncing
                 Location loc = player.getLocation();
                 for (int i = 0; i < 360; i += 10) {
                     double angle = i * Math.PI / 180;
