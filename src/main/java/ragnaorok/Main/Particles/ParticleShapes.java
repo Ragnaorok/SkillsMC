@@ -47,8 +47,8 @@ public class ParticleShapes {
                 double yaw = particleLoc.getYaw();
                 for (double i = 0; i < 180; i += 10) {
                     double angle = (i + yaw) * Math.PI / 180;
-                    double x1 = particleLoc.getX() + 5 * Math.cos(angle);
-                    double z1 = particleLoc.getZ() + 5 * Math.sin(angle);
+                    double x1 = particleLoc.getX() + 1 * Math.cos(angle);
+                    double z1 = particleLoc.getZ() + 1 * Math.sin(angle);
                     player.spawnParticle(particle, x1, particleLoc.getY(), z1 ,10);
                 }
         }
