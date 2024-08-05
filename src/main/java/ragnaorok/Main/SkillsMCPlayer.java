@@ -1,11 +1,14 @@
 package ragnaorok.Main;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
-
 import java.io.Serializable;
 
 public class SkillsMCPlayer implements Serializable {
     private int mana, maxMana, souls, currency, bounty;
+    private int level, experience;
     private ClassType classType;
     private transient Player player;
     private double manaShieldPercentage = 0.1;  // 10% damage absorbed by mana
@@ -25,8 +28,11 @@ public class SkillsMCPlayer implements Serializable {
         this.currency = currency;
         this.bounty = bounty;
         this.classType = classType;
+        this.level = 1;  // Starting level
+        this.experience = 0;  // Starting experience
     }
 
+    // Getters and setters
     public int getMana() {
         return mana;
     }
@@ -119,6 +125,54 @@ public class SkillsMCPlayer implements Serializable {
             player.damage(damage);
         } else {
             player.damage(damage);
+        }
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
+        checkLevelUp();
+    }
+
+    public void addExperience(int experience) {
+        this.experience += experience;
+        checkLevelUp();
+    }
+
+    private void checkLevelUp() {
+        int expToNextLevel = getExpToNextLevel();
+        while (this.experience >= expToNextLevel) {
+            this.experience -= expToNextLevel;
+            this.level++;
+            expToNextLevel = getExpToNextLevel();
+            onLevelUp();
+        }
+    }
+
+    public int getExpToNextLevel() {
+        return this.level * 10;
+    }
+
+    private void onLevelUp() {
+        player.sendMessage(ChatColor.GREEN + "You leveled up to level " + this.level + "!");
+        Location ploc = player.getLocation();
+        Location particleLoc = ploc.clone();
+        for (int i = 0; i < 360; i += 5) {
+            particleLoc.setY(ploc.getY()+2);
+            particleLoc.setZ(ploc.getZ() + Math.sin(i));
+            particleLoc.setX(ploc.getX() + Math.cos(i));
+            player.spawnParticle(Particle.END_ROD, particleLoc, 1);
         }
     }
 }
