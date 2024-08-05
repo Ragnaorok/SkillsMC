@@ -13,7 +13,6 @@ import ragnaorok.Main.Main;
 
 import java.util.ArrayList;
 
-
 public class Guidebook implements CommandExecutor, Listener {
     public Main plugin;
 
@@ -21,6 +20,7 @@ public class Guidebook implements CommandExecutor, Listener {
         this.plugin = plugin;
         plugin.getCommand("guide").setExecutor(this);
     }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (label.equalsIgnoreCase("guide")) {
@@ -28,61 +28,74 @@ public class Guidebook implements CommandExecutor, Listener {
                 sender.sendMessage(ChatColor.RED + "You cannot run this command!");
                 return true;
             }
-            //Create Guidebook
+
+            // Create Guidebook
             ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
             BookMeta bookmeta = (BookMeta) book.getItemMeta();
             bookmeta.setAuthor(ChatColor.RED + "Ragnarok");
             bookmeta.setTitle(ChatColor.DARK_PURPLE + "Guide Book");
             ArrayList<String> pages = new ArrayList<>();
 
-            //Page 1
+            // Page 1: Index
             pages.add(ChatColor.BOLD + "INDEX:\n"
-                            + (ChatColor.BLACK + "pages 2-6: Classes\n")
-                            + (ChatColor.BLACK + "page 7: Souls\n")
-                            + (ChatColor.BLACK + "page 8: Bounties"));
+                    + ChatColor.BLACK + "pages 2-6: Classes\n"
+                    + ChatColor.BLACK + "page 7: Souls\n"
+                    + ChatColor.BLACK + "page 8: Bounties");
 
-            //Page 2
-            pages.add(ChatColor.BOLD + "CLASSES:" +
-                    "\nThere are 4 classes in RagnarokMC each with their own skills and abilities \n"
-                    + (ChatColor.RED + "\n Warrior  ") + (ChatColor.YELLOW + "Cleric")
-                    + (ChatColor.LIGHT_PURPLE + "\n Mage   ") + (ChatColor.DARK_GREEN + " Archer"));
-            //Page 3
-            pages.add(ChatColor.BOLD   + "Warrior:\n"
-                    + (ChatColor.RED   + "Weapon:Sword ")
-                    + (ChatColor.GREEN + "Skill: Bleed\n")
-                    + (ChatColor.RED   + "Weapon:Shield\n")
-                    + (ChatColor.GREEN + "Skill: Brace\n")
-                    + (ChatColor.RED   + "Dual Weapon:Sword\n")
-                    +(ChatColor.GREEN + "Skill: Sweep"));
+            // Page 2: Classes Overview
+            pages.add(ChatColor.BOLD + "CLASSES:\n"
+                    + "There are 4 classes each with their own skills and abilities.\n"
+                    + ChatColor.RED + "Warrior  " + ChatColor.YELLOW + "Cleric\n"
+                    + ChatColor.LIGHT_PURPLE + "Mage   " + ChatColor.DARK_GREEN + "Archer");
 
-            //Page 4
-            pages.add(ChatColor.BOLD   + "Cleric:\n"
-                    + (ChatColor.RED   + "Weapon:Hoe\n")
-                    + (ChatColor.GREEN + "Skill: Hallowed Ground\n")
-                    + (ChatColor.RED   + "Alt Weapon:Lightning Rod\n")
-                    + (ChatColor.GREEN + "Skill: Energize"));
-            //Page 5
-            pages.add(ChatColor.BOLD   + "Mage:\n"
-                    + (ChatColor.RED   + "Weapon:Blaze Rod\n")
-                    + (ChatColor.GREEN + "Skill: Fire Ball\n")
-                    + (ChatColor.RED   + "Weapon:Skeleton Skull\n")
-                    + (ChatColor.GREEN + "Skill: Eldritch Blast"));
-            //Page 6
-            pages.add(ChatColor.BOLD   + "Archer:\n"
-                    + (ChatColor.RED   + "Weapon:Bow\n")
-                    + (ChatColor.GREEN + "Skill: Trueshot\n")
-                    + (ChatColor.RED   + "Weapon:Crossbow\n")
-                    + (ChatColor.GREEN + "Skill: Backstep"));
-            //Page 7
-            pages.add(ChatColor.BOLD   + "SOULS:\n"
-                    + (ChatColor.BLACK + "Souls are a resource obtained by killing certain monsters\n")
-                    + (ChatColor.BLACK + "When you gain enough souls you become stronger unlocking more skills\n")
-                    + (ChatColor.BLACK + "Souls can be used as currency for special enchantments"));
-            //Page 8
-            pages.add(ChatColor.BOLD   + "BOUNTIES:\n"
-                    + (ChatColor.BLACK + "Bounties are placed on players who kill others.\n")
-                    + (ChatColor.BLACK + "The Chat will show bounty changes\n")
-                    + (ChatColor.BLACK + "Killing a player with a bounty gives you souls based on their bounty\n"));
+            // Page 3: Warrior
+            pages.add(ChatColor.BOLD + "Warrior:\n"
+                    + ChatColor.BLACK + "Passive: +1 Heart\n"
+                    + ChatColor.RED + "Sword\n"
+                    + ChatColor.GREEN + "Skill: Gale Slash\n"
+                    + ChatColor.RED + "Shield\n"
+                    + ChatColor.GREEN + "Skill: Shield Surf\n"
+                    + ChatColor.RED + "Axe\n"
+                    + ChatColor.GREEN + "Skill: Shockwave\n"
+                    + ChatColor.RED + "Dual Sword\n"
+                    + ChatColor.GREEN + "Skill: Blade Dance");
+
+            // Page 4: Cleric
+            pages.add(ChatColor.BOLD + "Cleric:\n"
+                    + ChatColor.BLACK + "Passive: Rejuvenation\n"
+                    + ChatColor.RED + "Hoe\n"
+                    + ChatColor.GREEN + "Skill: Smite/Heal\n"
+                    + ChatColor.RED + "Breeze Rod\n"
+                    + ChatColor.GREEN + "Skill: Energize\n");
+
+            // Page 5: Mage
+            pages.add(ChatColor.BOLD + "Mage:\n"
+                    + ChatColor.BLACK + "Passive: -1 Heart & Mana Shield\n"
+                    + ChatColor.RED + "Blaze Rod\n"
+                    + ChatColor.GREEN + "Skill: Fireball\n"
+                    + ChatColor.RED + "Skill: Lava Eruption\n");
+
+            // Page 6: Archer
+            pages.add(ChatColor.BOLD + "Archer:\n"
+                    + ChatColor.BLACK + "Passive: +.2 movement speed\n"
+                    + ChatColor.RED + "Bow\n"
+                    + ChatColor.GREEN + "Main Skill: Trueshot\n"
+                    + ChatColor.GREEN + "Second Skill: Speed\n"
+                    + ChatColor.RED + "Crossbow\n"
+                    + ChatColor.GREEN + "Main Skill: Rapid Fire\n"
+                    + ChatColor.GREEN + "Second Skill: Backstep\n");
+
+            // Page 7: Souls
+            pages.add(ChatColor.BOLD + "SOULS:\n"
+                    + ChatColor.BLACK + "Souls are a resource obtained by killing certain monsters.\n"
+                    + "Gain enough souls to become stronger and unlock more skills.\n"
+                    + "Souls can be used as currency for special enchantments.");
+
+            // Page 8: Bounties
+            pages.add(ChatColor.BOLD + "BOUNTIES:\n"
+                    + ChatColor.BLACK + "Bounties are placed on players who kill others.\n"
+                    + "The chat will show bounty changes.\n"
+                    + "Killing a player with a bounty gives you souls based on their bounty.");
 
             bookmeta.setPages(pages);
             book.setItemMeta(bookmeta);
