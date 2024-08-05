@@ -1,9 +1,9 @@
 name: SkillsMC
 version: ${project.version}
 main: ragnaorok.Main.Main
-api-version: 1.19
+api-version: 1.21
 authors: [ Ragnaorok ]
-description: 1.19 Paper Plugin
+description: 1.21 Paper Plugin
 commands:
   profile:
     description: show profile
