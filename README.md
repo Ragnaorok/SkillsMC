@@ -1,7 +1,12 @@
-# SkillsMC: an RPG plugin
+# SkillsMC: an RPG plugin (1.21.X)
 
 ## Overview
 This Minecraft plugin introduces custom skills for different tools and weapons based off what class you choose, providing unique abilities to enhance gameplay. Key features include shield surfing, player bounties, and mob death effects.
+
+## Version Information
+- Current Version: 1.0.0 (Alpha)
+- Major Updates: Initial release with core features.
+
 
 ## Features
 - **Shield Surfing**: Allows players to surf using a shield, applying a dynamic particle effect and custom sound upon landing.
@@ -34,9 +39,10 @@ This Minecraft plugin introduces custom skills for different tools and weapons b
 - Combines an Iron Axe and Flint & Steel to create the Blast Axe.
 - Hit a monster while sprinting for a powerful strike.
   
-### Souls System (Unimplemented at the moment)
-- Kill certain mobs for a chance to obtain souls.
-- Souls can be used to improve or unlock new skills
+### Souls System (Planned Feature)
+- This feature is currently in development and will be available in future updates.
+- Planned functionality: Kill certain mobs for a chance to obtain souls. Souls can be used to improve or unlock new skills.
+
   
 ## Commands
 - `/souls` admin command to modify soul count
