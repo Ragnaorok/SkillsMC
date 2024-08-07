@@ -12,7 +12,7 @@ import ragnaorok.Main.ActionBarUtil;
 public class ExperienceListener implements Listener {
 
     @EventHandler
-    public void onEntityDeath(EntityDeathEvent event) {
+    public void experienceHandler(EntityDeathEvent event) {
         if (event.getEntity().getKiller() instanceof Player) {
             Player player = event.getEntity().getKiller();
             SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString());
