@@ -28,3 +28,6 @@ commands:
   check:
     description: check enchants
     usage: /<command>
+  setlevel:
+    description: Set the level of a player
+    usage: /setlevel <player> <level>

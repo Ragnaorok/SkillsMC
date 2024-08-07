@@ -15,7 +15,6 @@ import ragnaorok.Main.listeners.PlayerDataListeners.ExperienceListener;
 import ragnaorok.Main.listeners.*;
 import ragnaorok.Main.listeners.ToolListeners.AxeListener;
 import ragnaorok.Main.listeners.ToolListeners.*;
-
 import java.util.Objects;
 
 public final class Main extends JavaPlugin implements @NotNull Listener {
@@ -28,10 +27,12 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         effectManager = new EffectManager(this);
         PluginManager pm = this.getServer().getPluginManager();
         Objects.requireNonNull(this.getCommand("souls")).setExecutor(new SoulsCommand(this));
+        Objects.requireNonNull(this.getCommand("setLevel")).setExecutor(new SetLevelCommand(this));
         Objects.requireNonNull(this.getCommand("kaboom")).setExecutor(new KaboomCommand(this));
         Objects.requireNonNull(this.getCommand("class")).setExecutor(new ClassCommand(this));
         Objects.requireNonNull(this.getCommand("profile")).setExecutor(new ProfileCommand(this));
         Objects.requireNonNull(this.getCommand("guide")).setExecutor(new Guidebook(this));
+
         //Objects.requireNonNull(this.getCommand("reinforce")).setExecutor(new ReinforceEnchant(this));
         //Objects.requireNonNull(this.getCommand("check")).setExecutor(new EnchantCheck(this));
 
