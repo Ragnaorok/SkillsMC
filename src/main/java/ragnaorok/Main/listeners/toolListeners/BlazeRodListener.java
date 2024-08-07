@@ -81,7 +81,7 @@ public class BlazeRodListener implements Listener {
                 count++;
                 eruptLava(player, location);
             }
-        }.runTaskTimer(plugin, 0L, 20L); // Erupts every second for 5 seconds
+        }.runTaskTimer(plugin, 0L, 20L);
     }
 
     private void eruptLava(Player player, Location location) {
