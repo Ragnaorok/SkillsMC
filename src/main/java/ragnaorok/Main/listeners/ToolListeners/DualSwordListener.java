@@ -14,8 +14,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import ragnaorok.Main.Loadout;
 import ragnaorok.Main.Main;
-import ragnaorok.Main.Tools;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,7 +37,7 @@ public class DualSwordListener implements Listener {
         Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();
 
-        if (Tools.getLoadOut(inventory) == Tools.DUAL_SWORD) {
+        if (Loadout.getLoadOut(inventory) == Loadout.DUAL_SWORD) {
             if (player.isSneaking() && event.getAction().toString().contains("RIGHT_CLICK")) {
                 performBladeDance(player);
             }

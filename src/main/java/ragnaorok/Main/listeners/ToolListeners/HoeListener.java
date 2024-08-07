@@ -16,8 +16,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import ragnaorok.Main.Loadout;
 import ragnaorok.Main.Main;
-import ragnaorok.Main.Tools;
 import ragnaorok.Main.Particles.EnumShapes;
 import ragnaorok.Main.Particles.ParticleShapes;
 
@@ -34,7 +34,7 @@ public class HoeListener implements Listener {
         Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();
 
-        if (Tools.getLoadOut(inventory) == Tools.HOE) {
+        if (Loadout.getLoadOut(inventory) == Loadout.HOE) {
             if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 createHallowedGround(player, event.getClickedBlock());
             } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {

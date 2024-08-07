@@ -11,8 +11,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 import org.bukkit.scheduler.BukkitRunnable;
+import ragnaorok.Main.Loadout;
 import ragnaorok.Main.Main;
-import ragnaorok.Main.Tools;
 
 public class SwordListener implements Listener {
 
@@ -28,7 +28,7 @@ public class SwordListener implements Listener {
             Player player = (Player) event.getDamager();
             PlayerInventory inventory = player.getInventory();
 
-            if (Tools.getLoadOut(inventory) == Tools.SWORD) {
+            if (Loadout.getLoadOut(inventory) == Loadout.SWORD) {
                 if (player.isSneaking()) {
                     // Apply Gale Slash effects
                     Entity target = event.getEntity();

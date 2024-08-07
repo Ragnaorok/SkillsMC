@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.util.Vector;
-import ragnaorok.Main.Tools;
+import ragnaorok.Main.Loadout;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,7 @@ public class AxeListener implements Listener {
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
 
-            if (Tools.getMainHand(player.getInventory()) == Tools.AXE) {
+            if (Loadout.getMainHand(player.getInventory()) == Loadout.AXE) {
                 if (event.getEntity() instanceof Monster) {
                     if (!player.isSprinting()) {
                         player.sendMessage(ChatColor.DARK_GRAY + "You must be sprinting to use Shockwave.");
