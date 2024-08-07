@@ -7,8 +7,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+import ragnaorok.Main.Tools;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,13 +22,12 @@ public class CrossBowListener implements Listener {
 
     @EventHandler
     public void onBlock(PlayerInteractEvent event) {
-        Player player = event.getPlayer();  //player
-        Location origin = player.getLocation(); //player origin
-        Vector direction = origin.getDirection();   //player direction
-        Material type = player.getInventory().getItemInMainHand().getType();
+        Player player = event.getPlayer();
+        Location origin = player.getLocation();
+        Vector direction = origin.getDirection();
+        PlayerInventory inventory = player.getInventory();
 
-        if (player.getInventory().getItemInMainHand() == null) return;
-        if (type == Material.CROSSBOW) {
+        if (Tools.getLoadOut(inventory) == Tools.CROSSBOW) {
             if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
                 if (!player.isSneaking()) {
                     if (leftCooldown.containsKey(player.getName())) {
