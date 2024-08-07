@@ -131,12 +131,11 @@ public class ClassCommand implements CommandExecutor, Listener {
 
     private void resetPlayerStats(Player player, SkillsMCPlayer smPlayer) {
         player.setMaxHealth(20.0);  // Default max health is 20.0 (10 hearts)
-
-        player.setWalkSpeed(0.2f);  // Default walk speed is 0.2 (4.0)
-
-        smPlayer.setMaxMana(10);     // Reset mana to base value
-
-        // Remove any class-specific potion effects
+        player.setWalkSpeed(0.2f);  // Default walk speed is 0.2f (4.0)
+        smPlayer.setMaxMana(10);    //base value
+        smPlayer.setLevel(1);   //base value
+        smPlayer.setExperience(0);  //base value
+        // Remove any class-specific potion effects below
         player.removePotionEffect(PotionEffectType.REGENERATION);
     }
 
