@@ -95,3 +95,7 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 ## Contact
 For any questions or suggestions, please reach out to [Tung Nguyen](https://github.com/Ragnaorok).
 
+
+## CI and test delivery
+
+See [CI/CD setup](docs/CI-CD.md) for automatic builds and optional Windows test-server update staging.
