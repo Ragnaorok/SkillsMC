@@ -99,3 +99,5 @@ For any questions or suggestions, please reach out to [Tung Nguyen](https://gith
 ## CI and test delivery
 
 See [CI/CD setup](docs/CI-CD.md) for automatic builds and optional Windows test-server update staging.
+
+Player lifecycle and save behavior: [Class selection and player saves](docs/PLAYER-DATA.md).

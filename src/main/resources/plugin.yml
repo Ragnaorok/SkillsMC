@@ -32,3 +32,14 @@ commands:
   setlevel:
     description: Set the level of a player
     usage: /setlevel <player> <level>
+
+permissions:
+  skillsmc.class.select:
+    description: Choose an initial class
+    default: true
+  skillsmc.class.change:
+    description: Change an existing class without resetting progress
+    default: op
+  skillsmc.save:
+    description: Save all loaded player profiles
+    default: op
