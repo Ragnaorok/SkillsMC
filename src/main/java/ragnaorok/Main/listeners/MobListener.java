@@ -37,7 +37,7 @@ public class MobListener implements Listener {
         String uuid = player.getUniqueId().toString();
         SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
         Location mloc = monster.getLocation();
-        draw(EnumShapes.HELIX, mloc, Particle.TOWN_AURA, player);
+        draw(EnumShapes.HELIX, mloc, Particle.MYCELIUM, player);
         draw(EnumShapes.SPHERE, mloc, Particle.ASH, player);
         player.spawnParticle(Particle.SOUL, mloc, 10);
         smPlayer.setSouls(smPlayer.getSouls() +1 );
@@ -59,8 +59,8 @@ public class MobListener implements Listener {
         SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
         Location mloc = monster.getLocation();
         draw(EnumShapes.HELIX, mloc, Particle.FALLING_WATER, player);
-        draw(EnumShapes.CIRCLE, mloc, Particle.WATER_BUBBLE, player);
-        draw(EnumShapes.CIRCLE, mloc, Particle.WATER_SPLASH, player);
+        draw(EnumShapes.CIRCLE, mloc, Particle.BUBBLE, player);
+        draw(EnumShapes.CIRCLE, mloc, Particle.SPLASH, player);
         player.spawnParticle(Particle.SOUL, mloc, 10);
         smPlayer.setSouls(smPlayer.getSouls() +1 );
         player.sendMessage(ChatColor.GREEN + " +1 soul");
@@ -85,7 +85,7 @@ public class MobListener implements Listener {
     public static void handleCreeperDeath(EntityDeathEvent event, Player player, Monster monster) {
         Location mloc = monster.getLocation();
         Location particleLoc = mloc.clone();
-        draw(EnumShapes.HELIX, particleLoc, Particle.FIREWORKS_SPARK, player);
+        draw(EnumShapes.HELIX, particleLoc, Particle.FIREWORK, player);
     }
 
 

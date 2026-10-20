@@ -19,17 +19,20 @@ import java.util.Objects;
 
 public final class Main extends JavaPlugin implements @NotNull Listener {
     private EffectManager effectManager;
+    private ragnaorok.Main.data.PlayerStore playerStore;
     private static Main instance;
 
     @Override
     public void onEnable() {
         instance = this;
+        playerStore = new ragnaorok.Main.data.PlayerStore(java.nio.file.Path.of("."), getLogger()::warning);
         effectManager = new EffectManager(this);
         PluginManager pm = this.getServer().getPluginManager();
         Objects.requireNonNull(this.getCommand("souls")).setExecutor(new SoulsCommand(this));
         Objects.requireNonNull(this.getCommand("setLevel")).setExecutor(new SetLevelCommand(this));
         Objects.requireNonNull(this.getCommand("kaboom")).setExecutor(new KaboomCommand(this));
-        Objects.requireNonNull(this.getCommand("class")).setExecutor(new ClassCommand(this));
+        ClassCommand classCommand = new ClassCommand(this);
+        Objects.requireNonNull(this.getCommand("class")).setExecutor(classCommand);
         Objects.requireNonNull(this.getCommand("profile")).setExecutor(new ProfileCommand(this));
         Objects.requireNonNull(this.getCommand("guide")).setExecutor(new Guidebook(this));
 
@@ -37,11 +40,11 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         //Objects.requireNonNull(this.getCommand("check")).setExecutor(new EnchantCheck(this));
 
         pm.registerEvents(new Guidebook(this), this);
-        pm.registerEvents(new ClassCommand(this), this);
+        pm.registerEvents(classCommand, this);
         pm.registerEvents(new ProfileCommand(this), this);
 
         getServer().getPluginManager().registerEvents(new MobListener(), this);
-        getServer().getPluginManager().registerEvents(new LoginListener(), this);
+        getServer().getPluginManager().registerEvents(new LoginListener(this), this);
         getServer().getPluginManager().registerEvents(new ExperienceListener(), this);
         getServer().getPluginManager().registerEvents(new CrossBowListener(), this);
         getServer().getPluginManager().registerEvents(new ShieldListener(), this);
@@ -61,7 +64,18 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         // Create and register the custom item and recipe
         BlastAxe.createBlastAxe(this);
 
-        System.out.println("Plugin Enabled");
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (loadPlayer(player)) ClassPassives.apply(player,
+                    Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString()).getClassType());
+            else player.kickPlayer("SkillsMC could not load your progress. Check the server log.");
+        }
+        Bukkit.getScheduler().runTaskTimer(this, this::saveAllPlayers, 1200L, 1200L);
+        Objects.requireNonNull(getCommand("saveAll")).setExecutor((sender, command, label, args) -> {
+            if (!sender.hasPermission("skillsmc.save")) { sender.sendMessage("You cannot save player data."); return true; }
+            sender.sendMessage(saveAllPlayers() ? "SkillsMC player data saved." : "Some saves failed. Check the server log.");
+            return true;
+        });
+        getLogger().info("Plugin Enabled");
 
         // Schedule regular updates for the action bar
         new BukkitRunnable() {
@@ -85,8 +99,48 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
 
     @Override
     public void onDisable() {
-        effectManager.dispose();
+        saveAllPlayers();
+        if (effectManager != null) effectManager.dispose();
         HandlerList.unregisterAll((Listener) this);
+    }
+
+    public boolean loadPlayer(Player player) {
+        String id = player.getUniqueId().toString();
+        SkillsMCPlayer retained = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(id);
+        if (retained != null) { retained.setPlayer(player); return true; }
+        try {
+            SkillsMCPlayer profile = playerStore.load(player.getUniqueId());
+            if (profile == null) profile = new SkillsMCPlayer(player, 10, 10, 0, 0, 0, ClassType.NONE);
+            profile.setPlayer(player);
+            Constant.SKILLS_MC_PLAYER_HASH_MAP.put(id, profile);
+            return true;
+        } catch (java.io.IOException e) {
+            getLogger().log(java.util.logging.Level.SEVERE, "Cannot load progress for " + id + "; existing files preserved", e);
+            return false;
+        }
+    }
+
+    public boolean savePlayer(java.util.UUID id, SkillsMCPlayer profile) {
+        try {
+            playerStore.save(id, profile);
+            return true;
+        } catch (java.io.IOException e) {
+            getLogger().log(java.util.logging.Level.SEVERE, "Cannot save progress for " + id + "; retrying at next save", e);
+            return false;
+        }
+    }
+
+    private boolean saveAllPlayers() {
+        if (playerStore == null) return true;
+        boolean success = true;
+        var iterator = Constant.SKILLS_MC_PLAYER_HASH_MAP.entrySet().iterator();
+        while (iterator.hasNext()) {
+            var entry = iterator.next();
+            boolean saved = savePlayer(java.util.UUID.fromString(entry.getKey()), entry.getValue());
+            success &= saved;
+            if (saved && entry.getValue().getPlayer() == null) iterator.remove();
+        }
+        return success;
     }
 
     public static Main getInstance() {

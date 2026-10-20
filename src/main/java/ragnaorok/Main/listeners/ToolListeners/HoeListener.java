@@ -10,7 +10,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -71,7 +70,7 @@ public class HoeListener implements Listener {
 
                 ItemStack splashPotion = new ItemStack(Material.SPLASH_POTION);
                 PotionMeta potionMeta = (PotionMeta) splashPotion.getItemMeta();
-                potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
+                potionMeta.setBasePotionType(PotionType.HEALING);
                 splashPotion.setItemMeta(potionMeta);
 
                 // Spawn the thrown splash potion

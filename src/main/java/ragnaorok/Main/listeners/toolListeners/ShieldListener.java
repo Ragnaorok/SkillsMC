@@ -34,7 +34,7 @@ public class ShieldListener implements Listener {
                 double x1 = loc.getX() + 2 * Math.cos(angle);
                 double z1 = loc.getZ() + 2 * Math.sin(angle);
                 double y1 = loc.getY() + 1 + 0.4 * Math.sin(angle);
-                player.spawnParticle(Particle.REDSTONE, x1, y1, z1, 5, dustOptions);
+                player.spawnParticle(Particle.DUST, x1, y1, z1, 5, dustOptions);
             }
             player.sendMessage("left swing");
         }

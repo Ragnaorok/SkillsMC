@@ -57,9 +57,9 @@ public class BlazeRodListener implements Listener {
                     return;
                 }
                 Location loc = fireball.getLocation();
-                fireball.getWorld().spawnParticle(Particle.SPELL, loc, 5, 0.5, 0.5, 0.5, 0.05);
-                fireball.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 5, 0.5, 0.5, 0.5, 0.05);
-                fireball.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 5, 0.2, 0.2, 0.2, 0.01);
+                fireball.getWorld().spawnParticle(Particle.EFFECT, loc, 5, 0.5, 0.5, 0.5, 0.05, new Particle.Spell(org.bukkit.Color.WHITE, 1.0f));
+                fireball.getWorld().spawnParticle(Particle.ENCHANT, loc, 5, 0.5, 0.5, 0.5, 0.05);
+                fireball.getWorld().spawnParticle(Particle.LARGE_SMOKE, loc, 5, 0.2, 0.2, 0.2, 0.01);
                 fireball.getWorld().playSound(loc, Sound.ENTITY_BLAZE_SHOOT, 0.5f, 1.0f);
             }
         }.runTaskTimer(plugin, 0L, 2L);
@@ -90,7 +90,7 @@ public class BlazeRodListener implements Listener {
             lavaLoc.getWorld().spawnParticle(Particle.LAVA, lavaLoc, 20, 0.5, 0.5, 0.5, 0.1);
             lavaLoc.getWorld().playSound(lavaLoc, Sound.BLOCK_LAVA_POP, 1.0f, 1.0f);
             lavaLoc.getWorld().spawnParticle(Particle.FLAME, lavaLoc, 20, 0.5, 0.5, 0.5, 0.1);
-            lavaLoc.getWorld().spawnParticle(Particle.SMOKE_LARGE, lavaLoc, 20, 0.5, 0.5, 0.5, 0.1);
+            lavaLoc.getWorld().spawnParticle(Particle.LARGE_SMOKE, lavaLoc, 20, 0.5, 0.5, 0.5, 0.1);
             damageNearbyEntities(lavaLoc, player, 10.0);
         }
     }

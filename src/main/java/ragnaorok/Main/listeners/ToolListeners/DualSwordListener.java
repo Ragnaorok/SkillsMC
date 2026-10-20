@@ -86,7 +86,7 @@ public class DualSwordListener implements Listener {
                     }
                 }
 
-                player.getWorld().spawnParticle(Particle.CRIT_MAGIC, player.getLocation(), 20, 1, 1, 1, 0.1);
+                player.getWorld().spawnParticle(Particle.ENCHANTED_HIT, player.getLocation(), 20, 1, 1, 1, 0.1);
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.5f, 1.0f);
 
                 Vector direction = player.getVelocity().setY(0).normalize().multiply(1);

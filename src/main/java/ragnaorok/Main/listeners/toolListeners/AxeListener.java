@@ -51,8 +51,8 @@ public class AxeListener implements Listener {
 
         for (int i = 1; i <= 10; i++) { // Shockwave length
             Location shockwaveLoc = origin.clone().add(direction.multiply(i));
-            world.spawnParticle(Particle.EXPLOSION_LARGE, shockwaveLoc, 1, 0.2, 0.2, 0.2, 0);
-            world.spawnParticle(Particle.BLOCK_CRACK, shockwaveLoc, 10, 0.5, 0.5, 0.5, Material.STONE.createBlockData());
+            world.spawnParticle(Particle.EXPLOSION, shockwaveLoc, 1, 0.2, 0.2, 0.2, 0);
+            world.spawnParticle(Particle.BLOCK, shockwaveLoc, 10, 0.5, 0.5, 0.5, Material.STONE.createBlockData());
             world.spawnParticle(Particle.CLOUD, shockwaveLoc, 5, 0.2, 0.2, 0.2, 0);
             world.playSound(shockwaveLoc, Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f); // Play metal impact sound
             world.playSound(shockwaveLoc, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.1f); // Play explosion sound
