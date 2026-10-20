@@ -35,8 +35,8 @@ public class SoulListener implements Listener {
                 }
                 if (smPlayer.getSouls() > 299) { //Skill:Conqueror
                     if (player.getHealth() >= 15) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 15, 1));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 15, 1));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 15, 1));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 15, 1));
                     }
                 }
             }

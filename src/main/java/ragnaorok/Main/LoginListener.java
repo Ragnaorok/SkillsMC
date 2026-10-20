@@ -25,7 +25,7 @@ public class LoginListener implements Listener, Serializable {
         World world = player.getWorld();
         Location loc = player.getLocation();
         Location soundLoc = loc.clone();
-        player.sendMessage("SkillsMC 1.21 V1.0 loaded" + ChatColor.ITALIC);
+        player.sendMessage("SkillsMC 1.21.11 V1.0 loaded" + ChatColor.ITALIC);
         world.playSound(soundLoc, BLOCK_BEACON_AMBIENT, 73, 1);
         world.playSound(soundLoc, ENTITY_EXPERIENCE_ORB_PICKUP, 73, 1);
     }

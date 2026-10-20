@@ -15,7 +15,7 @@ public class CrouchJumpListener implements Listener {
         Player player = event.getPlayer();
         //Location loc = player.getLocation();
         //Location particleLoc = loc.clone();
-        player.addPotionEffect((new PotionEffect(PotionEffectType.JUMP, 10, 1)));
+        player.addPotionEffect((new PotionEffect(PotionEffectType.JUMP_BOOST, 10, 1)));
         //player.spawnParticle(Particle.SONIC_BOOM, particleLoc, 1);
     }
 }

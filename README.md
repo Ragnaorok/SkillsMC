@@ -1,4 +1,4 @@
-# SkillsMC: an RPG plugin (1.21.X)
+# SkillsMC: an RPG plugin (1.21.11)
 
 ## Overview
 This Minecraft plugin introduces custom skills for different tools and weapons based off what class you choose, providing unique abilities to enhance gameplay. Key features include shield surfing, player bounties, and mob death effects.
@@ -52,10 +52,33 @@ This Minecraft plugin introduces custom skills for different tools and weapons b
 - `/guide` gives the player a guidebook
 
 ## Dependencies
-- Minecraft server running Paper
-- EffectLib (for particle effects)
+- Paper 1.21.11 running Java 21
+- EffectLib 10.12 installed in the server plugins directory (required; supplied separately)
 
 ## Development
+### Build for Paper 1.21.11
+Use JDK 21 and Maven 3.9+:
+
+```sh
+mvn --batch-mode --no-transfer-progress clean verify
+```
+
+The plugin JAR is `target/SkillsMC-1.0-SNAPSHOT.jar`. The plugin's own
+version remains `1.0-SNAPSHOT`; `1.21.11` is the Minecraft/Paper API target.
+This branch requires Paper 1.21.11 or newer and no longer targets older 1.21 servers.
+EffectLib is a required external plugin and is not bundled into the JAR.
+ProtocolLib is no longer a dependency because SkillsMC does not use its API.
+
+Before replacing a working installation, test a copy of the server and its data:
+- Confirm startup enables SkillsMC with EffectLib 10.12 installed.
+- Join, change classes, and check the guide, profile, XP action bar, and level commands.
+- Test Blast Axe crafting/stats, shield surfing, bow/crossbow, dual swords, blaze rod,
+  hoe healing/projectiles, and mob-death particles; check logs for errors.
+- Quit and rejoin to verify existing player progression still loads.
+
+The Reinforce custom-enchantment implementation remains disabled, as it was before
+this migration. No world or player-data format migration is included.
+
 ### Main Class
 - `Main` class handles the initialization and registration of all event listeners and commands.
 
