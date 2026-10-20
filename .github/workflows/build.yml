@@ -78,10 +78,10 @@ jobs:
           name: SkillsMC-${{ github.sha }}
           path: ${{ runner.temp }}/skillsmc-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Back up and stage plugin
-        shell: powershell
+        shell: cmd
         env:
           SERVER_DIR: 'C:\Users\revup\OneDrive\Desktop\SkillsMC Test environment'
           DELIVERY_DIR: ${{ runner.temp }}/skillsmc-${{ github.run_id }}-${{ github.run_attempt }}
           BUILD_COMMIT: ${{ github.sha }}
         run: |
-          & (Join-Path $env:DELIVERY_DIR 'Stage-SkillsMC.ps1') -ServerDirectory $env:SERVER_DIR -DeliveryDirectory $env:DELIVERY_DIR -BuildCommit $env:BUILD_COMMIT
+          powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "%DELIVERY_DIR%\Stage-SkillsMC.ps1" -ServerDirectory "%SERVER_DIR%" -DeliveryDirectory "%DELIVERY_DIR%" -BuildCommit "%BUILD_COMMIT%"

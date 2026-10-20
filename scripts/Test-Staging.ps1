@@ -1,5 +1,6 @@
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $root = Join-Path ([System.IO.Path]::GetTempPath()) ('skillsmc-stage-test-' + [Guid]::NewGuid().ToString('N'))
 $server = Join-Path $root 'server with spaces'

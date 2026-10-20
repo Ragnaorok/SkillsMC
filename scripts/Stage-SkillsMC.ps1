@@ -36,6 +36,7 @@ $expected = ((Get-Content -LiteralPath $checksum -Raw).Trim() -split '\s+')[0]
 if ($expected -notmatch '^[a-fA-F0-9]{64}$') { throw 'Invalid SHA-256 checksum.' }
 if ((Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash -ne $expected) { throw 'Build checksum mismatch.' }
 
+Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $zip = [System.IO.Compression.ZipFile]::OpenRead($source)
 try {
