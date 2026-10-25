@@ -35,9 +35,9 @@ class SkillAccessTest {
         assertFalse(SkillAccess.require(player,BOW));
         assertThrows(IllegalStateException.class,()->SkillAccess.session(player,BOW));
     }
-    @Test void deniedMessagesAreRateLimitedAndDoNotMutateProfile() {
+    @Test void deniedSkillsAreSilentAndDoNotMutateProfile() {
         assertFalse(SkillAccess.require(player,BOW)); assertFalse(SkillAccess.require(player,HOE));
-        verify(player,times(1)).sendMessage(anyString());
+        verify(player,never()).sendMessage(anyString());
         assertEquals(ClassType.NONE,profile.getClassType()); assertEquals(10,profile.getMana());
     }
     @Test void invalidationCannotBeBypassedBySwitchingBack() {

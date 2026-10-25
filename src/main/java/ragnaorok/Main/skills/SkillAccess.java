@@ -18,19 +18,12 @@ public final class SkillAccess implements Listener {
         public boolean allows(ClassType actual) { return owner == actual; }
     }
     private static final Map<UUID, Session> sessions = new HashMap<>();
-    private static final Map<UUID, Long> notices = new HashMap<>();
     public static boolean allows(Player player, WeaponSkill skill) {
         SkillsMCPlayer profile = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString());
         return profile != null && skill.allows(profile.getClassType());
     }
     public static boolean require(Player player, WeaponSkill skill) {
-        if (allows(player, skill)) return true;
-        long now = System.currentTimeMillis();
-        if (now >= notices.getOrDefault(player.getUniqueId(), 0L)) {
-            player.sendMessage(skill.owner.name() + " class required for this skill.");
-            notices.put(player.getUniqueId(), now + 2000);
-        }
-        return false;
+        return allows(player, skill);
     }
     public static Session session(Player player, WeaponSkill skill) {
         if (!allows(player, skill)) throw new IllegalStateException("Unauthorized skill");
@@ -61,11 +54,10 @@ public final class SkillAccess implements Listener {
     public static void invalidate(Player player) {
         Session session = sessions.remove(player.getUniqueId());
         if (session != null) session.close();
-        notices.remove(player.getUniqueId());
     }
     public static void shutdown() {
         sessions.values().forEach(Session::close);
-        sessions.clear(); notices.clear();
+        sessions.clear();
     }
     @EventHandler public void quit(PlayerQuitEvent e) { invalidate(e.getPlayer()); }
     @EventHandler public void death(PlayerDeathEvent e) { invalidate(e.getEntity()); }

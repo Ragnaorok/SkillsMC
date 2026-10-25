@@ -18,6 +18,7 @@ import ragnaorok.Main.listeners.ToolListeners.*;
 import java.util.Objects;
 
 public final class Main extends JavaPlugin implements @NotNull Listener {
+    private static final long AUTOSAVE_INTERVAL_TICKS = 10L * 60L * 20L;
     private EffectManager effectManager;
     private ragnaorok.Main.data.PlayerStore playerStore;
     private static Main instance;
@@ -70,7 +71,7 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
                     Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString()).getClassType());
             else player.kickPlayer("SkillsMC could not load your progress. Check the server log.");
         }
-        Bukkit.getScheduler().runTaskTimer(this, this::saveAllPlayers, 1200L, 1200L);
+        Bukkit.getScheduler().runTaskTimer(this, this::saveAllPlayers, AUTOSAVE_INTERVAL_TICKS, AUTOSAVE_INTERVAL_TICKS);
         Objects.requireNonNull(getCommand("saveAll")).setExecutor((sender, command, label, args) -> {
             if (!sender.hasPermission("skillsmc.save")) { sender.sendMessage("You cannot save player data."); return true; }
             sender.sendMessage(saveAllPlayers() ? "SkillsMC player data saved." : "Some saves failed. Check the server log.");
