@@ -1,4 +1,7 @@
 package ragnaorok.Main.listeners.ToolListeners;
+import ragnaorok.Main.skills.SkillAccess;
+import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.AXE;
+
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -12,27 +15,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AxeListener implements Listener {
-    Map<String, Long> axeCooldown = new HashMap<>();
+    Map<java.util.UUID, Long> axeCooldown = new HashMap<>();
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onAxeHit(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
 
             if (Loadout.getMainHand(player.getInventory()) == Loadout.AXE) {
                 if (event.getEntity() instanceof Monster) {
+                    if (!SkillAccess.require(player, AXE)) return;
                     if (!player.isSprinting()) {
                         player.sendMessage(ChatColor.DARK_GRAY + "You must be sprinting to use Shockwave.");
                         return;
                     }
-                    if (axeCooldown.containsKey(player.getName())) {
-                        if (axeCooldown.get(player.getName()) > System.currentTimeMillis()) {
-                            long time = (axeCooldown.get(player.getName()) - System.currentTimeMillis()) / 1000;
+                    if (axeCooldown.containsKey(player.getUniqueId())) {
+                        if (axeCooldown.get(player.getUniqueId()) > System.currentTimeMillis()) {
+                            long time = (axeCooldown.get(player.getUniqueId()) - System.currentTimeMillis()) / 1000;
                             player.sendMessage(ChatColor.DARK_GRAY + "Shockwave will be ready in " + time + " second(s)");
                             return;
                         }
                     }
-                    axeCooldown.put(player.getName(), System.currentTimeMillis() + (3 * 1000)); // 1 second cooldown for testing
+                    axeCooldown.put(player.getUniqueId(), System.currentTimeMillis() + (3 * 1000)); // 1 second cooldown for testing
                     player.sendMessage(ChatColor.GREEN + "Axe Skill: Shockwave");
 
                     // Create shockwave effect originating from the mob's location

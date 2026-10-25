@@ -1,4 +1,7 @@
 package ragnaorok.Main.listeners.ToolListeners;
+import ragnaorok.Main.skills.SkillAccess;
+import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.BLAZE_ROD;
+
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -21,8 +24,10 @@ public class BlazeRodListener implements Listener {
     @EventHandler
     public void onCast(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        if (event.getHand() != org.bukkit.inventory.EquipmentSlot.HAND) return;
         if (player.getInventory().getItemInMainHand().getType() == Material.BLAZE_ROD) {
             if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                if (!SkillAccess.require(player, BLAZE_ROD)) return;
                 if (player.isSneaking()) {
                     castLavaEruption(player);
                 } else {
@@ -45,13 +50,16 @@ public class BlazeRodListener implements Listener {
         player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1.0f, 1.0f);
         player.sendMessage(ChatColor.RED + "You cast a fireball!");
 
-        addParticleEffectsToFireball(fireball);
+        var session = SkillAccess.session(player, BLAZE_ROD);
+        session.track(fireball);
+        addParticleEffectsToFireball(fireball, session);
     }
 
-    private void addParticleEffectsToFireball(Fireball fireball) {
+    private void addParticleEffectsToFireball(Fireball fireball, SkillAccess.Session session) {
         new BukkitRunnable() {
             @Override
             public void run() {
+                if (!session.valid(BLAZE_ROD)) { cancel(); return; }
                 if (fireball.isDead() || !fireball.isValid()) {
                     this.cancel();
                     return;
@@ -66,6 +74,7 @@ public class BlazeRodListener implements Listener {
     }
 
     private void castLavaEruption(Player player) {
+        var session = SkillAccess.session(player, BLAZE_ROD);
         Location location = player.getLocation();
         player.sendMessage(ChatColor.RED + "Lava Eruption!");
 
@@ -74,6 +83,7 @@ public class BlazeRodListener implements Listener {
 
             @Override
             public void run() {
+                if (!session.valid(BLAZE_ROD)) { cancel(); return; }
                 if (count >= 3) {
                     this.cancel();
                     return;

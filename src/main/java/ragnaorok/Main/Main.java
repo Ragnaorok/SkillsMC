@@ -41,6 +41,7 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
 
         pm.registerEvents(new Guidebook(this), this);
         pm.registerEvents(classCommand, this);
+        pm.registerEvents(new ragnaorok.Main.skills.SkillAccess(), this);
         pm.registerEvents(new ProfileCommand(this), this);
 
         getServer().getPluginManager().registerEvents(new MobListener(), this);
@@ -99,6 +100,7 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
 
     @Override
     public void onDisable() {
+        ragnaorok.Main.skills.SkillAccess.shutdown();
         saveAllPlayers();
         if (effectManager != null) effectManager.dispose();
         HandlerList.unregisterAll((Listener) this);

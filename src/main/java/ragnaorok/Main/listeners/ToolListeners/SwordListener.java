@@ -1,4 +1,7 @@
 package ragnaorok.Main.listeners.ToolListeners;
+import ragnaorok.Main.skills.SkillAccess;
+import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.SWORD;
+
 
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
@@ -22,7 +25,7 @@ public class SwordListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onSwordAttack(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
@@ -30,6 +33,8 @@ public class SwordListener implements Listener {
 
             if (Loadout.getLoadOut(inventory) == Loadout.SWORD) {
                 if (player.isSneaking()) {
+                    if (!SkillAccess.require(player, SWORD)) return;
+                    var session = SkillAccess.session(player, SWORD);
                     // Apply Gale Slash effects
                     Entity target = event.getEntity();
                     Vector direction = player.getLocation().getDirection().normalize().multiply(2);
@@ -44,6 +49,7 @@ public class SwordListener implements Listener {
                         double t = 0;
                         @Override
                         public void run() {
+                            if (!session.valid(SWORD) || !target.isValid()) { cancel(); return; }
                             if (t > 2 * Math.PI) {
                                 this.cancel();
                                 return;
@@ -62,6 +68,7 @@ public class SwordListener implements Listener {
                         int ticks = 0;
                         @Override
                         public void run() {
+                            if (!session.valid(SWORD) || !target.isValid()) { cancel(); return; }
                             if (ticks >= 20) {
                                 this.cancel();
                                 return;

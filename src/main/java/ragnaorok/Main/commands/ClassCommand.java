@@ -95,6 +95,7 @@ public final class ClassCommand implements CommandExecutor, Listener {
                 player.sendMessage(ChatColor.RED + "Class change cancelled because your progress could not be saved.");
                 return;
             }
+            ragnaorok.Main.skills.SkillAccess.invalidate(player);
             ClassPassives.apply(player, menu.selection);
             ItemStack book = switch (menu.selection) {
                 case WARRIOR -> createWarriorGuide();

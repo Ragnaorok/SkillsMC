@@ -1,4 +1,7 @@
 package ragnaorok.Main.listeners.ToolListeners;
+import ragnaorok.Main.skills.SkillAccess;
+import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.SHIELD;
+
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -58,6 +61,7 @@ public class ShieldListener implements Listener {
 
         // Check if player is holding a shield, crouching, and falling
         if (player.isSneaking() && player.isBlocking() && player.getVelocity().getY() < -0.5) {
+            if (!SkillAccess.require(player, SHIELD)) return;
             // Disable shield surfing if shield has 1 durability left
             if (shield.getDurability() >= shield.getType().getMaxDurability() - 1) {
                 player.sendMessage(ChatColor.RED + "Your shield is too damaged to surf!");
@@ -72,7 +76,7 @@ public class ShieldListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerLand(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
@@ -90,6 +94,7 @@ public class ShieldListener implements Listener {
 
             // Check if the player is landing from a fall
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL && player.isSneaking() && player.isBlocking()) {
+                if (!SkillAccess.require(player, SHIELD)) return;
                 // Cancel fall damage
                 event.setCancelled(true);
 
