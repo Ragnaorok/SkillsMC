@@ -1,5 +1,6 @@
 package ragnaorok.Main.listeners.ToolListeners;
 import ragnaorok.Main.skills.SkillAccess;
+import ragnaorok.Main.progression.PlayerStats;
 import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.DUAL_SWORD;
 
 
@@ -87,7 +88,7 @@ public class DualSwordListener implements Listener {
                 for (Entity entity : player.getWorld().getNearbyEntities(player.getLocation(), 5, 5, 5)) {
                     if (entity instanceof LivingEntity && entity != player) {
                         LivingEntity target = (LivingEntity) entity;
-                        target.damage(4.0, player);
+                        target.damage(PlayerStats.damage(player, 4.0), player);
                         Vector knockback = target.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(0.5);
                         target.setVelocity(knockback);
                         player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, target.getLocation(), 10);

@@ -1,5 +1,6 @@
 package ragnaorok.Main.listeners.ToolListeners;
 import ragnaorok.Main.skills.SkillAccess;
+import ragnaorok.Main.progression.PlayerStats;
 import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.HOE;
 
 
@@ -84,6 +85,8 @@ public class HoeListener implements Listener {
                 // Spawn the thrown splash potion
                 ThrownPotion thrownPotion = (ThrownPotion) world.spawnEntity(location, EntityType.SPLASH_POTION);
                 thrownPotion.setItem(splashPotion);
+                thrownPotion.setShooter(player);
+                ragnaorok.Main.progression.SkillScaling.markHealing(thrownPotion, PlayerStats.healing(player, 1));
                 session.track(thrownPotion);
                 ParticleShapes.draw(EnumShapes.SPHERE, player.getLocation(), Particle.END_ROD, player);
                 counter += interval;
@@ -130,10 +133,7 @@ public class HoeListener implements Listener {
                         .filter(entity -> entity instanceof LivingEntity && entity != player)
                         .forEach(entity -> {
                             LivingEntity target = (LivingEntity) entity;
-                            target.damage(5.0, player);
-                            if (target instanceof Monster) {
-                                target.damage(7.5, player); //1.5x damage to monsters
-                            }
+                            target.damage(PlayerStats.damage(player, target instanceof Monster ? 7.5 : 5.0), player);
                             target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 60, 1));
                             this.cancel();
                         });

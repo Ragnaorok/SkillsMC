@@ -1,5 +1,6 @@
 package ragnaorok.Main.listeners.ToolListeners;
 import ragnaorok.Main.skills.SkillAccess;
+import ragnaorok.Main.progression.PlayerStats;
 import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.CROSSBOW;
 
 
@@ -83,6 +84,7 @@ public class CrossBowListener implements Listener {
                     if (duration.get(player.getUniqueId()) > System.currentTimeMillis()
                             && rapidSessions.containsKey(player.getUniqueId()) && rapidSessions.get(player.getUniqueId()).valid(CROSSBOW)) {
                         Arrow arrow = player.launchProjectile(Arrow.class);
+                        arrow.setDamage(PlayerStats.damage(player, arrow.getDamage()));
                         rapidSessions.get(player.getUniqueId()).track(arrow);
                         arrow.setPickupStatus(Arrow.PickupStatus.DISALLOWED);
                     }

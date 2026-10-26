@@ -10,7 +10,7 @@
 
 ## Storage and recovery
 
-Existing `<uuid>.dat` files remain in the server working directory. Their GZIP Java serialization format is unchanged; `SkillsMCPlayer` and `ClassType` have not changed, preserving their serialization compatibility. No move or migration is required.
+Existing `<uuid>.dat` files remain in the server working directory. Their GZIP Java serialization format is unchanged; The player field layout and serialization identity remain unchanged, preserving compatibility. No move or migration is required.
 
 Profiles save every 10 minutes (12,000 server ticks at 20 TPS), on disconnect, on plugin shutdown, on confirmed class change, and through `/saveAll` (`skillsmc.save`, default operators). A hard crash can lose progress since the last completed save; graceful shutdown saves current profiles.
 
@@ -39,3 +39,5 @@ Keep the self-hosted runner open for staging. Paper applies the staged update on
 - Gain more XP and disconnect before the next autosave. Reconnect and confirm that progress was saved immediately on logout.
 - Gain XP and stop the server while connected; restart and confirm that shutdown saved the progress.
 - Scheduled full-save cycles are reduced by 90% (60 to 6 per hour at 20 TPS); this is not a claim of 90% lower total server load. An abrupt crash can lose up to the progress accumulated since the last successful save, normally up to ten minutes at 20 TPS.
+
+See [PROGRESSION.md](PROGRESSION.md) for derived level bonuses and operator-only repeat class selection. Serialized player fields and serialization identity remain unchanged.

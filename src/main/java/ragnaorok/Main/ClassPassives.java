@@ -9,9 +9,12 @@ public final class ClassPassives {
 
     /** Absolute values prevent stacking on reconnect, respawn or repeated selection. */
     public static void apply(Player player, ClassType type) {
-        double maxHealth = type == ClassType.WARRIOR ? 22 : type == ClassType.MAGE ? 18 : 20;
-        if (player.getHealth() > maxHealth) player.setHealth(maxHealth);
-        player.setMaxHealth(maxHealth);
+        SkillsMCPlayer profile = ragnaorok.Main.progression.PlayerStats.profile(player);
+        apply(player, type, profile == null ? 1 : profile.getLevel());
+    }
+
+    public static void apply(Player player, ClassType type, int level) {
+        ragnaorok.Main.progression.PlayerStats.applyHealth(player, type, level);
         player.setWalkSpeed(type == ClassType.ARCHER ? 0.21f : 0.2f);
         PotionEffect regeneration = player.getPotionEffect(PotionEffectType.REGENERATION);
         // Match SkillsMC's permanent Regen I; leave ordinary buffs alone.

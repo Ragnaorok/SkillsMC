@@ -1,5 +1,6 @@
 package ragnaorok.Main.listeners.ToolListeners;
 import ragnaorok.Main.skills.SkillAccess;
+import ragnaorok.Main.progression.PlayerStats;
 import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.BOW;
 
 
@@ -104,6 +105,7 @@ public class BowListener implements Listener {
             Arrow arrow = (Arrow) projectile;
             arrow.setVelocity(player.getEyeLocation().getDirection().multiply(8));
             arrow.setCritical(true);
+            arrow.setDamage(PlayerStats.damage(player, arrow.getDamage()));
             var session = SkillAccess.session(player, BOW);
             session.track(arrow);
             createArrowTrail(arrow, session);

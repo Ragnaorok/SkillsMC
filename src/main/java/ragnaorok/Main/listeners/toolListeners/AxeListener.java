@@ -1,5 +1,6 @@
 package ragnaorok.Main.listeners.ToolListeners;
 import ragnaorok.Main.skills.SkillAccess;
+import ragnaorok.Main.progression.PlayerStats;
 import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.AXE;
 
 
@@ -51,7 +52,7 @@ public class AxeListener implements Listener {
         Vector direction = player.getLocation().getDirection().normalize();
         double playerVelocityMagnitude = player.getVelocity().length();
         double baseDamage = 9.0;
-        double damage = baseDamage * playerVelocityMagnitude; // Damage scales with player velocity
+        double damage = PlayerStats.damage(player, baseDamage * playerVelocityMagnitude); // Damage scales with player velocity
 
         for (int i = 1; i <= 10; i++) { // Shockwave length
             Location shockwaveLoc = origin.clone().add(direction.multiply(i));
@@ -63,7 +64,7 @@ public class AxeListener implements Listener {
 
             for (Entity entity : world.getNearbyEntities(shockwaveLoc, 1, 1, 1)) {
                 if (entity instanceof LivingEntity && entity != player) {
-                    ((LivingEntity) entity).damage(damage); // Deal velocity-scaled damage to entities in the path
+                    ((LivingEntity) entity).damage(damage, player); // Deal velocity-scaled damage to entities in the path
                     Vector knockback = direction.clone().multiply(3); // knockback strength
                     knockback.setY(0.5); // Add some vertical knockback
                     entity.setVelocity(knockback);

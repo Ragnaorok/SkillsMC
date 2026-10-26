@@ -1,5 +1,6 @@
 package ragnaorok.Main.listeners.ToolListeners;
 import ragnaorok.Main.skills.SkillAccess;
+import ragnaorok.Main.progression.PlayerStats;
 import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.BLAZE_ROD;
 
 
@@ -44,6 +45,8 @@ public class BlazeRodListener implements Listener {
 
         Fireball fireball = player.getWorld().spawn(fireballSpawnLocation, Fireball.class);
         fireball.setDirection(direction);
+        fireball.setShooter(player);
+        ragnaorok.Main.progression.SkillScaling.markDamage(fireball, PlayerStats.damage(player, 1));
         fireball.setYield(0);  // Ensure the fireball doesn't destroy blocks
         fireball.setIsIncendiary(false);
 
@@ -107,7 +110,7 @@ public class BlazeRodListener implements Listener {
     private void damageNearbyEntities(Location location, Player player, double radius) {
         for (Entity entity : location.getWorld().getNearbyEntities(location, radius, radius, radius)) {
             if (entity instanceof Monster && entity != player) {
-                ((LivingEntity) entity).damage(2.0, player);
+                ((LivingEntity) entity).damage(PlayerStats.damage(player, 2.0), player);
                 entity.setFireTicks(20);
             }
         }

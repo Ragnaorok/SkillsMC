@@ -33,8 +33,8 @@ public final class ClassCommand implements CommandExecutor, Listener {
     }
 
     private boolean permitted(Player player, SkillsMCPlayer profile) {
-        return player.hasPermission(profile.getClassType() == ClassType.NONE
-                ? "skillsmc.class.select" : "skillsmc.class.change");
+        return profile.getClassType() == ClassType.NONE
+                ? player.hasPermission("skillsmc.class.select") : player.isOp();
     }
 
     @Override

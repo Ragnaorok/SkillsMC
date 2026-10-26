@@ -38,7 +38,7 @@ permissions:
     description: Choose an initial class
     default: true
   skillsmc.class.change:
-    description: Change an existing class without resetting progress
+    description: Reserved for future paid switching; repeat class selection currently requires operator status
     default: op
   skillsmc.save:
     description: Save all loaded player profiles
