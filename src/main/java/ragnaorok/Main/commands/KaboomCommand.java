@@ -46,11 +46,11 @@ public class KaboomCommand implements CommandExecutor {
                 double x = Math.cos(i) * radius;
                 double z = Math.sin(i) * radius;
                 loc.add(x, y, z);
-                world.spawnParticle(Particle.SMOKE_LARGE, particleLoc, 10);
-                world.spawnParticle(Particle.EXPLOSION_HUGE, particleLoc, 10);
-                world.spawnParticle(Particle.EXPLOSION_LARGE, particleLoc, 1);
-                world.spawnParticle(Particle.EXPLOSION_NORMAL, particleLoc, 1);
-                world.spawnParticle(Particle.FLASH, particleLoc, 10);
+                world.spawnParticle(Particle.LARGE_SMOKE, particleLoc, 10);
+                world.spawnParticle(Particle.EXPLOSION_EMITTER, particleLoc, 10);
+                world.spawnParticle(Particle.EXPLOSION, particleLoc, 1);
+                world.spawnParticle(Particle.POOF, particleLoc, 1);
+                world.spawnParticle(Particle.FLASH, particleLoc, 10, org.bukkit.Color.WHITE);
                 loc.subtract(x, y, z);
             }
         }

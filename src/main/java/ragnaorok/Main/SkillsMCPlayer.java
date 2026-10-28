@@ -165,6 +165,8 @@ public class SkillsMCPlayer implements Serializable {
     }
 
     private void onLevelUp() {
+        if (player == null) return;
+        ClassPassives.apply(player, classType, level);
         player.sendMessage(ChatColor.GREEN + "You leveled up to level " + this.level + "!");
         Location ploc = player.getLocation();
         Location particleLoc = ploc.clone();

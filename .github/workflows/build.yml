@@ -1,0 +1,87 @@
+name: SkillsMC CI and test delivery
+
+on:
+  push:
+    branches: [main, upgrade/1.21.11]
+  pull_request:
+    branches: [main, upgrade/1.21.11]
+  workflow_dispatch:
+    inputs:
+      deploy_test:
+        description: Stage the build on the Windows test server for its next restart
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Build and run available tests
+        run: mvn --batch-mode --no-transfer-progress clean verify
+      - name: Prepare delivery
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir dist
+          cp target/SkillsMC-1.0-SNAPSHOT.jar dist/SkillsMC-1.21.11.jar
+          jar tf dist/SkillsMC-1.21.11.jar | grep -qx 'plugin.yml'
+          cp scripts/Stage-SkillsMC.ps1 dist/
+          cd dist
+          sha256sum SkillsMC-1.21.11.jar > SkillsMC-1.21.11.jar.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SkillsMC-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+
+  test-staging:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Verify staging behavior on Windows PowerShell
+        shell: powershell
+        run: ./scripts/Test-Staging.ps1
+
+  stage-test:
+    needs: [build, test-staging]
+    # Never run pull requests on the personal Windows PC.
+    if: >-
+      github.repository == 'Ragnaorok/SkillsMC' &&
+      (github.ref == 'refs/heads/upgrade/1.21.11' || github.ref == 'refs/heads/main') &&
+      ((github.event_name == 'workflow_dispatch' && inputs.deploy_test) ||
+       (github.event_name == 'push' && vars.ENABLE_TEST_DEPLOYMENT == 'true'))
+    runs-on: [self-hosted, Windows, X64, skillsmc-test]
+    timeout-minutes: 10
+    concurrency:
+      group: skillsmc-test-server
+      cancel-in-progress: false
+    steps:
+      - name: Download this run's build
+        uses: actions/download-artifact@v4
+        with:
+          name: SkillsMC-${{ github.sha }}
+          path: ${{ runner.temp }}/skillsmc-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Back up and stage plugin
+        shell: cmd
+        env:
+          SERVER_DIR: 'C:\Users\revup\OneDrive\Desktop\SkillsMC Test environment'
+          DELIVERY_DIR: ${{ runner.temp }}/skillsmc-${{ github.run_id }}-${{ github.run_attempt }}
+          BUILD_COMMIT: ${{ github.sha }}
+        run: |
+          powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "%DELIVERY_DIR%\Stage-SkillsMC.ps1" -ServerDirectory "%SERVER_DIR%" -DeliveryDirectory "%DELIVERY_DIR%" -BuildCommit "%BUILD_COMMIT%"

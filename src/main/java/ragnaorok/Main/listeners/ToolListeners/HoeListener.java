@@ -1,4 +1,8 @@
 package ragnaorok.Main.listeners.ToolListeners;
+import ragnaorok.Main.skills.SkillAccess;
+import ragnaorok.Main.progression.PlayerStats;
+import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.HOE;
+
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -10,7 +14,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -32,13 +35,16 @@ public class HoeListener implements Listener {
     @EventHandler
     public void onHoeUse(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        if (event.getHand() != org.bukkit.inventory.EquipmentSlot.HAND) return;
         PlayerInventory inventory = player.getInventory();
 
         if (Loadout.getLoadOut(inventory) == Loadout.HOE) {
             if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                if (!SkillAccess.require(player, HOE)) return;
                 createHallowedGround(player, event.getClickedBlock());
             } else if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
                 if (player.isSneaking()) {
+                    if (!SkillAccess.require(player, HOE)) return;
                     castCrescentProjectile(player);
                 }
             }
@@ -46,6 +52,7 @@ public class HoeListener implements Listener {
     }
 
     private void createHallowedGround(Player player, Block clickedBlock) {
+        var session = SkillAccess.session(player, HOE);
         Location location;
         if (clickedBlock != null) {
             location = clickedBlock.getLocation().add(0.5, 1, 0.5);  // Drop slightly above the clicked block
@@ -64,6 +71,7 @@ public class HoeListener implements Listener {
 
             @Override
             public void run() {
+                if (!session.valid(HOE)) { cancel(); return; }
                 if (counter >= duration) {
                     this.cancel();
                     return;
@@ -71,12 +79,15 @@ public class HoeListener implements Listener {
 
                 ItemStack splashPotion = new ItemStack(Material.SPLASH_POTION);
                 PotionMeta potionMeta = (PotionMeta) splashPotion.getItemMeta();
-                potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
+                potionMeta.setBasePotionType(PotionType.HEALING);
                 splashPotion.setItemMeta(potionMeta);
 
                 // Spawn the thrown splash potion
                 ThrownPotion thrownPotion = (ThrownPotion) world.spawnEntity(location, EntityType.SPLASH_POTION);
                 thrownPotion.setItem(splashPotion);
+                thrownPotion.setShooter(player);
+                ragnaorok.Main.progression.SkillScaling.markHealing(thrownPotion, PlayerStats.healing(player, 1));
+                session.track(thrownPotion);
                 ParticleShapes.draw(EnumShapes.SPHERE, player.getLocation(), Particle.END_ROD, player);
                 counter += interval;
             }
@@ -84,10 +95,12 @@ public class HoeListener implements Listener {
     }
 
     private void castCrescentProjectile(Player player) {
+        var session = SkillAccess.session(player, HOE);
         Location location = player.getEyeLocation();
         Vector direction = location.getDirection();
 
         Snowball crescentProjectile = player.getWorld().spawn(location.add(direction.multiply(2)), Snowball.class);
+        session.track(crescentProjectile);
         crescentProjectile.setVelocity(direction.multiply(2));
         crescentProjectile.setCustomName("CrescentProjectile");
 
@@ -96,6 +109,7 @@ public class HoeListener implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
+                if (!session.valid(HOE)) { cancel(); return; }
                 if (crescentProjectile.isDead() || !crescentProjectile.isValid()) {
                     this.cancel();
                     return;
@@ -113,14 +127,13 @@ public class HoeListener implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
+                if (!session.valid(HOE)) { cancel(); return; }
+                if (!crescentProjectile.isValid() || crescentProjectile.isDead()) { cancel(); return; }
                 crescentProjectile.getNearbyEntities(1, 1, 1).stream()
                         .filter(entity -> entity instanceof LivingEntity && entity != player)
                         .forEach(entity -> {
                             LivingEntity target = (LivingEntity) entity;
-                            target.damage(5.0, player);
-                            if (target instanceof Monster) {
-                                target.damage(7.5, player); //1.5x damage to monsters
-                            }
+                            target.damage(PlayerStats.damage(player, target instanceof Monster ? 7.5 : 5.0), player);
                             target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 60, 1));
                             this.cancel();
                         });

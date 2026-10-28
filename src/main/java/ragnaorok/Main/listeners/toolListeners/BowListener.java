@@ -1,4 +1,8 @@
 package ragnaorok.Main.listeners.ToolListeners;
+import ragnaorok.Main.skills.SkillAccess;
+import ragnaorok.Main.progression.PlayerStats;
+import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.BOW;
+
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -17,9 +21,9 @@ import java.util.Map;
 
 public class BowListener implements Listener {
     private final Main plugin;
-    private final Map<String, Long> leftCooldown = new HashMap<>();
-    private final Map<String, Long> shiftCooldown = new HashMap<>();
-    private final Map<String, Boolean> trueshotReady = new HashMap<>();
+    private final Map<java.util.UUID, Long> leftCooldown = new HashMap<>();
+    private final Map<java.util.UUID, Long> shiftCooldown = new HashMap<>();
+    private final Map<java.util.UUID, SkillAccess.Session> trueshotReady = new HashMap<>();
 
     public BowListener(Main plugin) {
         this.plugin = plugin;
@@ -28,6 +32,7 @@ public class BowListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        if (event.getHand() != org.bukkit.inventory.EquipmentSlot.HAND) return;
         Material type = player.getItemInHand().getType();
 
         if (type != Material.BOW) {
@@ -35,6 +40,7 @@ public class BowListener implements Listener {
         }
 
         if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            if (!SkillAccess.require(player, BOW)) return;
             handleLeftClick(player);
         }
     }
@@ -54,7 +60,7 @@ public class BowListener implements Listener {
             return;
         }
 
-        leftCooldown.put(player.getName(), System.currentTimeMillis() + (10 * 1000));
+        leftCooldown.put(player.getUniqueId(), System.currentTimeMillis() + (10 * 1000));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 25, 3));
     }
 
@@ -65,26 +71,31 @@ public class BowListener implements Listener {
             return;
         }
 
-        shiftCooldown.put(player.getName(), System.currentTimeMillis() + (10 * 1000));
-        trueshotReady.put(player.getName(), true);
+        shiftCooldown.put(player.getUniqueId(), System.currentTimeMillis() + (10 * 1000));
+        var id = player.getUniqueId();
+        var prepared = SkillAccess.session(player, BOW);
+        trueshotReady.put(id, prepared);
+        prepared.onClose(BOW, () -> trueshotReady.remove(id));
         player.sendMessage(ChatColor.GREEN + "Trueshot ready for the next shot");
     }
 
-    private boolean isCooldownActive(Player player, Map<String, Long> cooldownMap) {
-        return cooldownMap.containsKey(player.getName()) && cooldownMap.get(player.getName()) > System.currentTimeMillis();
+    private boolean isCooldownActive(Player player, Map<java.util.UUID, Long> cooldownMap) {
+        return cooldownMap.containsKey(player.getUniqueId()) && cooldownMap.get(player.getUniqueId()) > System.currentTimeMillis();
     }
 
-    private long getCooldownTimeLeft(Player player, Map<String, Long> cooldownMap) {
-        return (cooldownMap.get(player.getName()) - System.currentTimeMillis()) / 1000;
+    private long getCooldownTimeLeft(Player player, Map<java.util.UUID, Long> cooldownMap) {
+        return (cooldownMap.get(player.getUniqueId()) - System.currentTimeMillis()) / 1000;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityShootBow(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if (trueshotReady.getOrDefault(player.getName(), false)) {
+            if (event.getBow() == null || event.getBow().getType() != Material.BOW) return;
+            var prepared = trueshotReady.remove(player.getUniqueId());
+            if (prepared != null && prepared.valid(BOW)) {
                 enhanceArrow(event.getProjectile(), player);
-                trueshotReady.put(player.getName(), false);  // Consume the trueshot
+                // Prepared state was consumed above.
             }
         }
     }
@@ -94,15 +105,18 @@ public class BowListener implements Listener {
             Arrow arrow = (Arrow) projectile;
             arrow.setVelocity(player.getEyeLocation().getDirection().multiply(8));
             arrow.setCritical(true);
-            createArrowTrail(arrow);
+            arrow.setDamage(PlayerStats.damage(player, arrow.getDamage()));
+            var session = SkillAccess.session(player, BOW);
+            session.track(arrow);
+            createArrowTrail(arrow, session);
         }
     }
 
-    private void createArrowTrail(Arrow arrow) {
+    private void createArrowTrail(Arrow arrow, SkillAccess.Session session) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (arrow.isDead() || !arrow.isValid() || arrow.isOnGround()) {
+                if (!session.valid(BOW) || arrow.isDead() || !arrow.isValid() || arrow.isOnGround()) {
                     this.cancel();
                     return;
                 }

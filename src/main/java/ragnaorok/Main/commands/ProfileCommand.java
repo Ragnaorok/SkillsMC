@@ -43,11 +43,12 @@ public class ProfileCommand implements CommandExecutor, Listener {
         Inventory gui = Bukkit.createInventory(null, 45, ChatColor.BLACK + "Player Profile");
         String uuid = player.getUniqueId().toString();
         SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
+        if (smPlayer == null) { player.sendMessage("Your profile is not loaded."); return; }
         int currency_ = smPlayer.getCurrency();
         int souls_ = smPlayer.getSouls();
         int bounty_ = smPlayer.getBounty();
-        double maxHearts_ = smPlayer.getMaxHearts();
-        double speed_ = smPlayer.getMovementSpeed();
+        double maxHearts_ = player.getMaxHealth() / 2.0;
+        double speed_ = player.getWalkSpeed();
         double mana_ = smPlayer.getMaxMana();
 
         ItemStack playerClass = new ItemStack(Material.PLAYER_HEAD);
@@ -68,6 +69,18 @@ public class ProfileCommand implements CommandExecutor, Listener {
 
 
         classItemMeta.setDisplayName(ChatColor.GREEN + "Class: " + smPlayer.getClassType().toString());
+        int level = smPlayer.getLevel();
+        var type = smPlayer.getClassType();
+        double damageBonus = (ragnaorok.Main.progression.PlayerStats.damageMultiplier(type, level) - 1) * 100;
+        double healingBonus = (ragnaorok.Main.progression.PlayerStats.healingMultiplier(type, level) - 1) * 100;
+        String next = type == ragnaorok.Main.ClassType.NONE ? "Choose a class to gain stat bonuses."
+                : level >= 30 ? "Stat growth cap reached (level 30)."
+                : "Next health bonus: level " + ((level / 5 + 1) * 5);
+        classItemMeta.setLore(java.util.List.of(
+                ChatColor.GRAY + "Level: " + level,
+                ChatColor.GRAY + String.format(java.util.Locale.ROOT, "Skill damage: +%.2f%%", damageBonus),
+                ChatColor.GRAY + String.format(java.util.Locale.ROOT, "Skill healing: +%.2f%%", healingBonus),
+                ChatColor.GRAY + next));
         currencyItemMeta.setDisplayName(ChatColor.GREEN + "Currency: " + currency_);
         soulsItemMeta.setDisplayName(ChatColor.GREEN + "Souls: " + souls_);
         bountyItemMeta.setDisplayName(ChatColor.GREEN + "Bounty: " + bounty_);

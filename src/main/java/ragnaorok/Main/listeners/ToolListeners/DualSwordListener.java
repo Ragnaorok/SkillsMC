@@ -1,4 +1,8 @@
 package ragnaorok.Main.listeners.ToolListeners;
+import ragnaorok.Main.skills.SkillAccess;
+import ragnaorok.Main.progression.PlayerStats;
+import static ragnaorok.Main.skills.SkillAccess.WeaponSkill.DUAL_SWORD;
+
 
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
@@ -25,7 +29,7 @@ import java.util.Set;
 public class DualSwordListener implements Listener {
 
     private final Main plugin;
-    private final Set<Player> bladeDancePlayers = new HashSet<>();
+    private final Map<Player, SkillAccess.Session> bladeDancePlayers = new HashMap<>();
     private final Map<Player, BukkitRunnable> bladeDanceTasks = new HashMap<>();
 
     public DualSwordListener(Main plugin) {
@@ -35,20 +39,22 @@ public class DualSwordListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        if (event.getHand() != org.bukkit.inventory.EquipmentSlot.HAND) return;
         PlayerInventory inventory = player.getInventory();
 
         if (Loadout.getLoadOut(inventory) == Loadout.DUAL_SWORD) {
             if (player.isSneaking() && event.getAction().toString().contains("RIGHT_CLICK")) {
+                if (!SkillAccess.require(player, DUAL_SWORD)) return;
                 performBladeDance(player);
             }
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if (bladeDancePlayers.contains(player) && event.getDamager() instanceof Arrow) {
+            if (bladeDancePlayers.containsKey(player) && bladeDancePlayers.get(player).valid(DUAL_SWORD) && event.getDamager() instanceof Arrow) {
                 event.setCancelled(true);
                 player.getWorld().playSound(player.getLocation(), Sound.ITEM_SHIELD_BLOCK, 1.0f, 1.0f);
                 player.spawnParticle(Particle.CRIT, player.getLocation(), 10, 0.5, 0.5, 0.5, 0.1);
@@ -57,7 +63,11 @@ public class DualSwordListener implements Listener {
     }
 
     private void performBladeDance(Player player) {
-        bladeDancePlayers.add(player);
+        if (bladeDancePlayers.containsKey(player) && bladeDancePlayers.get(player).valid(DUAL_SWORD)) return;
+        BukkitRunnable previous = bladeDanceTasks.remove(player);
+        if (previous != null) previous.cancel();
+        var session = SkillAccess.session(player, DUAL_SWORD);
+        bladeDancePlayers.put(player, session);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f);
         player.sendMessage(ChatColor.RED + "You performed a Blade Dance!");
 
@@ -67,7 +77,7 @@ public class DualSwordListener implements Listener {
 
             @Override
             public void run() {
-                if (hits >= 5) {
+                if (!session.valid(DUAL_SWORD) || hits >= 5) {
                     this.cancel();
                     bladeDancePlayers.remove(player);
                     bladeDanceTasks.remove(player);
@@ -78,7 +88,7 @@ public class DualSwordListener implements Listener {
                 for (Entity entity : player.getWorld().getNearbyEntities(player.getLocation(), 5, 5, 5)) {
                     if (entity instanceof LivingEntity && entity != player) {
                         LivingEntity target = (LivingEntity) entity;
-                        target.damage(4.0, player);
+                        target.damage(PlayerStats.damage(player, 4.0), player);
                         Vector knockback = target.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(0.5);
                         target.setVelocity(knockback);
                         player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, target.getLocation(), 10);
@@ -86,7 +96,7 @@ public class DualSwordListener implements Listener {
                     }
                 }
 
-                player.getWorld().spawnParticle(Particle.CRIT_MAGIC, player.getLocation(), 20, 1, 1, 1, 0.1);
+                player.getWorld().spawnParticle(Particle.ENCHANTED_HIT, player.getLocation(), 20, 1, 1, 1, 0.1);
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.5f, 1.0f);
 
                 Vector direction = player.getVelocity().setY(0).normalize().multiply(1);

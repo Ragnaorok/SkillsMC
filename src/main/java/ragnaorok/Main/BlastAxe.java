@@ -9,7 +9,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
-import java.util.UUID;
+
 
 public class BlastAxe {
     public static void createBlastAxe(JavaPlugin plugin) {
@@ -21,8 +21,8 @@ public class BlastAxe {
             meta.setLore(Arrays.asList("§7A modified axe with an ignition key"));
 
             // Set the base stats
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 4.5, AttributeModifier.Operation.ADD_NUMBER));
-            meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", -2.0, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(new NamespacedKey(plugin, "blast_axe_damage"), 4.5, AttributeModifier.Operation.ADD_NUMBER));
+            meta.addAttributeModifier(Attribute.ATTACK_SPEED, new AttributeModifier(new NamespacedKey(plugin, "blast_axe_speed"), -2.0, AttributeModifier.Operation.ADD_NUMBER));
             blastAxe.setItemMeta(meta);
         }
 

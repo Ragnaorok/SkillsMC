@@ -3,140 +3,112 @@ package ragnaorok.Main.commands;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import ragnaorok.Main.Constant;
-import ragnaorok.Main.Main;
-import ragnaorok.Main.SkillsMCPlayer;
-import ragnaorok.Main.ClassType;
-
+import ragnaorok.Main.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class ClassCommand implements CommandExecutor, Listener {
+public final class ClassCommand implements CommandExecutor, Listener {
+    private final Main plugin;
+    private static final ClassType[] CHOICES = {ClassType.WARRIOR, ClassType.MAGE, ClassType.CLERIC, ClassType.ARCHER};
+    private static final Material[] ICONS = {Material.IRON_SWORD, Material.WOODEN_HOE, Material.SPLASH_POTION, Material.BOW};
 
-    public Main plugin;
+    public ClassCommand(Main plugin) { this.plugin = plugin; }
 
-    public ClassCommand(Main plugin) {
-        this.plugin = plugin;
-        plugin.getCommand("class").setExecutor(this);
+    private static final class Menu implements InventoryHolder {
+        final ClassType selection;
+        final Inventory inventory;
+        Menu(ClassType selection) {
+            this.selection = selection;
+            inventory = Bukkit.createInventory(this, 9, selection == null ? "Class Selection" : "Confirm Class");
+        }
+        @Override public Inventory getInventory() { return inventory; }
+    }
+
+    private boolean permitted(Player player, SkillsMCPlayer profile) {
+        return profile.getClassType() == ClassType.NONE
+                ? player.hasPermission("skillsmc.class.select") : player.isOp();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (label.equalsIgnoreCase("class")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "You cannot run this command!");
-                return true;
-            }
-            Player player = (Player) sender;
-
-            // Check if the player is OP
-            if (player.isOp()) {
-                // Reset the player's class and open the GUI
-                String uuid = player.getUniqueId().toString();
-                SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
-                resetPlayerStats(player, smPlayer);
-                smPlayer.setClassType(ClassType.NONE);
-                player.sendMessage(ChatColor.YELLOW + "Your class has been reset.");
-                openGui(player);
-            } else {
-                // Deny access to non-OP players
-                player.sendMessage(ChatColor.RED + "You have already chosen a class");
-            }
-            return true;
-        }
-        return false;
+        if (!(sender instanceof Player player)) { sender.sendMessage("Run this command in game."); return true; }
+        SkillsMCPlayer profile = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString());
+        if (profile == null) { player.sendMessage("Your SkillsMC profile is unavailable."); return true; }
+        if (!permitted(player, profile)) { player.sendMessage("You do not have permission to change class."); return true; }
+        Menu menu = new Menu(null);
+        for (int i = 0; i < CHOICES.length; i++) menu.inventory.setItem(i + 1, icon(ICONS[i], CHOICES[i].name()));
+        player.openInventory(menu.inventory);
+        return true;
     }
 
-    private void openGui(Player player) {
-        Inventory gui = Bukkit.createInventory(null, 9, ChatColor.MAGIC + "Class Selection");
+    private ItemStack icon(Material material, String name) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.GREEN + name);
+        item.setItemMeta(meta);
+        return item;
+    }
 
-        Map<ClassType, Material> classMaterials = new HashMap<>();
-        classMaterials.put(ClassType.WARRIOR, Material.IRON_SWORD);
-        classMaterials.put(ClassType.MAGE, Material.BLAZE_ROD);
-        classMaterials.put(ClassType.CLERIC, Material.SPLASH_POTION);
-        classMaterials.put(ClassType.ARCHER, Material.BOW);
-
-        int slot = 1;
-        for (Map.Entry<ClassType, Material> entry : classMaterials.entrySet()) {
-            ItemStack classItem = new ItemStack(entry.getValue());
-            ItemMeta classMeta = classItem.getItemMeta();
-            classMeta.setDisplayName(ChatColor.GREEN + entry.getKey().toString() + " Class");
-            classItem.setItemMeta(classMeta);
-            gui.setItem(slot, classItem);
-            slot++;
-        }
-
-        player.openInventory(gui);
+    @EventHandler
+    public void onDrag(InventoryDragEvent event) {
+        if (event.getView().getTopInventory().getHolder() instanceof Menu) event.setCancelled(true);
     }
 
     @EventHandler
     public void onClickEvent(InventoryClickEvent event) {
-        if (event.getCurrentItem() == null) return;
-        if (event.getCurrentItem().getItemMeta() == null) return;
-        if (!ChatColor.stripColor(event.getView().getTitle()).equalsIgnoreCase("Class Selection")) return;
-        if (event.getCurrentItem().getItemMeta().getDisplayName() == null) return;
-
-        Player player = (Player) event.getWhoClicked();
-        String uuid = player.getUniqueId().toString();
-        SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
-        String className = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace(" Class", "").toUpperCase();
-
-        try {
-            ClassType classType = ClassType.valueOf(className);
-            resetPlayerStats(player, smPlayer);
-            smPlayer.setClassType(classType);
-            player.sendMessage(ChatColor.GREEN + classType.toString() + " Class selected");
-
-            // Class-specific stat changes and give the guidebook
-            switch (classType) {
-                case WARRIOR:
-                    player.setMaxHealth(player.getMaxHealth() + 2);  // Increase max health by 1 heart (2 health points)
-                    player.getInventory().addItem(createWarriorGuide());
-                    break;
-                case ARCHER:
-                    player.setWalkSpeed(player.getWalkSpeed() + 0.01f);  // Increase speed from 0.2 to 0.21 (4.0 to 4.2)
-                    player.getInventory().addItem(createArcherGuide());
-                    break;
-                case CLERIC:
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 0, false, false));
-                    player.getInventory().addItem(createClericGuide());
-                    break;
-                case MAGE:
-                    player.setMaxHealth(player.getMaxHealth() - 2);  // Decrease max health by 1 heart (2 health points)
-                    smPlayer.setManaShieldPercentage(0.1);  // 10% of damage absorbed by mana
-                    player.getInventory().addItem(createMageGuide());
-                    break;
-            }
-        } catch (IllegalArgumentException e) {
-            player.sendMessage(ChatColor.RED + "Invalid class selected");
+        if (!(event.getView().getTopInventory().getHolder() instanceof Menu menu)) return;
+        event.setCancelled(true); // Includes shift-clicks, hotbar swaps and the player's bottom inventory.
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (event.getRawSlot() < 0 || event.getRawSlot() >= menu.inventory.getSize()) return;
+        int slot = event.getRawSlot();
+        if (menu.selection == null) {
+            if (slot < 1 || slot > CHOICES.length) return;
+            ClassType selection = CHOICES[slot - 1];
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                if (!player.isOnline() || player.getOpenInventory().getTopInventory() != menu.inventory) return;
+                Menu confirmation = new Menu(selection);
+                confirmation.inventory.setItem(2, icon(Material.LIME_WOOL, "Confirm " + selection.name() + " (keeps level and XP)"));
+                confirmation.inventory.setItem(6, icon(Material.RED_WOOL, "Cancel"));
+                player.openInventory(confirmation.inventory);
+            });
+            return;
         }
-
-        event.setCancelled(true);
-        player.closeInventory();
-    }
-
-    private void resetPlayerStats(Player player, SkillsMCPlayer smPlayer) {
-        player.setMaxHealth(20.0);  // Default max health is 20.0 (10 hearts)
-        player.setWalkSpeed(0.2f);  // Default walk speed is 0.2f (4.0)
-        smPlayer.setMaxMana(10);    //base value
-        smPlayer.setLevel(1);   //base value
-        smPlayer.setExperience(0);  //base value
-        // Remove any class-specific potion effects below
-        player.removePotionEffect(PotionEffectType.REGENERATION);
+        if (slot != 2 && slot != 6) return;
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            if (!player.isOnline() || player.getOpenInventory().getTopInventory() != menu.inventory) return;
+            player.closeInventory();
+            if (slot == 6) return;
+            SkillsMCPlayer profile = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString());
+            if (profile == null || !permitted(player, profile)) { player.sendMessage("You cannot change class."); return; }
+            ClassType previous = profile.getClassType();
+            if (previous == menu.selection) { player.sendMessage("You already have that class."); return; }
+            if (!ragnaorok.Main.data.ClassSelection.commit(profile, menu.selection,
+                    () -> plugin.savePlayer(player.getUniqueId(), profile))) {
+                player.sendMessage(ChatColor.RED + "Class change cancelled because your progress could not be saved.");
+                return;
+            }
+            ragnaorok.Main.skills.SkillAccess.invalidate(player);
+            ClassPassives.apply(player, menu.selection);
+            ItemStack book = switch (menu.selection) {
+                case WARRIOR -> createWarriorGuide();
+                case ARCHER -> createArcherGuide();
+                case MAGE -> createMageGuide();
+                case CLERIC -> createClericGuide();
+                default -> throw new IllegalStateException("Invalid class");
+            };
+            // Avoid dropping duplicate guidebooks or losing one when an inventory is full.
+            if (player.getInventory().firstEmpty() >= 0) player.getInventory().addItem(book);
+            else player.sendMessage("Inventory full. Use /guide for ability help.");
+            player.sendMessage(ChatColor.GREEN + menu.selection.name() + " selected. Your progress has been preserved.");
+        });
     }
 
     private ItemStack createWarriorGuide() {
@@ -192,10 +164,10 @@ public class ClassCommand implements CommandExecutor, Listener {
 
         // Page 1: Mage Overview
         pages.add(ChatColor.BOLD + "Mage:\n"
-                + ChatColor.BLACK + "Passive: -1 Heart & Mana Shield\n"
-                + ChatColor.RED + "Blaze Rod\n"
-                + ChatColor.GREEN + "Skill: Fireball\n"
-                + ChatColor.RED + "Skill: Lava Eruption\n");
+                + ChatColor.BLACK + "Passive: -1 Heart\n"
+                + ChatColor.RED + "Any hoe\n"
+                + ChatColor.GREEN + "Left: Arcane Bolt (free)\nRight: selected spell\n"
+                + ChatColor.RED + "Sneak-right: switch spell\nFireball: 20 mana\nEruption: 45 mana\n");
 
         bookmeta.setPages(pages);
         book.setItemMeta(bookmeta);
@@ -211,7 +183,7 @@ public class ClassCommand implements CommandExecutor, Listener {
 
         // Page 1: Archer Overview
         pages.add(ChatColor.BOLD + "Archer:\n"
-                + ChatColor.BLACK + "Passive: +.2 movement speed\n"
+                + ChatColor.BLACK + "Passive: +5% walk speed\n"
                 + ChatColor.RED + "Bow\n"
                 + ChatColor.GREEN + "Main Skill: Trueshot\n"
                 + ChatColor.GREEN + "Second Skill: Speed\n"

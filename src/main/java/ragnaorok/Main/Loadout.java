@@ -7,7 +7,6 @@ public enum Loadout {
     NONE,
     SWORD,
     AXE,
-    FIRE_WAND,
     HOE,
     BOW,
     CROSSBOW,
@@ -23,14 +22,13 @@ public enum Loadout {
             return SWORD;
         } else if (mainHand == Material.WOODEN_AXE || mainHand == Material.STONE_AXE || mainHand == Material.IRON_AXE || mainHand == Material.DIAMOND_AXE || mainHand == Material.NETHERITE_AXE) {
             return AXE;
-        } else if (mainHand == Material.WOODEN_HOE || mainHand == Material.STONE_HOE || mainHand == Material.IRON_HOE || mainHand == Material.DIAMOND_HOE || mainHand == Material.NETHERITE_HOE) {
+        } else if (mainHand.name().endsWith("_HOE")) {
             return HOE;
         } else if (mainHand == Material.BOW) {
             return BOW;
         } else if (mainHand == Material.CROSSBOW) {
             return CROSSBOW;
-        } else if (mainHand == Material.BLAZE_ROD) {
-            return FIRE_WAND;
+
         } else if (mainHand == Material.AIR || mainHand == Material.CAVE_AIR || mainHand == Material.VOID_AIR) {
             return NONE;
         }
@@ -65,8 +63,7 @@ public enum Loadout {
             return SWORD;
         } else if (mainHand == SWORD && offHand == SHIELD) {
             return SWORD_SHIELD;
-        } else if (mainHand == FIRE_WAND && offHand == NONE) {
-            return FIRE_WAND;
+
         } else if (mainHand == BOW && offHand == NONE) {
             return BOW;
         } else if (mainHand == CROSSBOW && offHand == NONE) {
