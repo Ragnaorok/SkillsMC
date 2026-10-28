@@ -4,6 +4,8 @@ Choose a class, master its weapon skills, and grow stronger as you explore. Skil
 
 **Status: Beta.** Core systems are available for playtesting. Combat balance, progression rates, and features may change based on feedback.
 
+**Supported version:** Paper 1.21.11 on the `main` branch. Minecraft 1.21.1 is deprecated and no longer receives updates. Create future feature branches from `main`.
+
 ## What’s in the beta?
 
 - **Four playable classes:** Warrior, Archer, Mage, and Cleric.
@@ -81,7 +83,7 @@ The plugin currently reports `1.0-SNAPSHOT` internally. **Beta** describes the p
 ## Installation and updates
 
 1. Back up your server and player data before installing or updating a beta build.
-2. Obtain a JAR built from the `upgrade/1.21.11` branch, either from a successful GitHub Actions build or by building it yourself.
+2. Obtain a JAR built from the `main` branch, either from a successful GitHub Actions build or by building it yourself.
 3. Stop the server fully.
 4. Place EffectLib 10.12 and the SkillsMC JAR in the server’s `plugins` directory. Keep only one installed SkillsMC JAR.
 5. Start the server and confirm that both plugins enable successfully.
@@ -134,7 +136,7 @@ mvn --batch-mode --no-transfer-progress clean verify
 
 The output is `target/SkillsMC-1.0-SNAPSHOT.jar`. CI packages the delivery artifact as `SkillsMC-1.21.11.jar`.
 
-For changes, branch from `upgrade/1.21.11`, keep the scope focused, run the build and tests, and open a pull request against that branch. Test gameplay on Paper with EffectLib as well as running automated tests.
+For changes, branch from `main`, keep the scope focused, run the build and tests, and open a pull request against that branch. Test gameplay on Paper with EffectLib as well as running automated tests.
 
 ## Feedback and bug reports
 
