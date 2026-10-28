@@ -6,7 +6,7 @@ Special skills now require the owning class, including for operators. Ordinary w
 | --- | --- |
 | Warrior | Sword Gale Slash, dual sword Blade Dance, axe Shockwave, shield surf and fall bounce |
 | Archer | Bow Speed and Trueshot; crossbow Backstep and Rapidfire |
-| Mage | Blaze rod Fireball and Lava Eruption |
+| Mage | Hoe Fireball and Lava Eruption |
 | Cleric | Hoe Hallowed Ground and Crescent Projectile |
 
 No-class or unavailable profiles cannot cast weapon skills. Rejected attempts are silent and do not send a chat message. Interaction skills process the main-hand event once, avoiding duplicate off-hand activations; a shield may still be carried in either hand.

@@ -27,11 +27,11 @@ class WeaponListenerTest {
     }
     ItemStack item(Material type) { var item=mock(ItemStack.class);when(item.getType()).thenReturn(type);return item; }
     void equip(Material type) { var stack=item(type);when(inventory.getItemInMainHand()).thenReturn(stack);when(player.getItemInHand()).thenReturn(stack); }
-    @AfterEach void clear() { SkillAccess.shutdown();Constant.SKILLS_MC_PLAYER_HASH_MAP.clear(); }
+    @AfterEach void clear() { ragnaorok.Main.progression.MageMana.clear(); SkillAccess.shutdown();Constant.SKILLS_MC_PLAYER_HASH_MAP.clear(); }
     @Test void unauthorizedWeaponInputsLeaveBaseInteractionUntouched() {
         equip(Material.BOW);new BowListener(null).onPlayerInteract(event);
         equip(Material.CROSSBOW);new CrossBowListener().onBlock(event);
-        equip(Material.BLAZE_ROD);new BlazeRodListener(null).onCast(event);
+        equip(Material.BLAZE_ROD);new MageListener(null).onCast(event);
         equip(Material.IRON_HOE);when(event.getAction()).thenReturn(Action.RIGHT_CLICK_AIR);new HoeListener(null).onHoeUse(event);
         equip(Material.IRON_SWORD);doReturn(item(Material.IRON_SWORD)).when(inventory).getItemInOffHand();when(player.isSneaking()).thenReturn(true);
         new DualSwordListener(null).onPlayerInteract(event);
@@ -76,7 +76,60 @@ class WeaponListenerTest {
     }
     @Test void offhandInputCannotCastEvenForOwner() {
         Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString()).setClassType(ClassType.MAGE);
-        equip(Material.BLAZE_ROD);when(event.getHand()).thenReturn(EquipmentSlot.OFF_HAND);
-        new BlazeRodListener(null).onCast(event);verify(player,never()).getWorld();verify(event,never()).setCancelled(anyBoolean());
+        equip(Material.WOODEN_HOE);when(event.getHand()).thenReturn(EquipmentSlot.OFF_HAND);
+        new MageListener(null).onCast(event);verify(player,never()).getWorld();verify(event,never()).setCancelled(anyBoolean());
+    }
+    @Test void blazeRodNoLongerCastsForMage() {
+        Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString()).setClassType(ClassType.MAGE);
+        equip(Material.BLAZE_ROD);
+        new MageListener(null).onCast(event);
+        verify(event,never()).setCancelled(anyBoolean());
+        verify(player,never()).getWorld();
+        assertEquals(Loadout.NONE, Loadout.getMainHand(inventory));
+    }
+    @Test void allHoeTiersRecognizedAndClericCannotUseMageCasting() {
+        for (Material material : Material.values()) {
+            if (material.name().endsWith("_HOE")) {
+                assertTrue(MageListener.isHoe(material));
+                equip(material);
+                assertEquals(Loadout.HOE, Loadout.getMainHand(inventory));
+            }
+        }
+        Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString()).setClassType(ClassType.CLERIC);
+        new MageListener(null).onCast(event);
+        verify(event,never()).setCancelled(anyBoolean());
+        verify(player,never()).getWorld();
+    }
+    @Test void mageCanSelectSpellWithoutCastingOrClericEffects() {
+        var profile = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString());
+        profile.setClassType(ClassType.MAGE);
+        ragnaorok.Main.progression.MageMana.prepare(profile);
+        when(player.spigot()).thenReturn(mock(Player.Spigot.class));
+        equip(Material.WOODEN_HOE);
+        when(event.getAction()).thenReturn(Action.RIGHT_CLICK_BLOCK);
+        when(player.isSneaking()).thenReturn(true);
+        new MageListener(null).onCast(event);
+        new HoeListener(null).onHoeUse(event);
+        assertEquals(ragnaorok.Main.progression.MageMana.Spell.ERUPTION,
+                ragnaorok.Main.progression.MageMana.selected(player.getUniqueId()));
+        assertEquals(100, profile.getMana());
+        verify(event).setCancelled(true);
+        verify(player,never()).getWorld();
+    }
+    @Test void arcaneBoltReplacesNativeDamageWithOneScaledHit() {
+        Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString()).setClassType(ClassType.MAGE);
+        var bolt=mock(Snowball.class);
+        var target=mock(Blaze.class);
+        var data=mock(org.bukkit.persistence.PersistentDataContainer.class);
+        when(bolt.getPersistentDataContainer()).thenReturn(data);
+        when(data.get(new org.bukkit.NamespacedKey("skillsmc", "arcane_bolt"),
+                org.bukkit.persistence.PersistentDataType.DOUBLE)).thenReturn(3.09);
+        when(bolt.getShooter()).thenReturn(player);
+        var hit=mock(org.bukkit.event.entity.ProjectileHitEvent.class);
+        when(hit.getEntity()).thenReturn(bolt);when(hit.getHitEntity()).thenReturn(target);
+        new MageListener(null).boltHit(hit);
+        verify(target).damage(3.09,player);
+        verify(hit).setCancelled(true);
+        verify(bolt).remove();
     }
 }

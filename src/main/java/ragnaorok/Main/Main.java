@@ -57,7 +57,7 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         getServer().getPluginManager().registerEvents(new AxeListener(), this);
         getServer().getPluginManager().registerEvents(new CrouchJumpListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathInventory(this), this);
-        getServer().getPluginManager().registerEvents(new BlazeRodListener(this), this);
+        getServer().getPluginManager().registerEvents(new MageListener(this), this);
         getServer().getPluginManager().registerEvents(new BowListener(this), this);
         getServer().getPluginManager().registerEvents(new SwordListener(this), this);
         getServer().getPluginManager().registerEvents(new DualSwordListener(this), this);
@@ -91,6 +91,10 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
                     SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString());
                     if (smPlayer != null) {
                         String message = "Level " + smPlayer.getLevel() + " - XP: " + smPlayer.getExperience() + "/" + smPlayer.getExpToNextLevel();
+                        if (smPlayer.getClassType() == ClassType.MAGE) {
+                            if (!player.isDead()) ragnaorok.Main.progression.MageMana.tick(player.getUniqueId(), smPlayer, System.currentTimeMillis());
+                            message += " • " + ragnaorok.Main.progression.MageMana.display(player.getUniqueId(), smPlayer);
+                        }
                         ActionBarUtil.sendActionBar(player, message);
                     }
                 }
@@ -106,6 +110,7 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
     @Override
     public void onDisable() {
         ragnaorok.Main.skills.SkillAccess.shutdown();
+        ragnaorok.Main.progression.MageMana.clear();
         saveAllPlayers();
         if (effectManager != null) effectManager.dispose();
         HandlerList.unregisterAll((Listener) this);
@@ -114,11 +119,13 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
     public boolean loadPlayer(Player player) {
         String id = player.getUniqueId().toString();
         SkillsMCPlayer retained = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(id);
-        if (retained != null) { retained.setPlayer(player); return true; }
+        if (retained != null) { retained.setPlayer(player); ragnaorok.Main.progression.MageMana.joined(player.getUniqueId(), System.currentTimeMillis()); return true; }
         try {
             SkillsMCPlayer profile = playerStore.load(player.getUniqueId());
             if (profile == null) profile = new SkillsMCPlayer(player, 10, 10, 0, 0, 0, ClassType.NONE);
             profile.setPlayer(player);
+            ragnaorok.Main.progression.MageMana.prepare(profile);
+            ragnaorok.Main.progression.MageMana.joined(player.getUniqueId(), System.currentTimeMillis());
             Constant.SKILLS_MC_PLAYER_HASH_MAP.put(id, profile);
             return true;
         } catch (java.io.IOException e) {

@@ -50,10 +50,10 @@ class SkillAccessTest {
         assertFalse(old.valid(BOW)); assertTrue(SkillAccess.session(player,BOW).valid(BOW));
     }
     @Test void offlineDeadOrWrongClassStopsOngoingSkill() {
-        profile.setClassType(ClassType.MAGE);var session=SkillAccess.session(player,BLAZE_ROD);
-        when(player.isOnline()).thenReturn(false);assertFalse(session.valid(BLAZE_ROD));
-        when(player.isOnline()).thenReturn(true);when(player.isDead()).thenReturn(true);assertFalse(session.valid(BLAZE_ROD));
-        when(player.isDead()).thenReturn(false);profile.setClassType(ClassType.CLERIC);assertFalse(session.valid(BLAZE_ROD));
+        profile.setClassType(ClassType.MAGE);var session=SkillAccess.session(player,MAGE_HOE);
+        when(player.isOnline()).thenReturn(false);assertFalse(session.valid(MAGE_HOE));
+        when(player.isOnline()).thenReturn(true);when(player.isDead()).thenReturn(true);assertFalse(session.valid(MAGE_HOE));
+        when(player.isDead()).thenReturn(false);profile.setClassType(ClassType.CLERIC);assertFalse(session.valid(MAGE_HOE));
     }
     @Test void invalidationRemovesOwnedEntitiesAndPreparedState() {
         profile.setClassType(ClassType.CLERIC);var session=SkillAccess.session(player,HOE);

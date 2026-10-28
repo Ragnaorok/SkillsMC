@@ -21,7 +21,7 @@ Choose a class, master its weapon skills, and grow stronger as you explore. Skil
 | --- | --- | --- |
 | Warrior | Sword, dual swords, axe, shield | Gale Slash, Blade Dance, Shockwave, shield surfing and fall bounce |
 | Archer | Bow, crossbow | Speed, Trueshot, Backstep, Rapidfire |
-| Mage | Blaze rod | Fireball, Lava Eruption |
+| Mage | Any hoe | Arcane Bolt, Fireball, Lava Eruption |
 | Cleric | Hoe | Hallowed Ground, Crescent Projectile |
 
 Use `/class` to choose your first class. **Only server operators can change an existing class during the beta.** Class changes preserve your level and XP. Resource-based switching is planned.
@@ -117,7 +117,7 @@ Craft the Blast Axe in a crafting table with an **iron axe in the top-center slo
 
 - **Souls:** basic collection and balances exist. Spending souls on skill enhancements and advanced jobs is planned.
 - **Class switching:** resource costs are not implemented; repeat selection is operator-only.
-- **Mana:** mana-based progression and an active Mage mana shield are not implemented.
+- **Mana:** Mage mana casting is implemented; Mana Shield remains planned.
 - **Economy:** displayed currency and bounty balances are not a complete economy or bounty system.
 - **Reinforce enchantments:** disabled; `/reinforce` and `/check` are not supported beta features.
 - **VFX:** existing effects remain; their rework is deferred.
@@ -148,3 +148,9 @@ For changes, branch from `upgrade/1.21.11`, keep the scope focused, run the buil
 For mob-scaling reports, include nearby players’ levels and game modes, whether they were active, and whether the mob spawned before or after the update.
 
 Created by [Ragnaorok / Tung Nguyen](https://github.com/Ragnaorok).
+
+### Mage weapons and mana
+
+Mages cast with any hoe, including a wooden hoe. Blaze rods no longer cast Mage skills. Left-click fires a free Arcane Bolt; right-click casts the selected spell, and sneak-right-click switches between Fireball (20 mana) and Lava Eruption (45 mana). Cooldowns are 1, 3, and 10 seconds respectively.
+
+Maximum mana starts at 100 and grows by 2 per level after level 1, capped at 158 at level 30. Regeneration restores 5 mana per second after 3 seconds without a successful cast. Current mana is saved with player data; reconnecting does not refill it. Mana and the selected spell appear in the action bar. See [Mage mana rules and testing](docs/MAGE-MANA.md).

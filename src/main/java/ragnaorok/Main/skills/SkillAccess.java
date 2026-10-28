@@ -12,7 +12,7 @@ import ragnaorok.Main.*;
 public final class SkillAccess implements Listener {
     public enum WeaponSkill {
         SWORD(ClassType.WARRIOR), DUAL_SWORD(ClassType.WARRIOR), AXE(ClassType.WARRIOR), SHIELD(ClassType.WARRIOR),
-        BOW(ClassType.ARCHER), CROSSBOW(ClassType.ARCHER), BLAZE_ROD(ClassType.MAGE), HOE(ClassType.CLERIC);
+        BOW(ClassType.ARCHER), CROSSBOW(ClassType.ARCHER), MAGE_HOE(ClassType.MAGE), HOE(ClassType.CLERIC);
         public final ClassType owner;
         WeaponSkill(ClassType owner) { this.owner = owner; }
         public boolean allows(ClassType actual) { return owner == actual; }

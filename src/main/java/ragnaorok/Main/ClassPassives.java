@@ -10,6 +10,7 @@ public final class ClassPassives {
     /** Absolute values prevent stacking on reconnect, respawn or repeated selection. */
     public static void apply(Player player, ClassType type) {
         SkillsMCPlayer profile = ragnaorok.Main.progression.PlayerStats.profile(player);
+        if (profile != null) ragnaorok.Main.progression.MageMana.prepare(profile);
         apply(player, type, profile == null ? 1 : profile.getLevel());
     }
 

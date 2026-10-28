@@ -14,7 +14,7 @@ This update targets Paper 1.21.11. Stat growth is derived from the existing play
 
 At level 30 a Warrior has 17 hearts; Archer and Cleric have 13, and Mage has 12. Damage bonuses are additive over the level-1 base, not compounded each level. Health is recalculated on level-up, login, respawn, successful class change, and plugin startup. Raising max health does not grant a free heal; decreasing it clamps current health.
 
-Damage growth applies to Shockwave, Blade Dance, Trueshot, Rapidfire arrows, Fireball, Lava Eruption, and Crescent Projectile. Gale Slash and shield skills currently have control/movement effects without their own separate damage component, so they do not gain damage. Ordinary attacks/shots, movement, cooldowns, invulnerability durations, mana, and passive regeneration are unchanged.
+Damage growth applies to Shockwave, Blade Dance, Trueshot, Rapidfire arrows, Arcane Bolt, Fireball, Lava Eruption, and Crescent Projectile. Gale Slash and shield skills currently have control/movement effects without their own separate damage component, so they do not gain damage. Ordinary attacks/shots, movement, cooldowns, invulnerability durations, and passive health regeneration are unchanged. Mage mana grows separately; see [Mage mana](MAGE-MANA.md).
 
 Hallowed Ground retains two healing splashes, distance falloff, and vanilla healing-potion damage to undead. Its healing is multiplied by Cleric growth; normal potions are untouched. Crescent Projectile applies one 7.5-base hit to monsters or one 5-base hit to other living targets, fixing the previous two competing damage calls.
 

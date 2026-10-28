@@ -70,10 +70,10 @@ public class Guidebook implements CommandExecutor, Listener {
 
             // Page 5: Mage
             pages.add(ChatColor.BOLD + "Mage:\n"
-                    + ChatColor.BLACK + "Passive: -1 Heart & Mana Shield\n"
-                    + ChatColor.RED + "Blaze Rod\n"
-                    + ChatColor.GREEN + "Skill: Fireball\n"
-                    + ChatColor.RED + "Skill: Lava Eruption\n");
+                    + ChatColor.BLACK + "Passive: -1 Heart\n"
+                    + ChatColor.RED + "Any hoe\n"
+                    + ChatColor.GREEN + "Left: Arcane Bolt (free)\nRight: selected spell\n"
+                    + ChatColor.RED + "Sneak-right: switch spell\nFireball: 20 mana\nEruption: 45 mana\n");
 
             // Page 6: Archer
             pages.add(ChatColor.BOLD + "Archer:\n"

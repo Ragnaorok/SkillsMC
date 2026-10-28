@@ -70,4 +70,15 @@ class PlayerStoreTest {
             assertTrue(files.noneMatch(p -> p.getFileName().toString().endsWith(".tmp")));
         }
     }
+    @Test void mageManaSurvivesSaveLoadWithoutRefill() throws Exception {
+        SkillsMCPlayer p = profile();
+        p.setClassType(ClassType.MAGE);
+        ragnaorok.Main.progression.MageMana.prepare(p);
+        p.setMana(17);
+        store().save(id,p);
+        SkillsMCPlayer loaded = store().load(id);
+        ragnaorok.Main.progression.MageMana.prepare(loaded);
+        assertEquals(17, loaded.getMana());
+        assertEquals(114, loaded.getMaxMana());
+    }
 }

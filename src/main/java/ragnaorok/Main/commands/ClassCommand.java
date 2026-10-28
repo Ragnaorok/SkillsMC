@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public final class ClassCommand implements CommandExecutor, Listener {
     private final Main plugin;
     private static final ClassType[] CHOICES = {ClassType.WARRIOR, ClassType.MAGE, ClassType.CLERIC, ClassType.ARCHER};
-    private static final Material[] ICONS = {Material.IRON_SWORD, Material.BLAZE_ROD, Material.SPLASH_POTION, Material.BOW};
+    private static final Material[] ICONS = {Material.IRON_SWORD, Material.WOODEN_HOE, Material.SPLASH_POTION, Material.BOW};
 
     public ClassCommand(Main plugin) { this.plugin = plugin; }
 
@@ -165,9 +165,9 @@ public final class ClassCommand implements CommandExecutor, Listener {
         // Page 1: Mage Overview
         pages.add(ChatColor.BOLD + "Mage:\n"
                 + ChatColor.BLACK + "Passive: -1 Heart\n"
-                + ChatColor.RED + "Blaze Rod\n"
-                + ChatColor.GREEN + "Skill: Fireball\n"
-                + ChatColor.RED + "Skill: Lava Eruption\n");
+                + ChatColor.RED + "Any hoe\n"
+                + ChatColor.GREEN + "Left: Arcane Bolt (free)\nRight: selected spell\n"
+                + ChatColor.RED + "Sneak-right: switch spell\nFireball: 20 mana\nEruption: 45 mana\n");
 
         bookmeta.setPages(pages);
         book.setItemMeta(bookmeta);
