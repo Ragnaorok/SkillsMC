@@ -14,7 +14,7 @@ public final class MobScaling {
             level = Math.max(1, level);
             sum += level; min = Math.min(min, level); max = Math.max(max, level);
         }
-        long result = Math.round((double) sum / levels.size()) + Math.clamp(variation, -2, 2);
+        long result = Math.round((double) sum / levels.size()) + Math.clamp(variation, -5, 5);
         // Apply beginner protection AFTER variation. Equal-level groups use the ordinary roll.
         if (min != max) result = Math.min(result, (long) min + 5);
         return (int) Math.clamp(result, 1, MAX_LEVEL);

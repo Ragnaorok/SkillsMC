@@ -36,6 +36,10 @@ public class SetLevelCommand implements CommandExecutor {
             SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(uuid);
             try {
                 int targetLevel = Integer.parseInt(args[1]);
+                if (targetLevel < 1 || targetLevel > ragnaorok.Main.progression.PlayerStats.GROWTH_CAP) {
+                    sender.sendMessage("Level must be between 1 and 25.");
+                    return true;
+                }
                 if (targetLevel <= smPlayer.getLevel()) {
                     sender.sendMessage("Target level must be higher than the current level.");
                     return true;

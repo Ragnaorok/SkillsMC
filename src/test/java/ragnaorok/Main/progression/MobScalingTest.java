@@ -21,7 +21,7 @@ class MobScalingTest {
     @Test void emptyGroupsAndLimitsAreSafe() {
         assertEquals(1, MobScaling.level(List.of(), 2));
         assertEquals(1, MobScaling.level(List.of(1), -2));
-        assertEquals(35, MobScaling.level(List.of(Integer.MAX_VALUE, Integer.MAX_VALUE), 2));
+        assertEquals(30, MobScaling.level(List.of(Integer.MAX_VALUE, Integer.MAX_VALUE), 2));
         assertEquals(1, MobScaling.healthMultiplier(1));
         assertEquals(1, MobScaling.damageMultiplier(1));
         assertEquals(MobScaling.healthMultiplier(35), MobScaling.healthMultiplier(1000));

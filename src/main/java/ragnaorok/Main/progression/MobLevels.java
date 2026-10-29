@@ -57,7 +57,7 @@ public final class MobLevels implements Listener {
         // Transformations retain their existing assignment through transform(), not a fresh local roll.
         if (EnumSet.of(CreatureSpawnEvent.SpawnReason.DROWNED, CreatureSpawnEvent.SpawnReason.INFECTION,
                 CreatureSpawnEvent.SpawnReason.CURED, CreatureSpawnEvent.SpawnReason.FROZEN).contains(event.getSpawnReason())) return;
-        assign(mob, nearbyLevel(mob.getLocation(), ThreadLocalRandom.current().nextInt(-2, 3)));
+        assign(mob, nearbyLevel(mob.getLocation(), ThreadLocalRandom.current().nextInt(-5, 6)));
         equip(mob);
     }
     int nearbyLevel(Location origin, int variation) {

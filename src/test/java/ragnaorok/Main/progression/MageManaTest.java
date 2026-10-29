@@ -11,8 +11,8 @@ class MageManaTest {
     @Test void growthMigrationAndClamp() {
         assertEquals(100,p.getMana()); assertEquals(100,p.getMaxMana());
         p.setMana(20);p.setLevel(30);MageMana.prepare(p);
-        assertEquals(158,p.getMaxMana());assertEquals(20,p.getMana());
-        assertEquals(158,MageMana.maximum(1000));
+        assertEquals(148,p.getMaxMana());assertEquals(20,p.getMana());
+        assertEquals(148,MageMana.maximum(1000));
     }
     @Test void costsCooldownAndFailedCastRollback() {
         assertNull(MageMana.cast(id,p,MageMana.Spell.FIREBALL,10000,()->{}));

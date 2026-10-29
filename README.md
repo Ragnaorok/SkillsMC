@@ -43,7 +43,7 @@ SkillsMC levels are separate from Minecraft’s vanilla XP levels. Use `/profile
 | Mage | 9 | +½ heart | +1.5% | — |
 | Cleric | 10 | +½ heart | +1% | +1% |
 
-Health milestones occur at **levels 5, 10, 15, 20, 25, and 30**. Stat growth stops at level 30, although players can continue earning levels. Damage and healing bonuses add to the level-1 baseline rather than compounding.
+Health milestones occur at **levels 5, 10, 15, 20, and 25**. Player levels and stat growth stop at level 25. Damage and healing bonuses add to the level-1 baseline rather than compounding.
 
 Archer retains its small movement-speed bonus, and Cleric retains passive Regeneration I. Increasing maximum health does not instantly heal you. Ordinary attacks, regular bow shots, cooldowns, and movement abilities do not gain level-based damage bonuses. Gale Slash and shield abilities have no separate damage component to scale.
 
@@ -52,11 +52,11 @@ Archer retains its small movement-speed bonus, and Cleric retains passive Regene
 New eligible hostile mobs receive a level based on players within **128 blocks horizontally and 48 blocks vertically** of their spawn:
 
 1. Include living Survival or Adventure players with loaded profiles and activity within the last five minutes.
-2. Round their average SkillsMC level and apply **±2 levels** of random variation.
+2. Round their average SkillsMC level and apply **±5 levels** of random variation.
 3. For a mixed-level group, cap the result at **the lowest eligible player’s level +5**.
-4. Keep the final level between **1 and 35**. With no eligible players nearby, use level 1.
+4. Keep the final level between **1 and 30**. With no eligible players nearby, use level 1.
 
-For example, nearby players at levels 5 and 45 produce mobs no higher than level 10. A solo level-3 player can encounter mobs from level 1 through 5.
+For example, nearby players at levels 5 and 25 produce mobs no higher than level 10. A solo level-3 player can encounter mobs from level 1 through 8.
 
 **Creative and Spectator players do not count.** If you test alone in Creative, newly spawned mobs will be level 1. Switch to Survival, move around, and spawn fresh mobs to test variance.
 
@@ -155,7 +155,7 @@ Created by [Ragnaorok / Tung Nguyen](https://github.com/Ragnaorok).
 
 Mages cast with any hoe, including a wooden hoe. Blaze rods no longer cast Mage skills. Left-click fires a free Arcane Bolt; right-click casts the selected spell, and sneak-right-click switches between Fireball (20 mana) and Lava Eruption (45 mana). Cooldowns are 1, 3, and 10 seconds respectively.
 
-Maximum mana starts at 100 and grows by 2 per level after level 1, capped at 158 at level 30. Regeneration restores 5 mana per second after 3 seconds without a successful cast. Current mana is saved with player data; reconnecting does not refill it. Mana and the selected spell appear in the action bar. See [Mage mana rules and testing](docs/MAGE-MANA.md).
+Maximum mana starts at 100 and grows by 2 per level after level 1, capped at 148 at level 25. Regeneration restores 5 mana per second after 3 seconds without a successful cast. Current mana is saved with player data; reconnecting does not refill it. Mana and the selected spell appear in the action bar. See [Mage mana rules and testing](docs/MAGE-MANA.md).
 
 ### Warrior Arrow Parry
 
