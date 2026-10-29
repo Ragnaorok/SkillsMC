@@ -156,3 +156,7 @@ Created by [Ragnaorok / Tung Nguyen](https://github.com/Ragnaorok).
 Mages cast with any hoe, including a wooden hoe. Blaze rods no longer cast Mage skills. Left-click fires a free Arcane Bolt; right-click casts the selected spell, and sneak-right-click switches between Fireball (20 mana) and Lava Eruption (45 mana). Cooldowns are 1, 3, and 10 seconds respectively.
 
 Maximum mana starts at 100 and grows by 2 per level after level 1, capped at 158 at level 30. Regeneration restores 5 mana per second after 3 seconds without a successful cast. Current mana is saved with player data; reconnecting does not refill it. Mana and the selected spell appear in the action bar. See [Mage mana rules and testing](docs/MAGE-MANA.md).
+
+### Warrior Arrow Parry
+
+With a sword in your main hand and an empty offhand, swing toward an incoming arrow within four blocks to redirect it toward your crosshair. Only Warriors can parry. Embedded arrows and your own shots are excluded, and walls block targeting. Successful parries have a 0.5-second player cooldown, with sound and particle feedback. Reflected arrows retain their normal arrow properties but lose the original mob-level damage multiplier.
