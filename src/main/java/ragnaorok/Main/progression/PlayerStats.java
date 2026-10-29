@@ -37,7 +37,18 @@ public final class PlayerStats {
     }
     public static double damage(Player player, double base) {
         SkillsMCPlayer p = profile(player);
-        return base * (p == null ? 1 : damageMultiplier(p.getClassType(), p.getLevel()));
+        double material = p != null && (p.getClassType() == ClassType.MAGE || p.getClassType() == ClassType.CLERIC)
+                ? hoeMultiplier(player.getInventory().getItemInMainHand().getType()) : 1;
+        return base * material * (p == null ? 1 : damageMultiplier(p.getClassType(), p.getLevel()));
+    }
+    public static double hoeMultiplier(org.bukkit.Material material) {
+        return switch (material.name()) {
+            case "COPPER_HOE" -> 1.025;
+            case "IRON_HOE", "GOLDEN_HOE" -> 1.05;
+            case "DIAMOND_HOE" -> 1.10;
+            case "NETHERITE_HOE" -> 1.15;
+            default -> 1.0;
+        };
     }
     public static double healing(Player player, double base) {
         SkillsMCPlayer p = profile(player);
