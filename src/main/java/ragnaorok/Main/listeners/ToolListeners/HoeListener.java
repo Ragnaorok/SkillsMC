@@ -95,6 +95,7 @@ public class HoeListener implements Listener {
     }
 
     private void castCrescentProjectile(Player player) {
+        double multiplier = PlayerStats.damage(player, 1);
         var session = SkillAccess.session(player, HOE);
         Location location = player.getEyeLocation();
         Vector direction = location.getDirection();
@@ -133,7 +134,7 @@ public class HoeListener implements Listener {
                         .filter(entity -> entity instanceof LivingEntity && entity != player)
                         .forEach(entity -> {
                             LivingEntity target = (LivingEntity) entity;
-                            target.damage(PlayerStats.damage(player, target instanceof Monster ? 7.5 : 5.0), player);
+                            target.damage(multiplier * (target instanceof Monster ? 7.5 : 5.0), player);
                             target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 60, 1));
                             this.cancel();
                         });

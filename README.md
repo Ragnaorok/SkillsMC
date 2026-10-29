@@ -160,3 +160,5 @@ Maximum mana starts at 100 and grows by 2 per level after level 1, capped at 148
 ### Warrior Arrow Parry
 
 With a sword in your main hand and an empty offhand, swing toward an incoming arrow within four blocks to redirect it toward your crosshair. Only Warriors can parry. Embedded arrows and your own shots are excluded, and walls block targeting. Successful parries have a 0.5-second player cooldown, with sound and particle feedback. Reflected arrows retain their normal arrow properties but lose the original mob-level damage multiplier.
+
+See [elite mobs and hoe-material balance](docs/ELITE-MOBS.md) for elite traits, bonus XP, and Mage/Cleric weapon tiers.

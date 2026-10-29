@@ -139,6 +139,7 @@ public class MageListener implements Listener {
     }
 
     private void castLavaEruption(Player player) {
+        double damage = PlayerStats.damage(player, 2.0);
         var session = SkillAccess.session(player, MAGE_HOE);
         Location location = player.getLocation();
 
@@ -154,25 +155,25 @@ public class MageListener implements Listener {
                     return;
                 }
                 count++;
-                eruptLava(player, location);
+                eruptLava(player, location, damage);
             }
         }.runTaskTimer(plugin, 0L, 20L);
     }
 
-    private void eruptLava(Player player, Location location) {
+    private void eruptLava(Player player, Location location, double damage) {
         for (int i = 0; i < 10; i++) {
             Location lavaLoc = location.clone().add((Math.random() - 0.5) * 10, 0, (Math.random() - 0.5) * 10);
             lavaLoc.getWorld().spawnParticle(Particle.LAVA, lavaLoc, 20, 0.5, 0.5, 0.5, 0.1);
             lavaLoc.getWorld().playSound(lavaLoc, Sound.BLOCK_LAVA_POP, 1.0f, 1.0f);
             lavaLoc.getWorld().spawnParticle(Particle.FLAME, lavaLoc, 20, 0.5, 0.5, 0.5, 0.1);
             lavaLoc.getWorld().spawnParticle(Particle.LARGE_SMOKE, lavaLoc, 20, 0.5, 0.5, 0.5, 0.1);
-            damageNearbyEntities(lavaLoc, player, 10.0);
+            damageNearbyEntities(lavaLoc, player, 10.0, damage);
         }
     }
-    private void damageNearbyEntities(Location location, Player player, double radius) {
+    private void damageNearbyEntities(Location location, Player player, double radius, double damage) {
         for (Entity entity : location.getWorld().getNearbyEntities(location, radius, radius, radius)) {
             if (entity instanceof Monster && entity != player) {
-                ((LivingEntity) entity).damage(PlayerStats.damage(player, 2.0), player);
+                ((LivingEntity) entity).damage(damage, player);
                 entity.setFireTicks(20);
             }
         }

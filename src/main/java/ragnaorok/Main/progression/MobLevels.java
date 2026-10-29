@@ -59,6 +59,7 @@ public final class MobLevels implements Listener {
                 CreatureSpawnEvent.SpawnReason.CURED, CreatureSpawnEvent.SpawnReason.FROZEN).contains(event.getSpawnReason())) return;
         assign(mob, nearbyLevel(mob.getLocation(), ThreadLocalRandom.current().nextInt(-5, 6)));
         equip(mob);
+        EliteMobs.roll(mob);
     }
     int nearbyLevel(Location origin, int variation) {
         List<Integer> levels = new ArrayList<>();
@@ -98,7 +99,10 @@ public final class MobLevels implements Listener {
         Integer oldLevel = level(event.getEntity());
         if (oldLevel == null) return;
         for (Entity target : event.getTransformedEntities()) {
-            if (target instanceof LivingEntity living && HOSTILES.contains(target.getType())) assign(living, oldLevel);
+            if (target instanceof LivingEntity living && HOSTILES.contains(target.getType())) {
+                assign(living, oldLevel);
+                if (event.getEntity() instanceof LivingEntity source) EliteMobs.transfer(source, living);
+            }
         }
     }
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -117,7 +121,7 @@ public final class MobLevels implements Listener {
             activate(attacker);
             Integer targetLevel = level(event.getEntity());
             if (targetLevel != null) attacker.sendActionBar(net.kyori.adventure.text.Component.text(
-                    "[Lv. " + targetLevel + "] " + title(event.getEntity().getType())));
+                    "[Lv. " + targetLevel + "] " + EliteMobs.label(event.getEntity()) + title(event.getEntity().getType())));
         }
         Integer level = level(source);
         if (source instanceof Projectile) level = source.getPersistentDataContainer().get(PROJECTILE_LEVEL, PersistentDataType.INTEGER);

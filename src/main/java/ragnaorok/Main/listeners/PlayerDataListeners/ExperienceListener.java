@@ -17,6 +17,8 @@ public class ExperienceListener implements Listener {
             Player player = event.getEntity().getKiller();
             SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString());
             int xpGained = getExperienceForEntity(event.getEntityType());
+            if (smPlayer == null) return;
+            xpGained = ragnaorok.Main.progression.EliteMobs.reward(event.getEntity(), xpGained);
             smPlayer.addExperience(xpGained);
             updateActionBar(player, smPlayer);
         }

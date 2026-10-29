@@ -44,6 +44,7 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         pm.registerEvents(classCommand, this);
         pm.registerEvents(new ragnaorok.Main.skills.SkillAccess(), this);
         pm.registerEvents(new ragnaorok.Main.progression.SkillScaling(), this);
+        getServer().getPluginManager().registerEvents(new ragnaorok.Main.progression.EliteMobs(), this);
         var mobLevels = new ragnaorok.Main.progression.MobLevels();
         pm.registerEvents(mobLevels, this);
         for (Player player : Bukkit.getOnlinePlayers()) mobLevels.activate(player);
