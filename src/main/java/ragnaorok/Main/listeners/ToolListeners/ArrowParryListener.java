@@ -41,6 +41,7 @@ public final class ArrowParryListener implements Listener {
         arrow.getPersistentDataContainer().remove(new NamespacedKey("skillsmc", "mob_projectile_level"));
         arrow.setVelocity(direction.multiply(2));
         ready.put(player.getUniqueId(), now + 500_000_000L);
+        player.sendMessage(ChatColor.GREEN + "Parry successful!");
         player.getWorld().playSound(arrow.getLocation(), Sound.ITEM_SHIELD_BLOCK, .6f, 1.5f);
         player.getWorld().spawnParticle(Particle.CRIT, arrow.getLocation(), 6, .1, .1, .1, .05);
     }
