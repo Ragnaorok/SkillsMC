@@ -19,14 +19,14 @@ class PlayerStatsTest {
         assertEquals(0, PlayerStats.bonusHealth(ClassType.WARRIOR, 4));
         assertEquals(2, PlayerStats.bonusHealth(ClassType.WARRIOR, 5));
         assertEquals(1, PlayerStats.bonusHealth(ClassType.ARCHER, 5));
-        assertEquals(12, PlayerStats.bonusHealth(ClassType.WARRIOR, 30));
-        assertEquals(6, PlayerStats.bonusHealth(ClassType.MAGE, 30));
+        assertEquals(10, PlayerStats.bonusHealth(ClassType.WARRIOR, 30));
+        assertEquals(5, PlayerStats.bonusHealth(ClassType.MAGE, 30));
     }
-    @Test void classDamageAndHealingGrowthStopAtThirty() {
-        assertEquals(1.29, PlayerStats.damageMultiplier(ClassType.WARRIOR, 30), 1e-9);
-        assertEquals(1.3625, PlayerStats.damageMultiplier(ClassType.ARCHER, 30), 1e-9);
-        assertEquals(1.435, PlayerStats.damageMultiplier(ClassType.MAGE, 30), 1e-9);
-        assertEquals(1.29, PlayerStats.healingMultiplier(ClassType.CLERIC, 30), 1e-9);
+    @Test void classDamageAndHealingGrowthStopAtTwentyFive() {
+        assertEquals(1.24, PlayerStats.damageMultiplier(ClassType.WARRIOR, 30), 1e-9);
+        assertEquals(1.30, PlayerStats.damageMultiplier(ClassType.ARCHER, 30), 1e-9);
+        assertEquals(1.36, PlayerStats.damageMultiplier(ClassType.MAGE, 30), 1e-9);
+        assertEquals(1.24, PlayerStats.healingMultiplier(ClassType.CLERIC, 30), 1e-9);
         for (ClassType type : ClassType.values()) {
             assertEquals(PlayerStats.damageMultiplier(type, 30), PlayerStats.damageMultiplier(type, 999));
             assertEquals(PlayerStats.maxHealth(type, 30), PlayerStats.maxHealth(type, 999));
@@ -40,13 +40,13 @@ class PlayerStatsTest {
         when(player.getHealth()).thenReturn(20.0);
         PlayerStats.applyHealth(player, ClassType.WARRIOR, 30);
         PlayerStats.applyHealth(player, ClassType.WARRIOR, 30);
-        verify(player, times(2)).setMaxHealth(34);
+        verify(player, times(2)).setMaxHealth(32);
         verify(player, never()).setHealth(anyDouble());
         when(player.getHealth()).thenReturn(34.0);
         PlayerStats.applyHealth(player, ClassType.MAGE, 30);
         var ordered = inOrder(player);
-        ordered.verify(player).setHealth(24);
-        ordered.verify(player).setMaxHealth(24);
+        ordered.verify(player).setHealth(23);
+        ordered.verify(player).setMaxHealth(23);
     }
     @Test void offlineLevelUpDoesNotNeedBukkitPlayer() {
         var p = new SkillsMCPlayer(null, 10, 10, 0, 0, 0, ClassType.ARCHER);

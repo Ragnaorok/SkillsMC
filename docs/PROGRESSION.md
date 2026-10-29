@@ -1,10 +1,10 @@
 # Player progression and local mob levels
 
-This update targets Paper 1.21.11. Stat growth is derived from the existing player level and class. Player levels can continue past 30, but stat growth stops at 30. Existing UUID data files and their Java serialization identity are preserved.
+This update targets Paper 1.21.11. Stat growth is derived from the existing player level and class. Player levels and stat growth stop at 25. Existing UUID data files and their Java serialization identity are preserved.
 
 ## Player growth
 
-| Class | Starting hearts | Bonus hearts at levels 5, 10, 15, 20, 25, 30 | Skill damage per level after 1 | Skill healing per level after 1 |
+| Class | Starting hearts | Bonus hearts at levels 5, 10, 15, 20, 25 | Skill damage per level after 1 | Skill healing per level after 1 |
 | --- | --- | --- | --- | --- |
 | Warrior | 11 | +1 at each milestone | +1% | None |
 | Archer | 10 | +0.5 at each milestone | +1.25% | None |
@@ -12,7 +12,7 @@ This update targets Paper 1.21.11. Stat growth is derived from the existing play
 | Cleric | 10 | +0.5 at each milestone | +1% | +1% |
 | No class | 10 | None | None | None |
 
-At level 30 a Warrior has 17 hearts; Archer and Cleric have 13, and Mage has 12. Damage bonuses are additive over the level-1 base, not compounded each level. Health is recalculated on level-up, login, respawn, successful class change, and plugin startup. Raising max health does not grant a free heal; decreasing it clamps current health.
+At level 25 a Warrior has 16 hearts; Archer and Cleric have 12.5, and Mage has 11.5. Damage bonuses are additive over the level-1 base, not compounded each level. Health is recalculated on level-up, login, respawn, successful class change, and plugin startup. Raising max health does not grant a free heal; decreasing it clamps current health.
 
 Damage growth applies to Shockwave, Blade Dance, Trueshot, Rapidfire arrows, Arcane Bolt, Fireball, Lava Eruption, and Crescent Projectile. Gale Slash and shield skills currently have control/movement effects without their own separate damage component, so they do not gain damage. Ordinary attacks/shots, movement, cooldowns, invulnerability durations, and passive health regeneration are unchanged. Mage mana grows separately; see [Mage mana](MAGE-MANA.md).
 
@@ -28,13 +28,13 @@ For each eligible spawn:
 
 1. Find players in the same world within a 128-block horizontal radius and 48 blocks vertically.
 2. Include living, online Survival/Adventure players with loaded profiles who moved, interacted, built/mined, or attacked in the last five minutes. Joining counts as activity. Passive damage taken and looking around alone do not count.
-3. Round the average of those players' actual levels and add a random integer from -2 through +2.
+3. Round the average of those players' actual levels and add a random integer from -5 through +5.
 4. If their levels differ, cap the result at the lowest eligible level plus 5, AFTER random variation.
-5. Clamp the final mob level to 1–35. With no eligible players, use level 1.
+5. Clamp the final mob level to 1–30. With no eligible players, use level 1.
 
-Examples: levels 5 and 45 yield mobs capped at 10; levels 1 and 45 yield mobs capped at 6. Equal-level or solo groups use normal +/-2 variation. The cap applies at spawn, not when a lower-level player subsequently encounters an existing mob.
+Examples: levels 5 and 25 yield mobs capped at 10; levels 1 and 25 yield mobs capped at 6. Equal-level or solo groups use normal +/-5 variation. The cap applies at spawn, not when a lower-level player subsequently encounters an existing mob.
 
-This first version intentionally caps mobs at 35 to match the level-30 player growth cap. Health gains are +3% per mob level after 1; direct attack/projectile/explosion damage gains are +1%. Level 35 therefore has 2.02x base health and 1.34x eligible damage. Speed, explosion radius, potion status effects, and fire/poison ticks are unchanged. Health uses a named attribute modifier, and projectile damage snapshots the shooter's level. Eligible transformations retain the original level; newly spawned slime children receive a fresh assignment.
+This first version intentionally caps mobs at 30 to match the level-25 player growth cap. Health gains are +3% per mob level after 1; direct attack/projectile/explosion damage gains are +1%. Level 30 therefore has 1.87x base health and 1.29x eligible damage. Speed, explosion radius, potion status effects, and fire/poison ticks are unchanged. Health uses a named attribute modifier, and projectile damage snapshots the shooter's level. Eligible transformations retain the original level; newly spawned slime children receive a fresh assignment.
 
 The allowlist includes ordinary zombie/skeleton variants, creepers, spiders, silverfish, endermites, slimes, magma cubes, phantoms, blazes, breezes, ghasts, guardians, pillagers, vindicators, evokers, vexes, witches, ravagers, piglin brutes, hoglins, zoglins, and shulkers. Spiders retain vanilla daylight behavior. Passive animals, villagers, neutral endermen/piglins/zombified piglins, and bosses (including elder guardians) are excluded. New entity types outside the list remain unscaled.
 
@@ -54,11 +54,15 @@ Ten-minute autosaves, immediate logout saves, shutdown saves, and critical class
 
 ## In-game acceptance checks
 
-1. Back up test player data. Compare /profile at levels 1, 5, 10, 30, and above 30. Verify reconnect/respawn do not stack bonuses; class changes never heal. /setlevel currently only raises levels.
+1. Back up test player data. Compare /profile at levels 1, 5, 10, and 25; verify /setlevel rejects 26 and higher. Verify reconnect/respawn do not stack bonuses; class changes never heal. /setlevel currently only raises levels.
 2. Check each damaging class skill against the same mob type. Normal attacks/shots must retain baseline damage. Check Hallowed Ground healing, undead damage, and ordinary healing potions.
-3. With Survival players at 5 and 45 nearby, spawn fresh zombies; all must be at most 10. With 1 and 45, all must be at most 6. Both players must be active.
+3. With Survival players at 5 and 25 nearby, spawn fresh zombies; all must be at most 10. With 1 and 25, all must be at most 6. Both players must be active.
 4. Move a player beyond the horizontal/vertical radius and verify NEW mobs use the remaining players. Creative/Spectator/AFK players must not influence levels.
 5. Move away, unload/reload chunks, and restart: existing mob levels must stay fixed. Check zombie-to-drowned and skeleton-to-stray conversions for preserved levels and non-stacking health.
 6. Check cows, villagers, endermen, neutral piglins, and bosses remain unscaled. Check ranged attacks and creeper damage, with no increased explosion radius.
 7. Spawn multiple high-level zombie/skeleton variants: armor is probabilistic, not guaranteed. Check existing gear is preserved and generated armor never appears in death drops, including with Looting.
 8. Confirm mobs still despawn normally and existing names are preserved. Profile normal play and a crowded mob farm with Spark before expanding deployment.
+
+## Level-cap migration
+
+Existing player saves above level 25 are clamped to 25 when loaded. XP at the cap is cleared and further XP does not accumulate; souls and other balances are preserved. Mage maximum mana is now 148. New mobs cap at 30. Existing mobs keep their saved level and health; their damage multiplier is bounded at level 30. Spawn fresh mobs when testing the new range.

@@ -133,7 +133,8 @@ public class SkillsMCPlayer implements Serializable {
     }
 
     public void setLevel(int level) {
-        this.level = level;
+        this.level = ragnaorok.Main.progression.PlayerStats.growthLevel(level);
+        if (this.level == ragnaorok.Main.progression.PlayerStats.GROWTH_CAP) this.experience = 0;
     }
 
     public int getExperience() {
@@ -141,27 +142,34 @@ public class SkillsMCPlayer implements Serializable {
     }
 
     public void setExperience(int experience) {
-        this.experience = experience;
+        this.experience = Math.max(0, experience);
         checkLevelUp();
     }
 
     public void addExperience(int experience) {
-        this.experience += experience;
+        this.experience = (int) Math.min(Integer.MAX_VALUE, (long) this.experience + Math.max(0, experience));
         checkLevelUp();
     }
 
     private void checkLevelUp() {
         int expToNextLevel = getExpToNextLevel();
-        while (this.experience >= expToNextLevel) {
+        while (this.level < ragnaorok.Main.progression.PlayerStats.GROWTH_CAP && this.experience >= expToNextLevel) {
             this.experience -= expToNextLevel;
             this.level++;
             expToNextLevel = getExpToNextLevel();
             onLevelUp();
         }
+        if (this.level >= ragnaorok.Main.progression.PlayerStats.GROWTH_CAP) this.experience = 0;
     }
 
     public int getExpToNextLevel() {
         return this.level * 10;
+    }
+
+    private void readObject(java.io.ObjectInputStream input) throws java.io.IOException, ClassNotFoundException {
+        input.defaultReadObject();
+        setLevel(level); // Normalize legacy saves without changing their serialization identity.
+        experience = Math.max(0, experience);
     }
 
     private void onLevelUp() {

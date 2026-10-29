@@ -91,7 +91,9 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     SkillsMCPlayer smPlayer = Constant.SKILLS_MC_PLAYER_HASH_MAP.get(player.getUniqueId().toString());
                     if (smPlayer != null) {
-                        String message = "Level " + smPlayer.getLevel() + " - XP: " + smPlayer.getExperience() + "/" + smPlayer.getExpToNextLevel();
+                        String message = smPlayer.getLevel() >= ragnaorok.Main.progression.PlayerStats.GROWTH_CAP
+                                ? "Level 25 - MAX"
+                                : "Level " + smPlayer.getLevel() + " - XP: " + smPlayer.getExperience() + "/" + smPlayer.getExpToNextLevel();
                         if (smPlayer.getClassType() == ClassType.MAGE) {
                             if (!player.isDead()) ragnaorok.Main.progression.MageMana.tick(player.getUniqueId(), smPlayer, System.currentTimeMillis());
                             message += " • " + ragnaorok.Main.progression.MageMana.display(player.getUniqueId(), smPlayer);

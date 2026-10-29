@@ -5,7 +5,7 @@ import ragnaorok.Main.*;
 
 /** Derived values only: no new fields in the legacy serialized player profile. */
 public final class PlayerStats {
-    public static final int GROWTH_CAP = 30;
+    public static final int GROWTH_CAP = 25;
     private PlayerStats() {}
     public static int growthLevel(int level) { return Math.max(1, Math.min(GROWTH_CAP, level)); }
     public static double bonusHealth(ClassType type, int level) {

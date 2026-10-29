@@ -74,7 +74,7 @@ public class ProfileCommand implements CommandExecutor, Listener {
         double damageBonus = (ragnaorok.Main.progression.PlayerStats.damageMultiplier(type, level) - 1) * 100;
         double healingBonus = (ragnaorok.Main.progression.PlayerStats.healingMultiplier(type, level) - 1) * 100;
         String next = type == ragnaorok.Main.ClassType.NONE ? "Choose a class to gain stat bonuses."
-                : level >= 30 ? "Stat growth cap reached (level 30)."
+                : level >= ragnaorok.Main.progression.PlayerStats.GROWTH_CAP ? "Maximum level reached (25)."
                 : "Next health bonus: level " + ((level / 5 + 1) * 5);
         classItemMeta.setLore(java.util.List.of(
                 ChatColor.GRAY + "Level: " + level,
