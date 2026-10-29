@@ -60,6 +60,7 @@ public final class Main extends JavaPlugin implements @NotNull Listener {
         getServer().getPluginManager().registerEvents(new MageListener(this), this);
         getServer().getPluginManager().registerEvents(new BowListener(this), this);
         getServer().getPluginManager().registerEvents(new SwordListener(this), this);
+        getServer().getPluginManager().registerEvents(new ArrowParryListener(), this);
         getServer().getPluginManager().registerEvents(new DualSwordListener(this), this);
         getServer().getPluginManager().registerEvents(new HoeListener(this), this);
 
